@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Reservea.API.CMS.Controllers
+namespace Reservea.Microservices.Users.Controllers
 {
     [ApiController]
     [Route("[controller]")]

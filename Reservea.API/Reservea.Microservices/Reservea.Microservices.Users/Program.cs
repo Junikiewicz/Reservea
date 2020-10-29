@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Reservea.API.CMS
+namespace Reservea.Microservices.Users
 {
     public class Program
     {

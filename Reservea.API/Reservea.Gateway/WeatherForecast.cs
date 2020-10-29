@@ -1,6 +1,6 @@
 using System;
 
-namespace Reservea.API.Resources
+namespace Reservea.Gateway
 {
     public class WeatherForecast
     {

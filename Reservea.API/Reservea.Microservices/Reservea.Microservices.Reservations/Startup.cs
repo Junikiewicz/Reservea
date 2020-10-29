@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Reservea.API.CMS
+namespace Reservea.Microservices.Reservations
 {
     public class Startup
     {

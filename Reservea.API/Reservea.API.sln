@@ -3,33 +3,35 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.API.Users", "Reservea.API.Users\Reservea.API.Users.csproj", "{8ED7EB40-A1A3-49FA-82FB-0F809287EBC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Microservices.Users", "Reservea.Microservices\Reservea.Microservices.Users\Reservea.Microservices.Users.csproj", "{8ED7EB40-A1A3-49FA-82FB-0F809287EBC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.Common", "Reservea.Common\Reservea.Common.csproj", "{9F0CEB31-8A68-4A99-8E06-8D90FB6A9512}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Common", "Reservea.Common\Reservea.Common.csproj", "{9F0CEB31-8A68-4A99-8E06-8D90FB6A9512}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{9EAF7D96-C50D-4DCC-A8F7-09E93BD585A2}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{9EAF7D96-C50D-4DCC-A8F7-09E93BD585A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.API.Reservations", "Reservea.API.Reservations\Reservea.API.Reservations.csproj", "{FC45525E-BDB7-47B8-BD42-240878F3C957}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Microservices.Reservations", "Reservea.Microservices\Reservea.Microservices.Reservations\Reservea.Microservices.Reservations.csproj", "{FC45525E-BDB7-47B8-BD42-240878F3C957}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.API.Gateway", "Reservea.API.Gateway\Reservea.API.Gateway.csproj", "{9448A065-1D2F-4A54-AAA6-70365DC2CC35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Gateway", "Reservea.Gateway\Reservea.Gateway.csproj", "{9448A065-1D2F-4A54-AAA6-70365DC2CC35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.API.Resources", "Reservea.API.Resources\Reservea.API.Resources.csproj", "{31D96D59-B2EC-4390-98DC-5DF5559F14E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Microservices.Resources", "Reservea.Microservices\Reservea.Microservices.Resources\Reservea.Microservices.Resources.csproj", "{31D96D59-B2EC-4390-98DC-5DF5559F14E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.API.CMS", "Reservea.API.CMS\Reservea.API.CMS.csproj", "{7C6DC707-816D-4594-8C88-48273DAB8399}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Microservices.CMS", "Reservea.Microservices\Reservea.Microservices.CMS\Reservea.Microservices.CMS.csproj", "{7C6DC707-816D-4594-8C88-48273DAB8399}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A13865AE-4D2B-4443-91DF-8CF00990F0FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.Tests.Users", "Reservea.Tests.Users\Reservea.Tests.Users.csproj", "{1F9DA2FB-DB2B-4096-9402-AD328321FD97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Tests.Users", "Reservea.Tests\Reservea.Tests.Users\Reservea.Tests.Users.csproj", "{1F9DA2FB-DB2B-4096-9402-AD328321FD97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.Tests.Resources", "Reservea.Tests.Resources\Reservea.Tests.Resources.csproj", "{5655E602-F1B8-4A08-BAA0-180B9F78B535}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Tests.Resources", "Reservea.Tests\Reservea.Tests.Resources\Reservea.Tests.Resources.csproj", "{5655E602-F1B8-4A08-BAA0-180B9F78B535}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.Tests.Reservations", "Reservea.Tests.Reservations\Reservea.Tests.Reservations.csproj", "{AE7232C8-734E-4E43-8FA7-CFD73E8618DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Tests.Reservations", "Reservea.Tests\Reservea.Tests.Reservations\Reservea.Tests.Reservations.csproj", "{AE7232C8-734E-4E43-8FA7-CFD73E8618DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.Tests.CMS", "Reservea.Tests.CMS\Reservea.Tests.CMS.csproj", "{A0DD223E-766D-4BEF-8707-FBEC0CD277AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Tests.CMS", "Reservea.Tests\Reservea.Tests.CMS\Reservea.Tests.CMS.csproj", "{A0DD223E-766D-4BEF-8707-FBEC0CD277AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.Tests.Common", "Reservea.Tests.Common\Reservea.Tests.Common.csproj", "{568F940D-04B5-4726-BA58-9CA4833B0AC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Tests.Common", "Reservea.Tests\Reservea.Tests.Common\Reservea.Tests.Common.csproj", "{568F940D-04B5-4726-BA58-9CA4833B0AC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservea.Persistance", "Reservea.Persistance\Reservea.Persistance.csproj", "{644D475C-7B28-42C9-A581-2D53693B7938}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Persistance", "Reservea.Persistance\Reservea.Persistance.csproj", "{644D475C-7B28-42C9-A581-2D53693B7938}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{AD5ACC5C-BF3E-49F1-82A4-D3674771FF17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,7 +94,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8ED7EB40-A1A3-49FA-82FB-0F809287EBC9} = {9EAF7D96-C50D-4DCC-A8F7-09E93BD585A2}
 		{FC45525E-BDB7-47B8-BD42-240878F3C957} = {9EAF7D96-C50D-4DCC-A8F7-09E93BD585A2}
-		{9448A065-1D2F-4A54-AAA6-70365DC2CC35} = {9EAF7D96-C50D-4DCC-A8F7-09E93BD585A2}
+		{9448A065-1D2F-4A54-AAA6-70365DC2CC35} = {AD5ACC5C-BF3E-49F1-82A4-D3674771FF17}
 		{31D96D59-B2EC-4390-98DC-5DF5559F14E3} = {9EAF7D96-C50D-4DCC-A8F7-09E93BD585A2}
 		{7C6DC707-816D-4594-8C88-48273DAB8399} = {9EAF7D96-C50D-4DCC-A8F7-09E93BD585A2}
 		{1F9DA2FB-DB2B-4096-9402-AD328321FD97} = {A13865AE-4D2B-4443-91DF-8CF00990F0FA}
