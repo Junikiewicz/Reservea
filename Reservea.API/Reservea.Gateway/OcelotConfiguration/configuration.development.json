@@ -53,6 +53,48 @@
       "UpstreamHttpMethod": [ "Post", "Get", "Patch", "Delete", "Put" ]
     }
   ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "user",
+      "Config": [
+        {
+          "Name": "User API",
+          "Version": "v1",
+          "Url": "https://localhost:44384/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "reservation",
+      "Config": [
+        {
+          "Name": "Reservation API",
+          "Version": "v1",
+          "Url": "https://localhost:44328/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "resources",
+      "Config": [
+        {
+          "Name": "Resources API",
+          "Version": "v1",
+          "Url": "https://localhost:44360/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "cms",
+      "Config": [
+        {
+          "Name": "CMS API",
+          "Version": "v1",
+          "Url": "https://localhost:44340/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:44399"
   }
