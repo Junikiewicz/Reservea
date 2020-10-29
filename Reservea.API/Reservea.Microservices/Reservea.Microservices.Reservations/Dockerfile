@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Reservea.API.Reservations/Reservea.API.Reservations.csproj", "Reservea.API.Reservations/"]
-RUN dotnet restore "Reservea.API.Reservations/Reservea.API.Reservations.csproj"
+COPY ["Reservea.Microservices.Reservations/Reservea.Microservices.Reservations.csproj", "Reservea.Microservices.Reservations/"]
+RUN dotnet restore "Reservea.Microservices.Reservations/Reservea.API.Reservations.csproj"
 COPY . .
 WORKDIR "/src/Reservea.API.Reservations"
-RUN dotnet build "Reservea.API.Reservations.csproj" -c Release -o /app/build
+RUN dotnet build "Reservea.Microservices.Reservations.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Reservea.API.Reservations.csproj" -c Release -o /app/publish
+RUN dotnet publish "Reservea.Microservices.Reservations.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Reservea.API.Reservations.dll"]
+ENTRYPOINT ["dotnet", "Reservea.Microservices.Reservations.dll"]

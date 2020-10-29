@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["Reservea.API.Users/Reservea.API.Users.csproj", "Reservea.API.Users/"]
-RUN dotnet restore "Reservea.API.Users/Reservea.API.Users.csproj"
+COPY ["Reservea.Microservices.Users/Reservea.Microservices.Users.csproj", "Reservea.Microservices.Users/"]
+RUN dotnet restore "Reservea.Microservices.Users/Reservea.API.Users.csproj"
 COPY . .
-WORKDIR "/src/Reservea.API.Users"
-RUN dotnet build "Reservea.API.Users.csproj" -c Release -o /app/build
+WORKDIR "/src/Reservea.Microservices.Users"
+RUN dotnet build "Reservea.Microservices.Users.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Reservea.API.Users.csproj" -c Release -o /app/publish
+RUN dotnet publish "Reservea.Microservices.Users.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Reservea.API.Users.dll"]
+ENTRYPOINT ["dotnet", "Reservea.Microservices.Users.dll"]
