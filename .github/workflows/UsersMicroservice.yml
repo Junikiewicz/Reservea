@@ -10,7 +10,7 @@ on:
 jobs:
   build-and-deploy:
     env: 
-      SERVICE_NAME: microservice
+      SERVICE_NAME: usersmicroservice
     name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
