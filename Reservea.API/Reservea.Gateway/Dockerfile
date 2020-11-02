@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 
 # Restore nuget packages for service
-COPY "Reservea.Gateway/Reservea.Gateway.csproj" "Reservea.Gateway"
+COPY "Reservea.Gateway/Reservea.Gateway.csproj" "Reservea.Gateway/"
 RUN dotnet restore "Reservea.Gateway/Reservea.Gateway.csproj"
 
 # Copy service source files
