@@ -19,6 +19,9 @@ RUN dotnet restore "Reservea.Tests/Reservea.Tests.Common/Reservea.Tests.Common.c
 COPY "Reservea.Microservices/Reservea.Microservices.Users/" "Reservea.Microservices/Reservea.Microservices.Users/"
 COPY "Reservea.Common/" "Reservea.Common/"
 
+# Docker build bug in CI environment workaround
+RUN true
+
 # Copy test files
 COPY "Reservea.Tests/Reservea.Tests.Users/" "Reservea.Tests/Reservea.Tests.Users/"
 COPY "Reservea.Tests/Reservea.Tests.Common/" "Reservea.Tests/Reservea.Tests.Common/"
