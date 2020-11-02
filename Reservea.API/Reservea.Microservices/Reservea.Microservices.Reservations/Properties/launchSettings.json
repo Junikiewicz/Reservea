@@ -24,8 +24,12 @@
     },
     "Docker": {
       "commandName": "Docker",
-      "publishAllPorts": true,
-      "useSSL": true
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "httpPort": 58506,
+      "useSSL": true,
+      "sslPort": 44328
     }
   }
 }
