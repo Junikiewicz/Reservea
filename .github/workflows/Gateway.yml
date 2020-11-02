@@ -1,0 +1,30 @@
+name: "Gateway"
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "Reservea.API/Reservea.Gateway/**"
+      - ".github/workflows/Gateway.yml"
+jobs:
+  build-and-deploy:
+    env: 
+      SERVICE_NAME: gateway
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: 'Build'
+      run: |
+        cd Reservea.API
+        docker build -f "Reservea.Gateway/Dockerfile" -t $SERVICE_NAME . 
+    - name: 'Login to azure'
+      uses: azure/docker-login@v1
+      with:
+        login-server: '${{ secrets.AZURE_CONTAINER_REGISTRY_URL }}'
+        username: '${{ secrets.AZURE_CONTAINER_REGISTRY_USERNAME }}'
+        password: '${{ secrets.AZURE_CONTAINER_REGISTRY_PASSWORD }}'
+    - name: 'Push to azure'
+      run: |
+        docker tag $SERVICE_NAME ${{ secrets.AZURE_CONTAINER_REGISTRY_URL }}/$SERVICE_NAME
+        docker push ${{ secrets.AZURE_CONTAINER_REGISTRY_URL }}/$SERVICE_NAME
