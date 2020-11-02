@@ -1,0 +1,101 @@
+{
+  "Routes": [
+    {
+      "SwaggerKey": "user",
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "https://reservea-api-users.azurewebsites.net",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/user/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Patch", "Delete", "Put" ]
+    },
+    {
+      "SwaggerKey": "reservation",
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "https://reservea-api-reservations.azurewebsites.net",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/reservation/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Patch", "Delete", "Put" ]
+    },
+    {
+      "SwaggerKey": "resources",
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "https://reservea-api-resources.azurewebsites.net",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/resources/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Patch", "Delete", "Put" ]
+    },
+    {
+      "SwaggerKey": "cms",
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "https://reservea-api-cms.azurewebsites.net",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/cms/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get", "Patch", "Delete", "Put" ]
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "user",
+      "Config": [
+        {
+          "Name": "User API",
+          "Version": "v1",
+          "Url": "https://reservea-api-users.azurewebsites.net/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "reservation",
+      "Config": [
+        {
+          "Name": "Reservation API",
+          "Version": "v1",
+          "Url": "https://reservea-api-reservations.azurewebsites.net/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "resources",
+      "Config": [
+        {
+          "Name": "Resources API",
+          "Version": "v1",
+          "Url": "https://reservea-api-resources.azurewebsites.net/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "cms",
+      "Config": [
+        {
+          "Name": "CMS API",
+          "Version": "v1",
+          "Url": "https://reservea-api-cms.azurewebsites.net/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://reservea-api-gateway.azurewebsites.net:44399"
+  }
+}
