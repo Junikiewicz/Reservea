@@ -36,7 +36,7 @@ namespace Reservea.Microservices.Resources.Controllers
             .ToArray();
         }
         
-        [HttpGet("test"]
+        [HttpGet("test")]
         public IEnumerable<WeatherForecast> Get2()
         {
             var rng = new Random();
