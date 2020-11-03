@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Microservices.Users", "Reservea.Microservices\Reservea.Microservices.Users\Reservea.Microservices.Users.csproj", "{8ED7EB40-A1A3-49FA-82FB-0F809287EBC9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9F0CEB31-8A68-4A99-8E06-8D90FB6A9512} = {9F0CEB31-8A68-4A99-8E06-8D90FB6A9512}
+		{644D475C-7B28-42C9-A581-2D53693B7938} = {644D475C-7B28-42C9-A581-2D53693B7938}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Common", "Reservea.Common\Reservea.Common.csproj", "{9F0CEB31-8A68-4A99-8E06-8D90FB6A9512}"
 EndProject
