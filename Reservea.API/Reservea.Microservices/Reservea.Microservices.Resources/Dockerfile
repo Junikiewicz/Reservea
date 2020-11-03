@@ -7,6 +7,7 @@ WORKDIR /src
 # Restore nuget packages for service
 COPY "Reservea.Microservices/Reservea.Microservices.Resources/Reservea.Microservices.Resources.csproj" "Reservea.Microservices/Reservea.Microservices.Resources/"
 COPY "Reservea.Common/Reservea.Common.csproj" "Reservea.Common/"
+COPY "Reservea.Persistance/Reservea.Persistance.csproj" "Reservea.Persistance/"
 RUN dotnet restore "Reservea.Microservices/Reservea.Microservices.Resources/Reservea.Microservices.Resources.csproj"
 
 # Restore nuget packages for tests
@@ -18,6 +19,7 @@ RUN dotnet restore "Reservea.Tests/Reservea.Tests.Common/Reservea.Tests.Common.c
 # Copy service source files
 COPY "Reservea.Microservices/Reservea.Microservices.Resources/" "Reservea.Microservices/Reservea.Microservices.Resources/"
 COPY "Reservea.Common/" "Reservea.Common/"
+COPY "Reservea.Persistance/" "Reservea.Persistance/"
 
 # Docker build bug in CI environment workaround
 RUN true
