@@ -96,6 +96,6 @@
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "https://reservea-api-gateway.azurewebsites.net:44399"
+    "BaseUrl": "https://reservea-api-gateway.azurewebsites.net"
   }
 }
