@@ -6,7 +6,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "https://reservea-api-users.azurewebsites.net",
+          "Host": "reservea-api-users.azurewebsites.net",
           "Port": 443
         }
       ],
@@ -19,7 +19,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "https://reservea-api-reservations.azurewebsites.net",
+          "Host": "reservea-api-reservations.azurewebsites.net",
           "Port": 443
         }
       ],
@@ -32,7 +32,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "https://reservea-api-resources.azurewebsites.net",
+          "Host": "reservea-api-resources.azurewebsites.net",
           "Port": 443
         }
       ],
@@ -45,7 +45,7 @@
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "https://reservea-api-cms.azurewebsites.net",
+          "Host": "reservea-api-cms.azurewebsites.net",
           "Port": 443
         }
       ],
