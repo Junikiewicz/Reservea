@@ -14,7 +14,7 @@ namespace Reservea.Microservices.Resources.Helpers
             CreateMap<ResourceAttribute, ResourceAttributeForDetailedResourceResponse>();
 
             CreateMap<AddResourceRequest, Resource>();
-            CreateMap<ResourceAttributeForAddResourceRequest, ResourceAttribute>();
+            CreateMap<ResourceAttributeForAddOrUpdateRequest, ResourceAttribute >();
         }
     }
 }

@@ -36,9 +36,17 @@ namespace Reservea.Microservices.Resources.Controllers
         [HttpPost]
         public async Task<IActionResult> AddResource(AddResourceRequest request, CancellationToken cancellationToken)
         {
-            var result = await _resourcesService.AddResource(request, cancellationToken);
+            var result = await _resourcesService.AddResourceAsync(request, cancellationToken);
 
             return Ok(result);
+        }
+
+        [HttpPatch("{resourceId}")]
+        public async Task<IActionResult> UpdateResourceAttributes(int resourceId, UpdateResourceAttributesRequest request, CancellationToken cancellationToken)
+        {
+            await _resourcesService.UpdateResourceAttributesAsync(resourceId, request, cancellationToken);
+
+            return NoContent();
         }
     }
 }

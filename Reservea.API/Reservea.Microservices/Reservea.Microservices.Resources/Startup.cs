@@ -28,19 +28,22 @@ namespace Reservea.Microservices.Resources
         {
             services.AddControllers();
 
-            #region Depndency Injection
-            services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IResourcesUnitOfWork, ResourcesUnitOfWork>();
-            services.AddScoped<IResourcesService, ResourcesService>();
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            #endregion
+            AddDependencyInjection(services);
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(c => 
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = Configuration.GetValue<string>("ApplicationName"), Version = "v1" });
                 var xmlFilePath = "Swagger_doc.xml";
                 c.IncludeXmlComments(xmlFilePath);
             });
+        }
+
+        public void AddDependencyInjection(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IResourcesUnitOfWork, ResourcesUnitOfWork>();
+            services.AddScoped<IResourcesService, ResourcesService>();
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

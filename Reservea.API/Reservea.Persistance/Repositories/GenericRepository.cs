@@ -20,6 +20,7 @@ namespace Reservea.Persistance.Repositories
             _context = context;
             _mapper = mapper;
         }
+
         public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Set<TEntity>().ToListAsync(cancellationToken);
@@ -32,7 +33,7 @@ namespace Reservea.Persistance.Repositories
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async Task<TEntity> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken)
+        public async virtual Task<TEntity> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken)
         {
             var lambda = CreateFindByPrimaryKeyLambda<TId, TEntity>(id);
 
@@ -41,13 +42,75 @@ namespace Reservea.Persistance.Repositories
             return await query.SingleAsync(lambda, cancellationToken);
         }
 
-        public async Task<TResult> GetByIdAsync<TId, TResult>(TId id, CancellationToken cancellationToken)
+        public async virtual Task<TResult> GetByIdAsync<TId, TResult>(TId id, CancellationToken cancellationToken)
         {
             var lambda = CreateFindByPrimaryKeyLambda<TId, TResult>(id);
 
             var query = _mapper.ProjectTo<TResult>(_context.Set<TEntity>());
 
             return await query.SingleAsync(lambda, cancellationToken);
+        }
+
+        public async virtual Task<IEnumerable<TEntity>> GetByListOfIdsAsync<TId>(IEnumerable<TId> ids, CancellationToken cancellationToken)
+        {
+            var lambda = CreateFindByPrimaryKeyLambda<TId, TEntity>(ids);
+
+            var query = _context.Set<TEntity>().Where(lambda);
+
+            return await query.ToListAsync(cancellationToken);
+        }
+
+        public async virtual Task<IEnumerable<TResult>> GetByListOfIdsAsync<TId, TResult>(IEnumerable<TId> ids, CancellationToken cancellationToken)
+        {
+            var lambda = CreateFindByPrimaryKeyLambda<TId, TResult>(ids);
+
+            var query = _mapper.ProjectTo<TResult>(_context.Set<TEntity>()).Where(lambda);
+
+            return await query.ToListAsync(cancellationToken);
+        }
+
+        public void AddAsync(TEntity entity)
+        {
+            _context.Set<TEntity>().Add(entity);
+        }
+
+        public void AddManyAsync(IEnumerable<TEntity> entities)
+        {
+            _context.Set<TEntity>().AddRange(entities);
+        }
+
+        public void Update(TEntity entity)
+        {
+            _context.Set<TEntity>().Update(entity);
+        }
+
+        public void UpdateRange(IEnumerable<TEntity> entities)
+        {
+            _context.Set<TEntity>().UpdateRange(entities);
+        }
+
+        public void Delete(TEntity entity)
+        {
+            _context.Remove(entity);
+        }
+
+        public void DeleteRange(IEnumerable<TEntity> entity)
+        {
+            _context.Set<TEntity>().RemoveRange(entity);
+        }
+
+        public virtual async Task DeleteByIdAsync<TId>(TId id, CancellationToken cancellationToken)
+        {
+            var entity = await GetByIdAsync(id, cancellationToken);
+
+            Delete(entity);
+        }
+
+        public virtual async Task DeleteByListOfIdsAsync<TId>(IEnumerable<TId> ids, CancellationToken cancellationToken)
+        {
+            var entity = await GetByListOfIdsAsync(ids, cancellationToken);
+
+            DeleteRange(entity);
         }
 
         public void Add(TEntity entity)
@@ -61,31 +124,39 @@ namespace Reservea.Persistance.Repositories
         }
 
         #region Private helpers
+        private Expression<Func<TResult, bool>> CreateFindByPrimaryKeyLambda<TId, TResult>(IEnumerable<TId> ids)
+        {
+            var primaryKeyProperties = _context.Model.FindEntityType(typeof(TEntity)).FindPrimaryKey().Properties;
+
+            if (primaryKeyProperties.Count != 1) throw new Exception();
+
+            var pkPropertyName = primaryKeyProperties.Select(x => x.Name).Single();
+            var propertyInfo = typeof(TResult).GetProperty(pkPropertyName);
+            var method = ids.GetType().GetMethod("Contains");
+
+            var parameter = Expression.Parameter(typeof(TResult), "x");
+            var member = Expression.MakeMemberAccess(parameter, propertyInfo);
+            var constant = Expression.Constant(ids, ids.GetType());
+            var call = Expression.Call(constant, method, member);
+
+            return Expression.Lambda<Func<TResult, bool>>(call, parameter);
+        }
 
         private Expression<Func<TResult, bool>> CreateFindByPrimaryKeyLambda<TId, TResult>(TId id)
         {
             var primaryKeyProperties = _context.Model.FindEntityType(typeof(TEntity)).FindPrimaryKey().Properties;
 
-            if(primaryKeyProperties.Count <= 0)
-            {
-                throw new Exception();
-            }
-            else if (primaryKeyProperties.Count == 1)
-            {
-                var pkPropertyName = primaryKeyProperties.Select(x => x.Name).Single();
-                var propertyInfo = typeof(TResult).GetProperty(pkPropertyName);
+            if (primaryKeyProperties.Count != 1) throw new Exception();
 
-                var parameter = Expression.Parameter(typeof(TResult), "x");
-                var member = Expression.MakeMemberAccess(parameter, propertyInfo);
-                var constant = Expression.Constant(id, id.GetType());
-                var equation = Expression.Equal(member, constant);
+            var pkPropertyName = primaryKeyProperties.Select(x => x.Name).Single();
+            var propertyInfo = typeof(TResult).GetProperty(pkPropertyName);
 
-                return Expression.Lambda<Func<TResult, bool>>(equation, parameter);
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
+            var parameter = Expression.Parameter(typeof(TResult), "x");
+            var member = Expression.MakeMemberAccess(parameter, propertyInfo);
+            var constant = Expression.Constant(id, id.GetType());
+            var equation = Expression.Equal(member, constant);
+
+            return Expression.Lambda<Func<TResult, bool>>(equation, parameter);
         }
         #endregion
     }
