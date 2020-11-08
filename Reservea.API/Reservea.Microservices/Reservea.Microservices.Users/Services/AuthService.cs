@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Reservea.Common.Helpers;
 using Reservea.Microservices.Users.Interfaces.Services;
-using Reservea.Persistance.Models;
+using Reservea.Persistance.Users.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
