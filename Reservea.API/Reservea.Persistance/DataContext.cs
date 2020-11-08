@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Reservea.Persistance.Resources.Models;
-using Reservea.Persistance.Users.Models;
+using Reservea.Persistance.Models;
 using System.Reflection;
 
 namespace Reservea.Persistance
