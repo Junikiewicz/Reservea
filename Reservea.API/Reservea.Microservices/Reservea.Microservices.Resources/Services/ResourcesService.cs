@@ -28,13 +28,22 @@ namespace Reservea.Microservices.Resources.Services
             return resourcesForList;
         }
 
-        public async Task AddResource(AddResourceRequest request, CancellationToken cancellationToken)
+        public async Task<ResourceForDetailedResponse> GetResourceDetailsByIdAsync(int resourceId, CancellationToken cancellationToken)
+        {
+            var result = await _unitOfWork.ResourcesRepository.GetByIdAsync<int, ResourceForDetailedResponse>(resourceId, cancellationToken);
+
+            return result;
+        }
+
+        public async Task<AddResourceResponse> AddResource(AddResourceRequest request, CancellationToken cancellationToken)
         {
             var newResource = _mapper.Map<Resource>(request);
-            newResource.ResourceStatusId = 1;
+            newResource.ResourceStatusId = (int)Common.Enums.ResourceStatus.New;
 
             _unitOfWork.ResourcesRepository.Add(newResource);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return _mapper.Map<AddResourceResponse>(newResource);
         }
     }
 }

@@ -25,12 +25,20 @@ namespace Reservea.Microservices.Resources.Controllers
             return Ok(resourcesForList);
         }
 
+        [HttpGet("{resourceId}")]
+        public async Task<IActionResult> GetResourceDetails(int resourceId, CancellationToken cancellationToken)
+        {
+            var resourceDetails = await _resourcesService.GetResourceDetailsByIdAsync(resourceId, cancellationToken);
+
+            return Ok(resourceDetails);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddResource(AddResourceRequest request, CancellationToken cancellationToken)
         {
-            await _resourcesService.AddResource(request, cancellationToken);
+            var result = await _resourcesService.AddResource(request, cancellationToken);
 
-            return NoContent();
+            return Ok(result);
         }
     }
 }

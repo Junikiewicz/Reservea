@@ -9,10 +9,10 @@ namespace Reservea.Microservices.Resources.Dtos.Requests
         public decimal PricePerHour { get; set; }
         public int ResourceTypeId { get; set; }
 
-        public IEnumerable<AddResourceAttributeRequest> ResourceAttributes { get; set; }
+        public IEnumerable<ResourceAttributeForAddResourceRequest> ResourceAttributes { get; set; }
     }
 
-    public class AddResourceAttributeRequest
+    public class ResourceAttributeForAddResourceRequest
     {
         public int AttributeId { get; set; }
         public string Value { get; set; }

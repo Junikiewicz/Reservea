@@ -21,6 +21,7 @@ namespace Reservea.Persistance.UnitsOfWork
         {
             await _context.SaveChangesAsync(cancellationToken);
         }
+
         public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken)
         {
             return await _context.Database.BeginTransactionAsync(cancellationToken);

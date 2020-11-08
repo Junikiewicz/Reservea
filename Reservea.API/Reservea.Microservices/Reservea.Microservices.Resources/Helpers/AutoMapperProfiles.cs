@@ -10,8 +10,11 @@ namespace Reservea.Microservices.Resources.Helpers
         public AutoMapperProfiles()
         {
             CreateMap<Resource, ResourceForListResponse>();
+            CreateMap<Resource, ResourceForDetailedResponse>();
+            CreateMap<ResourceAttribute, ResourceAttributeForDetailedResourceResponse>();
+
             CreateMap<AddResourceRequest, Resource>();
-            CreateMap<AddResourceAttributeRequest, ResourceAttribute>();
+            CreateMap<ResourceAttributeForAddResourceRequest, ResourceAttribute>();
         }
     }
 }

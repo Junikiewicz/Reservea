@@ -9,6 +9,7 @@ namespace Reservea.Microservices.Resources.Interfaces.Services
     public interface IResourcesService
     {
         Task<IEnumerable<ResourceForListResponse>> GetAllResourcesForListAsync(CancellationToken cancellationToken);
-        Task AddResource(AddResourceRequest request, CancellationToken cancellationToken);
+        Task<ResourceForDetailedResponse> GetResourceDetailsByIdAsync(int resourceId, CancellationToken cancellationToken);
+        Task<AddResourceResponse> AddResource(AddResourceRequest request, CancellationToken cancellationToken);
     }
 }
