@@ -38,6 +38,14 @@ namespace Reservea.Microservices.Resources.Services
             return result;
         }
 
+        public async Task UpdateResourceAsync(int resourceId, UpdateResourceRequest request, CancellationToken cancellationToken)
+        {
+            var resourceFromDatabase = await _unitOfWork.ResourcesRepository.GetByIdAsync(resourceId, cancellationToken);
+            _mapper.Map(request, resourceFromDatabase);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        }
+
         public async Task<AddResourceResponse> AddResourceAsync(AddResourceRequest request, CancellationToken cancellationToken)
         {
             var newResource = _mapper.Map<Resource>(request);
@@ -64,7 +72,7 @@ namespace Reservea.Microservices.Resources.Services
                 alreadyExistingResourceAttributes.ForEach(x => x.Value = request.AttributesToAddOrUpdate.Single(y => y.AttributeId == x.AttributeId).Value);
                 _unitOfWork.ResourceAttributesRepository.UpdateRange(alreadyExistingResourceAttributes);
 
-                var attributesToAdd = request.AttributesToAddOrUpdate.Where(x => !alreadyExistingResourceAttributes.Any(y => y.AttributeId == y.AttributeId));
+                var attributesToAdd = request.AttributesToAddOrUpdate.Where(x => !alreadyExistingResourceAttributes.Any(y => x.AttributeId == y.AttributeId));
                 var attributesToAddEntities = _mapper.Map<IEnumerable<ResourceAttribute>>(attributesToAdd);
                 attributesToAddEntities.ForEach(x => x.ResourceId = resourceId);
                 _unitOfWork.ResourceAttributesRepository.AddRange(attributesToAddEntities);
