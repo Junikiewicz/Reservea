@@ -10,7 +10,7 @@ using Microsoft.OpenApi.Models;
 using Reservea.Microservices.Users.Interfaces.Services;
 using Reservea.Microservices.Users.Services;
 using Reservea.Persistance;
-using Reservea.Persistance.Models;
+using Reservea.Persistance.Users.Models;
 
 namespace Reservea.Microservices.Users
 {

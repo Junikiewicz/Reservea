@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 
-namespace Reservea.Persistance.Models
+namespace Reservea.Persistance.Users.Models
 {
     public class Role : IdentityRole<int>
     {
