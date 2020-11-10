@@ -48,13 +48,5 @@ namespace Reservea.Microservices.Resources.Controllers
 
             return NoContent();
         }
-
-        [HttpPut("{resourceId}/attributes")]
-        public async Task<IActionResult> UpdateResourceAttributes(int resourceId, UpdateResourceAttributesRequest request, CancellationToken cancellationToken)
-        {
-            await _resourcesService.UpdateResourceAttributesAsync(resourceId, request, cancellationToken);
-
-            return NoContent();
-        }
     }
 }

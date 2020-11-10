@@ -45,6 +45,7 @@ namespace Reservea.Microservices.Resources
 
             services.AddScoped<IResourcesService, ResourcesService>();
             services.AddScoped<IAttributesService, AttributesService>();
+            services.AddScoped<IResourceAttributesService, ResourceAttributesService>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
