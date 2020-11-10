@@ -4,7 +4,6 @@ using Reservea.Microservices.Resources.Dtos.Responses;
 using Reservea.Microservices.Resources.Interfaces.Services;
 using Reservea.Persistance.Interfaces.UnitsOfWork;
 using Reservea.Persistance.Models;
-using Reservea.Persistance.UnitsOfWork;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,7 +41,7 @@ namespace Reservea.Microservices.Resources.Services
         {
             var attributeFromDatabase = await _unitOfWork.AttributesRepository.GetByIdAsync(id, cancellationToken);
 
-            _ = _mapper.Map(request, attributeFromDatabase);
+            _mapper.Map(request, attributeFromDatabase);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }

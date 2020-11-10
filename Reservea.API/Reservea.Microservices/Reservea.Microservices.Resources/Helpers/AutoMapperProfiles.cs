@@ -22,6 +22,10 @@ namespace Reservea.Microservices.Resources.Helpers
 
             CreateMap<Attribute, AttributeForListResponse>();
             CreateMap<Attribute, AddAttributeResponse>();
+
+            CreateMap<ResourceType, ResourceTypeForDetailedResponse>();
+            CreateMap<ResourceType, ResourceTypeForListResponse>();
+            CreateMap<ResourceType, AddResourceTypeResponse>();
         }
 
         private void CreateMapsFromDtosToEntities()
@@ -33,6 +37,9 @@ namespace Reservea.Microservices.Resources.Helpers
 
             CreateMap<AddAttributeRequest, Attribute>();
             CreateMap<EditAttributeRequest, Attribute>();
+
+            CreateMap<UpdateResourceTypeRequest, ResourceType>();
+            CreateMap<AddResourceTypeRequest, ResourceType>();
         }
     }
 }

@@ -5,7 +5,7 @@ using Reservea.Persistance.Repositories;
 
 namespace Reservea.Persistance.UnitsOfWork
 {
-    public class ResourcesUnitOfWork : GenericUnitOfWork, IResourcesUnitOfWork
+    public class ResourcesUnitOfWork : BasicUnitOfWork, IResourcesUnitOfWork
     {
         public IResourceAttributesRepository ResourceAttributesRepository
         {
@@ -43,9 +43,22 @@ namespace Reservea.Persistance.UnitsOfWork
             }
         }
 
+        public IResourceTypesRepository ResourceTypesRepository
+        {
+            get
+            {
+                if (_resourceTypesRepository == null)
+                {
+                    _resourceTypesRepository = new ResourceTypesRepository(_context, _mapper);
+                }
+                return _resourceTypesRepository;
+            }
+        }
+
         private IResourcesRepository _resourcesRepository;
         private IResourceAttributesRepository _resourceAttributesRepository;
         private IAttributesRepository _attributesRepository;
+        private IResourceTypesRepository _resourceTypesRepository;
 
         public ResourcesUnitOfWork(DataContext context, IMapper mapper) : base(context, mapper)
         {

@@ -1,18 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Reservea.Persistance.Interfaces.Repositories;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Reservea.Persistance.Interfaces.Repositories;
 
 namespace Reservea.Persistance.Interfaces.UnitsOfWork
 {
-    public interface IResourcesUnitOfWork
+    public interface IResourcesUnitOfWork : IBasicUnitOfWork
     {
         IResourceAttributesRepository ResourceAttributesRepository { get; }
         IResourcesRepository ResourcesRepository { get; }
-        public IAttributesRepository AttributesRepository { get; }
-        Task SaveChangesAsync(CancellationToken cancellationToken);
-        Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);
-        Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken);
-        Task RollbackTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken);
+        IAttributesRepository AttributesRepository { get; }
+        IResourceTypesRepository ResourceTypesRepository { get; }
     }
 }

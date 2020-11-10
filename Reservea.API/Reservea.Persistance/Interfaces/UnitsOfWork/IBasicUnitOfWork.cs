@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Reservea.Persistance.Interfaces.UnitsOfWork
 {
-    public interface IGenericUnitOfWork
+    public interface IBasicUnitOfWork
     {
         Task SaveChangesAsync(CancellationToken cancellationToken);
         Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);

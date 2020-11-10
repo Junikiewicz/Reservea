@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Reservea.Persistance.UnitsOfWork
 {
-    public abstract class GenericUnitOfWork : IGenericUnitOfWork
+    public abstract class BasicUnitOfWork : IBasicUnitOfWork
     {
         protected DataContext _context;
         protected IMapper _mapper;
 
-        public GenericUnitOfWork(DataContext context, IMapper mapper)
+        public BasicUnitOfWork(DataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
