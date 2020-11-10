@@ -9,6 +9,7 @@ namespace Reservea.Persistance.Interfaces.UnitsOfWork
     {
         IResourceAttributesRepository ResourceAttributesRepository { get; }
         IResourcesRepository ResourcesRepository { get; }
+        public IAttributesRepository AttributesRepository { get; }
         Task SaveChangesAsync(CancellationToken cancellationToken);
         Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);
         Task CommitTransactionAsync(IDbContextTransaction transaction, CancellationToken cancellationToken);

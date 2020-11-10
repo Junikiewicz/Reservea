@@ -42,7 +42,10 @@ namespace Reservea.Microservices.Resources
         {
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IResourcesUnitOfWork, ResourcesUnitOfWork>();
+
             services.AddScoped<IResourcesService, ResourcesService>();
+            services.AddScoped<IAttributesService, AttributesService>();
+
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 

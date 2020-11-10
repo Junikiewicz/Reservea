@@ -11,7 +11,7 @@ namespace Reservea.Persistance.UnitsOfWork
         {
             get
             {
-                if (_resourcesRepository == null)
+                if (_resourceAttributesRepository == null)
                 {
                     _resourceAttributesRepository = new ResourceAttributesRepository(_context, _mapper);
                 }
@@ -31,8 +31,21 @@ namespace Reservea.Persistance.UnitsOfWork
             }
         }
 
+        public IAttributesRepository AttributesRepository
+        {
+            get
+            {
+                if (_attributesRepository == null)
+                {
+                    _attributesRepository = new AttributesRepository(_context, _mapper);
+                }
+                return _attributesRepository;
+            }
+        }
+
         private IResourcesRepository _resourcesRepository;
         private IResourceAttributesRepository _resourceAttributesRepository;
+        private IAttributesRepository _attributesRepository;
 
         public ResourcesUnitOfWork(DataContext context, IMapper mapper) : base(context, mapper)
         {

@@ -9,13 +9,30 @@ namespace Reservea.Microservices.Resources.Helpers
     {
         public AutoMapperProfiles()
         {
+            CreateMapsFromEntitiesToDtos();
+            CreateMapsFromDtosToEntities();
+        }
+
+        private void CreateMapsFromEntitiesToDtos()
+        {
             CreateMap<Resource, ResourceForListResponse>();
             CreateMap<Resource, ResourceForDetailedResponse>();
+
             CreateMap<ResourceAttribute, ResourceAttributeForDetailedResourceResponse>();
 
+            CreateMap<Attribute, AttributeForListResponse>();
+            CreateMap<Attribute, AddAttributeResponse>();
+        }
+
+        private void CreateMapsFromDtosToEntities()
+        {
             CreateMap<AddResourceRequest, Resource>();
             CreateMap<UpdateResourceRequest, Resource>();
-            CreateMap<ResourceAttributeForAddOrUpdateRequest, ResourceAttribute >();
+
+            CreateMap<ResourceAttributeForAddOrUpdateRequest, ResourceAttribute>();
+
+            CreateMap<AddAttributeRequest, Attribute>();
+            CreateMap<EditAttributeRequest, Attribute>();
         }
     }
 }
