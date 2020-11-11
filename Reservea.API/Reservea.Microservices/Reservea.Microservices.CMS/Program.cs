@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Azure.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using System;
 
 namespace Reservea.Microservices.CMS
 {
@@ -17,10 +14,18 @@ namespace Reservea.Microservices.CMS
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+          Host.CreateDefaultBuilder(args)
+          .ConfigureAppConfiguration((context, config) =>
+          {
+              if (context.HostingEnvironment.IsProduction())
+              {
+                  var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("MyKeyVaultUri"));
+                  config.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
+              }
+          })
+          .ConfigureWebHostDefaults(webBuilder =>
+          {
+              webBuilder.UseStartup<Startup>();
+          });
     }
 }

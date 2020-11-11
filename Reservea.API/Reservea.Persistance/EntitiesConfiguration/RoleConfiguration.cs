@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Reservea.Persistance.Models;
 
-namespace Reservea.Persistance.Configuration
+namespace Reservea.Persistance.EntitiesConfiguration
 {
     public class RoleConfiguration : IEntityTypeConfiguration<Role>
     {

@@ -14,24 +14,50 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{9EAF7D96-C50D-4DCC-A8F7-09E93BD585A2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Microservices.Reservations", "Reservea.Microservices\Reservea.Microservices.Reservations\Reservea.Microservices.Reservations.csproj", "{FC45525E-BDB7-47B8-BD42-240878F3C957}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9F0CEB31-8A68-4A99-8E06-8D90FB6A9512} = {9F0CEB31-8A68-4A99-8E06-8D90FB6A9512}
+		{644D475C-7B28-42C9-A581-2D53693B7938} = {644D475C-7B28-42C9-A581-2D53693B7938}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Gateway", "Reservea.Gateway\Reservea.Gateway.csproj", "{9448A065-1D2F-4A54-AAA6-70365DC2CC35}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Microservices.Resources", "Reservea.Microservices\Reservea.Microservices.Resources\Reservea.Microservices.Resources.csproj", "{31D96D59-B2EC-4390-98DC-5DF5559F14E3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9F0CEB31-8A68-4A99-8E06-8D90FB6A9512} = {9F0CEB31-8A68-4A99-8E06-8D90FB6A9512}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Microservices.CMS", "Reservea.Microservices\Reservea.Microservices.CMS\Reservea.Microservices.CMS.csproj", "{7C6DC707-816D-4594-8C88-48273DAB8399}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9F0CEB31-8A68-4A99-8E06-8D90FB6A9512} = {9F0CEB31-8A68-4A99-8E06-8D90FB6A9512}
+		{644D475C-7B28-42C9-A581-2D53693B7938} = {644D475C-7B28-42C9-A581-2D53693B7938}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A13865AE-4D2B-4443-91DF-8CF00990F0FA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Tests.Users", "Reservea.Tests\Reservea.Tests.Users\Reservea.Tests.Users.csproj", "{1F9DA2FB-DB2B-4096-9402-AD328321FD97}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8ED7EB40-A1A3-49FA-82FB-0F809287EBC9} = {8ED7EB40-A1A3-49FA-82FB-0F809287EBC9}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Tests.Resources", "Reservea.Tests\Reservea.Tests.Resources\Reservea.Tests.Resources.csproj", "{5655E602-F1B8-4A08-BAA0-180B9F78B535}"
+	ProjectSection(ProjectDependencies) = postProject
+		{31D96D59-B2EC-4390-98DC-5DF5559F14E3} = {31D96D59-B2EC-4390-98DC-5DF5559F14E3}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Tests.Reservations", "Reservea.Tests\Reservea.Tests.Reservations\Reservea.Tests.Reservations.csproj", "{AE7232C8-734E-4E43-8FA7-CFD73E8618DD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FC45525E-BDB7-47B8-BD42-240878F3C957} = {FC45525E-BDB7-47B8-BD42-240878F3C957}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Tests.CMS", "Reservea.Tests\Reservea.Tests.CMS\Reservea.Tests.CMS.csproj", "{A0DD223E-766D-4BEF-8707-FBEC0CD277AC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7C6DC707-816D-4594-8C88-48273DAB8399} = {7C6DC707-816D-4594-8C88-48273DAB8399}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Tests.Common", "Reservea.Tests\Reservea.Tests.Common\Reservea.Tests.Common.csproj", "{568F940D-04B5-4726-BA58-9CA4833B0AC9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9F0CEB31-8A68-4A99-8E06-8D90FB6A9512} = {9F0CEB31-8A68-4A99-8E06-8D90FB6A9512}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reservea.Persistance", "Reservea.Persistance\Reservea.Persistance.csproj", "{644D475C-7B28-42C9-A581-2D53693B7938}"
 EndProject
