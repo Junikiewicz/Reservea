@@ -28,5 +28,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Reservea.Persistance\Reservea.Persistance.csproj" />
+  </ItemGroup>
+
 
 </Project>

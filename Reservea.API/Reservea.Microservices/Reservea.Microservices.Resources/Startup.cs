@@ -50,8 +50,10 @@ namespace Reservea.Microservices.Resources
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataContext dataContext)
         {
+            dataContext.Database.Migrate();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
