@@ -12,7 +12,7 @@ namespace Reservea.Microservices.Resources.Interfaces.Services
         Task<ResourceTypeForDetailedResponse> GetResourceTypeDetailsAsync(int resourceTypeId, CancellationToken cancellationToken);
         Task UpdateResourceTypeAsync(int resourceTypeId, UpdateResourceTypeRequest request, CancellationToken cancellationToken);
         Task<AddResourceTypeResponse> AddResourceTypeAsync(AddResourceTypeRequest request, CancellationToken cancellationToken);
-        Task DeleteResourceTypeAsync(int resourceTypeId, CancellationToken cancellationToken);
+        Task RemoveResourceTypeAsync(int resourceTypeId, CancellationToken cancellationToken);
         Task UpdateResourceTypeAttributesAsync(int resourceTypeId, UpdateResourceTypeAttributesRequest request, CancellationToken cancellationToken);
     }
 }

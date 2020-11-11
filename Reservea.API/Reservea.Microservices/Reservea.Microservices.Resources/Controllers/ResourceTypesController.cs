@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Reservea.Microservices.Resources.Dtos.Requests;
 using Reservea.Microservices.Resources.Interfaces.Services;
 using System.Threading;
@@ -17,7 +18,17 @@ namespace Reservea.Microservices.Resources.Controllers
             _resourceTypesService = resourceTypesService;
         }
 
+        /// <summary>
+        /// Pobiera wszystkie typy zasobów zdefiniowane w systemie
+        /// </summary>
+        /// <remarks>
+        /// Tu będzie informacja o paginacji, jak już ją wprowadze
+        /// </remarks>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns>Lista wszystkich typów zasobów zdefiniowanych w systemie</returns>
+        /// <response code="200">Pobranie danych powiodło się</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllResourceTypesForListAsync(CancellationToken cancellationToken)
         {
             var response = await _resourceTypesService.GetAllResourceTypesForListAsync(cancellationToken);
@@ -25,7 +36,17 @@ namespace Reservea.Microservices.Resources.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Pobiera szczegółowe informacje na temat danego typu zasobu
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="id">Identyfikator typu zasobu</param>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns>Szczegółowe dane typu zasobu zdefiniowanego w systemie</returns>
+        /// <response code="200">Pobranie danych powiodło się</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetResourceTypeDetailsAsync(int id, CancellationToken cancellationToken)
         {
             var response = await _resourceTypesService.GetResourceTypeDetailsAsync(id,cancellationToken);
@@ -33,7 +54,17 @@ namespace Reservea.Microservices.Resources.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Tworzy nowy typ zasobu w systemie
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="request">Parametry nowego typu zasobu</param>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns>Szczegółowe dane nowo utworzonego typu zasobu</returns>
+        /// <response code="200">Dodanie typu zasobu powiodło się</response>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> AddResourceTypeAsync(AddResourceTypeRequest request, CancellationToken cancellationToken)
         {
             var result = await _resourceTypesService.AddResourceTypeAsync(request, cancellationToken);
@@ -41,7 +72,18 @@ namespace Reservea.Microservices.Resources.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Aktualizuje parametry typu zasobu znajdującego się w systemie
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="id">Identyfikator zasobu do aktualizacji</param>
+        /// <param name="request">Nowe parametry danego zasobu</param>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns></returns>
+        /// <response code="204">Typ zasobu został poprawnie zaaktualizowany</response>
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateResourceTypeAsync(int id, UpdateResourceTypeRequest request, CancellationToken cancellationToken)
         {
             await _resourceTypesService.UpdateResourceTypeAsync(id, request, cancellationToken);
@@ -49,15 +91,36 @@ namespace Reservea.Microservices.Resources.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Usuwa typ zasobu z systemu
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="id">Identyfikator typu zasobu do usunięcia</param>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns></returns>
+        /// <response code="204">Typ zasobu został poprawnie usunięty</response>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteResourceTypeAsync(int id, CancellationToken cancellationToken)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> RemoveResourceTypeAsync(int id, CancellationToken cancellationToken)
         {
-            await _resourceTypesService.DeleteResourceTypeAsync(id, cancellationToken);
+            await _resourceTypesService.RemoveResourceTypeAsync(id, cancellationToken);
 
             return NoContent();
         }
 
+        /// <summary>
+        /// Aktualizuje listę atrybutów przypisaną do danego typu zasobu
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="id">Identyfikator typu zasobu którego atrybuty chcemy zaaktualizować</param>
+        /// <param name="request">Dwie listy: identyfikatory atrybutów do usunięcia oraz atrybutów do dodania</param>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns></returns>
+        /// <response code="204">Lista atrybutów została poprawnie zaaktualizowana</response>
         [HttpPut("{id}/attributes")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateResourceTypeAttributesAsync(int id, UpdateResourceTypeAttributesRequest request, CancellationToken cancellationToken)
         {
             await _resourceTypesService.UpdateResourceTypeAttributesAsync(id, request, cancellationToken);

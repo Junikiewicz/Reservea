@@ -56,7 +56,7 @@ namespace Reservea.Microservices.Resources.Services
             return _mapper.Map<AddResourceTypeResponse>(newResourceType);
         }
 
-        public async Task DeleteResourceTypeAsync(int resourceTypeId, CancellationToken cancellationToken)
+        public async Task RemoveResourceTypeAsync(int resourceTypeId, CancellationToken cancellationToken)
         {
             await _unitOfWork.ResourceTypesRepository.RemoveByIdAsync(resourceTypeId, cancellationToken);
 
