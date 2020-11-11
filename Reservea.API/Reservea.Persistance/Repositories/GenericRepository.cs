@@ -69,58 +69,38 @@ namespace Reservea.Persistance.Repositories
             return await query.ToListAsync(cancellationToken);
         }
 
-        public void AddAsync(TEntity entity)
+        public void Add(TEntity entity)
         {
             _context.Set<TEntity>().Add(entity);
         }
 
-        public void AddManyAsync(IEnumerable<TEntity> entities)
+        public void AddRange(IEnumerable<TEntity> entities)
         {
             _context.Set<TEntity>().AddRange(entities);
         }
 
-        public void Update(TEntity entity)
-        {
-            _context.Set<TEntity>().Update(entity);
-        }
-
-        public void UpdateRange(IEnumerable<TEntity> entities)
-        {
-            _context.Set<TEntity>().UpdateRange(entities);
-        }
-
-        public void Delete(TEntity entity)
+        public void Remove(TEntity entity)
         {
             _context.Remove(entity);
         }
 
-        public void DeleteRange(IEnumerable<TEntity> entity)
+        public void RemoveRange(IEnumerable<TEntity> entity)
         {
             _context.Set<TEntity>().RemoveRange(entity);
         }
 
-        public virtual async Task DeleteByIdAsync<TId>(TId id, CancellationToken cancellationToken)
+        public virtual async Task RemoveByIdAsync<TId>(TId id, CancellationToken cancellationToken)
         {
             var entity = await GetByIdAsync(id, cancellationToken);
 
-            Delete(entity);
+            Remove(entity);
         }
 
-        public virtual async Task DeleteByListOfIdsAsync<TId>(IEnumerable<TId> ids, CancellationToken cancellationToken)
+        public virtual async Task RemoveByListOfIdsAsync<TId>(IEnumerable<TId> ids, CancellationToken cancellationToken)
         {
             var entity = await GetByListOfIdsAsync(ids, cancellationToken);
 
-            DeleteRange(entity);
-        }
-
-        public void Add(TEntity entity)
-        {
-            _context.Add(entity);
-        }
-
-        public void AddRange(IEnumerable<TEntity> entity)
-        {
-            _context.AddRange(entity);
+            RemoveRange(entity);
         }
 
         #region Private helpers

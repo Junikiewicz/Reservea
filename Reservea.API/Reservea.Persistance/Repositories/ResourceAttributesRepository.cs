@@ -18,18 +18,18 @@ namespace Reservea.Persistance.Repositories
 
         }
 
-        public async Task DeleteByIdAsync<TId>(ResourceAttributePrimaryKey primaryKey, CancellationToken cancellationToken)
+        public async Task RemoveByIdAsync<TId>(ResourceAttributePrimaryKey primaryKey, CancellationToken cancellationToken)
         {
             var entity = await GetByIdAsync(primaryKey, cancellationToken);
 
-            Delete(entity);
+            Remove(entity);
         }
 
-        public async Task DeleteByListOfIdsAsync(IEnumerable<ResourceAttributePrimaryKey> ids, CancellationToken cancellationToken)
+        public async Task RemoveByListOfIdsAsync(IEnumerable<ResourceAttributePrimaryKey> ids, CancellationToken cancellationToken)
         {
             var entity = await GetByListOfIdsAsync(ids, cancellationToken);
 
-            DeleteRange(entity);
+            RemoveRange(entity);
         }
         public async Task<ResourceAttribute> GetByIdAsync(ResourceAttributePrimaryKey primaryKey, CancellationToken cancellationToken)
         {

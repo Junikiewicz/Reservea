@@ -1,6 +1,6 @@
 ﻿namespace Reservea.Microservices.Resources.Dtos.Requests
 {
-    public class EditAttributeRequest
+    public class UpdateAttributeRequest
     {
         public string Name { get; set; }
     }

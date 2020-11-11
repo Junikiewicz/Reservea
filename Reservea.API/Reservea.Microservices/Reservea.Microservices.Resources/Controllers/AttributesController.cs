@@ -18,33 +18,33 @@ namespace Reservea.Microservices.Resources.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAttributesForList(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllAttributesForListAsync(CancellationToken cancellationToken)
         {
-            var response = await _attributesService.GetAllAttributesForList(cancellationToken);
+            var response = await _attributesService.GetAllAttributesForListAsync(cancellationToken);
 
             return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAttribute(AddAttributeRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddAttributeAsync(AddAttributeRequest request, CancellationToken cancellationToken)
         {
-            var result = await _attributesService.AddAttribute(request, cancellationToken);
+            var result = await _attributesService.AddAttributeAsync(request, cancellationToken);
 
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAttribute(int id, EditAttributeRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateAttributeAsync(int id, UpdateAttributeRequest request, CancellationToken cancellationToken)
         {
-            await _attributesService.EditAttribute(id, request, cancellationToken);
+            await _attributesService.UpdateAttributeAsync(id, request, cancellationToken);
             
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAttribute(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> RemoveAttributeAsync(int id, CancellationToken cancellationToken)
         {
-            await _attributesService.DeleteAttribute(id, cancellationToken);
+            await _attributesService.RemoveAttributeAsync(id, cancellationToken);
 
             return NoContent();
         }

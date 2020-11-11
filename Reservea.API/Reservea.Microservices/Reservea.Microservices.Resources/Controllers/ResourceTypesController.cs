@@ -18,7 +18,7 @@ namespace Reservea.Microservices.Resources.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllResourceTypesForList(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllResourceTypesForListAsync(CancellationToken cancellationToken)
         {
             var response = await _resourceTypesService.GetAllResourceTypesForListAsync(cancellationToken);
 
@@ -26,15 +26,15 @@ namespace Reservea.Microservices.Resources.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetResourceTypeDetails(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetResourceTypeDetailsAsync(int id, CancellationToken cancellationToken)
         {
-            var response = await _resourceTypesService.GetResourceTypeDetailsByIdAsync(id,cancellationToken);
+            var response = await _resourceTypesService.GetResourceTypeDetailsAsync(id,cancellationToken);
 
             return Ok(response);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddResourceType(AddResourceTypeRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddResourceTypeAsync(AddResourceTypeRequest request, CancellationToken cancellationToken)
         {
             var result = await _resourceTypesService.AddResourceTypeAsync(request, cancellationToken);
 
@@ -42,7 +42,7 @@ namespace Reservea.Microservices.Resources.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateResourceType(int id, UpdateResourceTypeRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateResourceTypeAsync(int id, UpdateResourceTypeRequest request, CancellationToken cancellationToken)
         {
             await _resourceTypesService.UpdateResourceTypeAsync(id, request, cancellationToken);
 
@@ -50,7 +50,7 @@ namespace Reservea.Microservices.Resources.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteResourceType(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteResourceTypeAsync(int id, CancellationToken cancellationToken)
         {
             await _resourceTypesService.DeleteResourceTypeAsync(id, cancellationToken);
 

@@ -21,12 +21,12 @@ namespace Reservea.Microservices.Resources.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<AttributeForListResponse>> GetAllAttributesForList(CancellationToken cancellationToken)
+        public async Task<IEnumerable<AttributeForListResponse>> GetAllAttributesForListAsync(CancellationToken cancellationToken)
         {
             return await _unitOfWork.AttributesRepository.GetAllAsync<AttributeForListResponse>(cancellationToken);
         }
 
-        public async Task<AddAttributeResponse> AddAttribute(AddAttributeRequest request, CancellationToken cancellationToken)
+        public async Task<AddAttributeResponse> AddAttributeAsync(AddAttributeRequest request, CancellationToken cancellationToken)
         {
             var newAttribute = _mapper.Map<Attribute>(request);
 
@@ -37,7 +37,7 @@ namespace Reservea.Microservices.Resources.Services
             return _mapper.Map<AddAttributeResponse>(newAttribute);
         }
 
-        public async Task EditAttribute(int id, EditAttributeRequest request, CancellationToken cancellationToken)
+        public async Task UpdateAttributeAsync(int id, UpdateAttributeRequest request, CancellationToken cancellationToken)
         {
             var attributeFromDatabase = await _unitOfWork.AttributesRepository.GetByIdAsync(id, cancellationToken);
 
@@ -46,9 +46,9 @@ namespace Reservea.Microservices.Resources.Services
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task DeleteAttribute(int id, CancellationToken cancellationToken)
+        public async Task RemoveAttributeAsync(int id, CancellationToken cancellationToken)
         {
-            await _unitOfWork.AttributesRepository.DeleteByIdAsync(id, cancellationToken);
+            await _unitOfWork.AttributesRepository.RemoveByIdAsync(id, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }

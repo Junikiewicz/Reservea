@@ -7,8 +7,8 @@ namespace Reservea.Persistance.Interfaces.Repositories
 {
     public interface IResourceAttributesRepository : IGenericRepository<ResourceAttribute>
     {
-        Task DeleteByIdAsync<TId>(ResourceAttributePrimaryKey primaryKey, CancellationToken cancellationToken);
-        Task DeleteByListOfIdsAsync(IEnumerable<ResourceAttributePrimaryKey> primaryKeys, CancellationToken cancellationToken);
+        Task RemoveByIdAsync<TId>(ResourceAttributePrimaryKey primaryKey, CancellationToken cancellationToken);
+        Task RemoveByListOfIdsAsync(IEnumerable<ResourceAttributePrimaryKey> primaryKeys, CancellationToken cancellationToken);
         Task<ResourceAttribute> GetByIdAsync(ResourceAttributePrimaryKey primaryKey, CancellationToken cancellationToken);
         Task<TResult> GetByIdAsync<TResult>(ResourceAttributePrimaryKey primaryKey, CancellationToken cancellationToken);
         Task<IEnumerable<ResourceAttribute>> GetByListOfIdsAsync(IEnumerable<ResourceAttributePrimaryKey> primaryKeys, CancellationToken cancellationToken);

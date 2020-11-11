@@ -28,7 +28,7 @@ namespace Reservea.Microservices.Resources.Services
             if (request.AttributesToDelete != null)
             {
                 var idsOfAttributesToDelete = request.AttributesToDelete.Select(x => new ResourceAttributePrimaryKey { ResourceId = resourceId, AttributeId = x.AttributeId });
-                await _unitOfWork.ResourceAttributesRepository.DeleteByListOfIdsAsync(idsOfAttributesToDelete, cancellationToken);
+                await _unitOfWork.ResourceAttributesRepository.RemoveByListOfIdsAsync(idsOfAttributesToDelete, cancellationToken);
             }
             if (request.AttributesToAddOrUpdate != null)
             {
@@ -36,7 +36,6 @@ namespace Reservea.Microservices.Resources.Services
 
                 var alreadyExistingResourceAttributes = await _unitOfWork.ResourceAttributesRepository.GetByListOfIdsAsync(idsOfAttributesToAddOrUpdate, cancellationToken);
                 alreadyExistingResourceAttributes.ForEach(x => x.Value = request.AttributesToAddOrUpdate.Single(y => y.AttributeId == x.AttributeId).Value);
-                _unitOfWork.ResourceAttributesRepository.UpdateRange(alreadyExistingResourceAttributes);
 
                 var attributesToAdd = request.AttributesToAddOrUpdate.Where(x => !alreadyExistingResourceAttributes.Any(y => x.AttributeId == y.AttributeId));
                 var attributesToAddEntities = _mapper.Map<IEnumerable<ResourceAttribute>>(attributesToAdd);
