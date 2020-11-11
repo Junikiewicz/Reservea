@@ -7,12 +7,12 @@ WORKDIR /src
 # Restore nuget packages for service
 COPY "Reservea.Microservices/Reservea.Microservices.Reservations/Reservea.Microservices.Reservations.csproj" "Reservea.Microservices/Reservea.Microservices.Reservations/"
 COPY "Reservea.Common/Reservea.Common.csproj" "Reservea.Common/"
+COPY "Reservea.Persistance/Reservea.Persitance.csproj" "Reservea.Persistance/"
 RUN dotnet restore "Reservea.Microservices/Reservea.Microservices.Reservations/Reservea.Microservices.Reservations.csproj"
 
 # Restore nuget packages for tests
 COPY "Reservea.Tests/Reservea.Tests.Reservations/Reservea.Tests.Reservations.csproj" "Reservea.Tests/Reservea.Tests.Reservations/"
 COPY "Reservea.Tests/Reservea.Tests.Common/Reservea.Tests.Common.csproj" "Reservea.Tests/Reservea.Tests.Common/"
-COPY "Reservea.Persistance/Reservea.Persistance.csproj" "Reservea.Persistance/"
 RUN dotnet restore "Reservea.Tests/Reservea.Tests.Reservations/Reservea.Tests.Reservations.csproj"
 RUN dotnet restore "Reservea.Tests/Reservea.Tests.Common/Reservea.Tests.Common.csproj"
 
