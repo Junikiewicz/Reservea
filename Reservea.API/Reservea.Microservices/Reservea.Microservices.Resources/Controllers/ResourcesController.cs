@@ -25,10 +25,10 @@ namespace Reservea.Microservices.Resources.Controllers
             return Ok(resourcesForList);
         }
 
-        [HttpGet("{resourceId}")]
-        public async Task<IActionResult> GetResourceDetailsAsync(int resourceId, CancellationToken cancellationToken)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetResourceDetailsAsync(int id, CancellationToken cancellationToken)
         {
-            var resourceDetails = await _resourcesService.GetResourceDetailsAsync(resourceId, cancellationToken);
+            var resourceDetails = await _resourcesService.GetResourceDetailsAsync(id, cancellationToken);
 
             return Ok(resourceDetails);
         }
@@ -41,10 +41,18 @@ namespace Reservea.Microservices.Resources.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{resourceId}")]
-        public async Task<IActionResult> UpdateResourceAsync(int resourceId, UpdateResourceRequest request, CancellationToken cancellationToken)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateResourceAsync(int id, UpdateResourceRequest request, CancellationToken cancellationToken)
         {
-            await _resourcesService.UpdateResourceAsync(resourceId, request, cancellationToken);
+            await _resourcesService.UpdateResourceAsync(id, request, cancellationToken);
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}/attributes")]
+        public async Task<IActionResult> UpdateResourceAttributesAsync(int id, UpdateResourceAttributesRequest request, CancellationToken cancellationToken)
+        {
+            await _resourcesService.UpdateResourceAttributesAsync(id, request, cancellationToken);
 
             return NoContent();
         }

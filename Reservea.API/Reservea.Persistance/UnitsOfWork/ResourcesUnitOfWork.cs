@@ -55,10 +55,23 @@ namespace Reservea.Persistance.UnitsOfWork
             }
         }
 
+        public IResourceTypeAttributesRepository ResourceTypeAttributesRepository
+        {
+            get
+            {
+                if (_resourceTypeAttributesRepository == null)
+                {
+                    _resourceTypeAttributesRepository = new ResourceTypeAttributesRepository(_context, _mapper);
+                }
+                return _resourceTypeAttributesRepository;
+            }
+        }
+
         private IResourcesRepository _resourcesRepository;
         private IResourceAttributesRepository _resourceAttributesRepository;
         private IAttributesRepository _attributesRepository;
         private IResourceTypesRepository _resourceTypesRepository;
+        private IResourceTypeAttributesRepository _resourceTypeAttributesRepository;
 
         public ResourcesUnitOfWork(DataContext context, IMapper mapper) : base(context, mapper)
         {

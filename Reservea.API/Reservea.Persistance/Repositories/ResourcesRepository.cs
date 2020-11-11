@@ -9,6 +9,5 @@ namespace Reservea.Persistance.Repositories
         public ResourcesRepository(DataContext context, IMapper mapper) : base(context, mapper)
         {
         }
-
     }
 }
