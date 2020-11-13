@@ -5,7 +5,6 @@ import Router from "./router";
 import NavbarLayout from "./components/navbar/navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
-import "./web.config";
 
 ReactDOM.render(
   <React.StrictMode>
