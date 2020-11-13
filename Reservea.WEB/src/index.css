@@ -1,13 +1,21 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Hover tab */
+.customPillsColors a:hover {
+    background-color: #303235;
+    color: rgb(233, 233, 233);
+}
+/* Active tab */
+.customPillsColors a.active
+{
+    background-color: rgb(42, 89, 116) !important;
+    color: rgb(233, 233, 233)!important;
+}
+/* Inactive tab */
+.customPillsColors a {
+    background-color:#343a40;
+    color: darkgray;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.contentDiv {
+    background-color:#343a40;
+    color:rgb(233, 233, 233);
 }
