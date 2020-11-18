@@ -19,6 +19,12 @@ namespace Reservea.Gateway
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    builder => builder.AllowAnyOrigin().AllowAnyHeader());
+            });
+
             services.AddOcelot();
 
             services.AddSwaggerForOcelot(Configuration);
@@ -30,6 +36,8 @@ namespace Reservea.Gateway
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("AllowAllOrigins");
 
             app.UseHttpsRedirection();
 

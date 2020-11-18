@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Reservea.Common.Middleware;
 using Reservea.Microservices.Users.Interfaces.Services;
 using Reservea.Microservices.Users.Services;
 using Reservea.Persistance;
@@ -58,6 +59,8 @@ namespace Reservea.Microservices.Users
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 

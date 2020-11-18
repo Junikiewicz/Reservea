@@ -1,4 +1,4 @@
-﻿namespace Reservea.Common.Enums
+﻿namespace Reservea.Microservices.Resources.Enums
 {
     public enum ResourceStatus
     {

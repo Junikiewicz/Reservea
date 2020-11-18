@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Reservea.Common.Exceptions;
 using Reservea.Common.Helpers;
+using Reservea.Microservices.Users.Dtos.Responses;
 using Reservea.Microservices.Users.Interfaces.Services;
 using Reservea.Persistance.Models;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -39,20 +40,23 @@ namespace Reservea.Microservices.Users.Services
             };
             var userCreationResult = await _userManager.CreateAsync(userToCreate, password);
 
-            if (!userCreationResult.Succeeded) throw new Exception(userCreationResult.Errors.ToString());
+            if (!userCreationResult.Succeeded) throw new UserCreationException(userCreationResult.Errors.ToString());
         }
 
-        public async Task<string> Login(string email, string password)
+        public async Task<LoginResponse> Login(string email, string password)
         {
             var userFromDatabase = await _userManager.FindByEmailAsync(email);
 
-            if (userFromDatabase == null || !userFromDatabase.IsActive) throw new AuthenticationException("Unauthorized");
+            if (userFromDatabase == null || !userFromDatabase.IsActive) throw new AuthenticationException("Invalid username or password");
 
             var signInResult = await _signInManager.CheckPasswordSignInAsync(userFromDatabase, password, false);
 
-            if (!signInResult.Succeeded) throw new AuthenticationException();
+            if (!signInResult.Succeeded) throw new AuthenticationException("Invalid username or password");
 
-            return await GenerateJwtToken(_configuration.GetSection("AppSettings:PrivateKey").Value, userFromDatabase);
+            return new LoginResponse
+            {
+                JwtToken = await GenerateJwtToken(_configuration.GetSection("AppSettings:PrivateKey").Value, userFromDatabase)
+            };
         }
 
         private async Task<string> GenerateJwtToken(string privateKey, User user)
