@@ -49,7 +49,7 @@ namespace Reservea.Microservices.Resources.Services
         public async Task<AddResourceResponse> AddResourceAsync(AddResourceRequest request, CancellationToken cancellationToken)
         {
             var newResource = _mapper.Map<Resource>(request);
-            newResource.ResourceStatusId = (int)Common.Enums.ResourceStatus.New;
+            newResource.ResourceStatusId = (int)Enums.ResourceStatus.New;
 
             _unitOfWork.ResourcesRepository.Add(newResource);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Reservea.Common.Helpers;
+using Reservea.Microservices.Users.Dtos.Responses;
 using System.Threading.Tasks;
 
 namespace Reservea.Microservices.Users.Interfaces.Services
@@ -9,6 +8,6 @@ namespace Reservea.Microservices.Users.Interfaces.Services
     {
         Task Register(string email, string password, string firstName, string lastName);
 
-        Task<string> Login(string email, string password);
+        Task<LoginResponse> Login(string email, string password);
     }
 }

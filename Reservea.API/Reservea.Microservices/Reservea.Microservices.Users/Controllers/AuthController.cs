@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Reservea.Microservices.Users.Dtos.Requests;
-using Reservea.Microservices.Users.Dtos.Responses;
 using Reservea.Microservices.Users.Interfaces.Services;
 using System.Threading.Tasks;
 
@@ -17,23 +17,34 @@ namespace Reservea.Microservices.Users.Controllers
         }
 
         /// <summary>
-        /// Provides user with jwt token used for authentication in the api
+        /// Na podstawie dostarczonych przez użytkownika danych do logowania generuje token JWT
         /// </summary>
-        /// <returns>Jwt token</returns>
-        /// <param name="loginRequest">User email and password</param>
+        /// <remarks></remarks>
+        /// <param name="loginRequest">Email i hasło</param>
+        /// <returns>Token JWT</returns>
+        /// <response code="200">Logowanie powiodło sie</response>
+        /// <response code="401">Nieprawidłowy email lub hasło</response>
         [HttpPost("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
-            var token = await _authenticationService.Login(loginRequest.Email, loginRequest.Password);
+            var jwtToken = await _authenticationService.Login(loginRequest.Email, loginRequest.Password);
 
-            return Ok(new LoginResponse { JwtToken = token });
+            return Ok(jwtToken);
         }
 
         /// <summary>
-        /// Creates new user
+        /// Tworzy nowego użytkownika
         /// </summary>
-        /// <param name="registerRequest">Dto containg basic information about the user and his desired login credentials</param>
+        /// <remarks></remarks>
+        /// <param name="registerRequest">Email, hasło oraz dane osobowe</param>
+        /// <returns></returns>
+        /// <response code="201">Utworzenie nowego użytkownika powiodło się</response>
+        /// <response code="400">Nie udało się stworzyć użytkownika o podanych danych</response>
         [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register(RegisterRequest registerRequest)
         {
             await _authenticationService.Register(registerRequest.Email, registerRequest.Password, registerRequest.FirstName, registerRequest.LastName);
