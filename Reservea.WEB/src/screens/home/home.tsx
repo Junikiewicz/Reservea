@@ -1,6 +1,6 @@
 import React from "react";
 import "./home.css";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import ImageCarousel from "../../components/image-carousel/image-carousel";
 
 const Home = () => (
@@ -29,19 +29,24 @@ const Home = () => (
     </Col>
     <Col xl="3">
       <div>
-        <Row>OPINIE</Row>
-        <Row className="mt-1">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-          laoreet felis non volutpat molestie.
-        </Row>
-        <Row className="mt-4">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-          laoreet felis non volutpat molestie.
-        </Row>
-        <Row className="mt-4">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-          laoreet felis non volutpat molestie.
-        </Row>
+        <Container>
+          <Row>OPINIE</Row>
+          <Row className="mt-1">
+            <span>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+            laoreet felis non volutpat molestie.
+            </span>
+            
+          </Row>
+          <Row className="mt-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+            laoreet felis non volutpat molestie.
+          </Row>
+          <Row className="mt-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
+            laoreet felis non volutpat molestie.
+          </Row>
+        </Container>
       </div>
       <div className="mt-4">
         <Row>KONTAKT</Row>

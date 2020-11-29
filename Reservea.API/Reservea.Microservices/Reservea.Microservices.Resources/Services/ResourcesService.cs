@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Reservea.Common.Extensions;
 using Reservea.Microservices.Resources.Dtos.Requests;
 using Reservea.Microservices.Resources.Dtos.Responses;
@@ -37,10 +38,51 @@ namespace Reservea.Microservices.Resources.Services
 
             return result;
         }
+        public async Task<IEnumerable<ResourceAttributeForDetailedResourceResponse>> GetResourceAttributesForTypeChange(int resourceId, int resourceTypeId, CancellationToken cancellationToken)
+        {
+            var resourceAttributes = (await _unitOfWork.ResourcesRepository.GetByIdAsync(resourceId, cancellationToken, include: i => i.Include(x => x.ResourceAttributes))).ResourceAttributes;//tylko atrybuty 
+            var resourceTypeAttributes = await _unitOfWork.ResourceTypesRepository.GetResourceTypeAttributes(resourceTypeId, cancellationToken);
+            var attributesList = new List<ResourceAttributeForDetailedResourceResponse>();
+
+            foreach (var attribute in resourceTypeAttributes)
+            {
+                var alreadyPresentAttribute = resourceAttributes.SingleOrDefault(x => x.ResourceId == resourceId && x.AttributeId == attribute.Id);
+
+                var newAttribute = new ResourceAttributeForDetailedResourceResponse
+                {
+                    AttributeId = attribute.Id,
+                    ResourceId = resourceId,
+                    Name = attribute.Name,
+                    Value = alreadyPresentAttribute != null ? alreadyPresentAttribute.Value : ""
+                };
+
+                attributesList.Add(newAttribute);
+            }
+
+            return attributesList;
+        }
 
         public async Task UpdateResourceAsync(int resourceId, UpdateResourceRequest request, CancellationToken cancellationToken)
         {
-            var resourceFromDatabase = await _unitOfWork.ResourcesRepository.GetByIdAsync(resourceId, cancellationToken);
+            var resourceFromDatabase = await _unitOfWork.ResourcesRepository.GetByIdAsync(resourceId, cancellationToken, include: i => i.Include(x => x.ResourceAttributes));
+
+            var resourceTypeAttributesIds = await _unitOfWork.ResourceTypesRepository.GetResourceTypeAttributesIds(request.ResourceTypeId, cancellationToken);
+            var attributesToDelete = resourceFromDatabase.ResourceAttributes.Where(x => !resourceTypeAttributesIds.Contains(x.AttributeId));
+            foreach (var newAttributeId in resourceTypeAttributesIds)
+            {
+                var attributeValueToSet = request.ResourceAttributes?.SingleOrDefault(x => x.AttributeId == newAttributeId)?.Value;
+                var alreadyPresentAttribute = resourceFromDatabase.ResourceAttributes.SingleOrDefault(x => x.ResourceId == resourceId && x.AttributeId == newAttributeId);
+                if (alreadyPresentAttribute != null)
+                {
+                    alreadyPresentAttribute.Value = attributeValueToSet;
+                }
+                else
+                {
+                    resourceFromDatabase.ResourceAttributes.Add(new ResourceAttribute { AttributeId = newAttributeId, ResourceId = resourceId, Value = attributeValueToSet });
+                }
+            }
+            _unitOfWork.ResourceAttributesRepository.RemoveRange(attributesToDelete);
+
             _mapper.Map(request, resourceFromDatabase);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -55,29 +97,6 @@ namespace Reservea.Microservices.Resources.Services
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return _mapper.Map<AddResourceResponse>(newResource);
-        }
-
-        public async Task UpdateResourceAttributesAsync(int resourceId, UpdateResourceAttributesRequest request, CancellationToken cancellationToken)
-        {
-            if (request.AttributesToDelete != null)
-            {
-                var idsOfAttributesToDelete = request.AttributesToDelete.Select(x => new ResourceAttributePrimaryKey { ResourceId = resourceId, AttributeId = x.AttributeId });
-                await _unitOfWork.ResourceAttributesRepository.RemoveByListOfIdsAsync(idsOfAttributesToDelete, cancellationToken);
-            }
-            if (request.AttributesToAddOrUpdate != null)
-            {
-                var idsOfAttributesToAddOrUpdate = request.AttributesToAddOrUpdate.Select(x => new ResourceAttributePrimaryKey { ResourceId = resourceId, AttributeId = x.AttributeId });
-
-                var alreadyExistingResourceAttributes = await _unitOfWork.ResourceAttributesRepository.GetByListOfIdsAsync(idsOfAttributesToAddOrUpdate, cancellationToken);
-                alreadyExistingResourceAttributes.ForEach(x => x.Value = request.AttributesToAddOrUpdate.Single(y => y.AttributeId == x.AttributeId).Value);
-
-                var attributesToAdd = request.AttributesToAddOrUpdate.Where(x => !alreadyExistingResourceAttributes.Any(y => x.AttributeId == y.AttributeId));
-                var attributesToAddEntities = _mapper.Map<IEnumerable<ResourceAttribute>>(attributesToAdd);
-                attributesToAddEntities.ForEach(x => x.ResourceId = resourceId);
-                _unitOfWork.ResourceAttributesRepository.AddRange(attributesToAddEntities);
-            }
-
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
     }
 }

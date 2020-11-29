@@ -55,6 +55,25 @@ namespace Reservea.Microservices.Resources.Controllers
         }
 
         /// <summary>
+        /// Pobiera liste atrybutów do zmiany typu
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="resouceId">Identyfikator zasobu</param>
+        /// <param name="resourceTypeId">Identyfikator nowego typu zasobu</param>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns>Szczegółowe dane zasobu zdefiniowanego w systemie</returns>
+        /// <response code="200">Pobranie danych powiodło się</response>
+        [HttpGet("{resourceId}/{resourceTypeId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetResourceAttributesForTypeChange(int resourceId, int resourceTypeId, CancellationToken cancellationToken)
+        {
+            var attributes = await _resourcesService.GetResourceAttributesForTypeChange(resourceId, resourceTypeId, cancellationToken);
+
+            return Ok(attributes);
+        }
+
+        /// <summary>
         /// Tworzy nowy zasób w systemie
         /// </summary>
         /// <remarks>
@@ -87,25 +106,6 @@ namespace Reservea.Microservices.Resources.Controllers
         public async Task<IActionResult> UpdateResourceAsync(int id, UpdateResourceRequest request, CancellationToken cancellationToken)
         {
             await _resourcesService.UpdateResourceAsync(id, request, cancellationToken);
-
-            return NoContent();
-        }
-
-        /// <summary>
-        /// Aktualizuje atrybuty przypisaną do danego zasobu
-        /// </summary>
-        /// <remarks>
-        /// </remarks>
-        /// <param name="id">Identyfikator zasobu którego atrybuty chcemy zaaktualizować</param>
-        /// <param name="request">Dwie listy: atrybutów do usunięcia oraz atrybutów do dodania lub zaaktualizowania</param>
-        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
-        /// <returns></returns>
-        /// <response code="204">Lista atrybutów została poprawnie zaaktualizowana</response>
-        [HttpPut("{id}/attributes")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateResourceAttributesAsync(int id, UpdateResourceAttributesRequest request, CancellationToken cancellationToken)
-        {
-            await _resourcesService.UpdateResourceAttributesAsync(id, request, cancellationToken);
 
             return NoContent();
         }
