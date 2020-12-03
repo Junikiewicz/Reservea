@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  Button,
-  Row,
-  Tab,
-  Nav,
-  Col,
-  Container,
-  Breadcrumb,
-} from "react-bootstrap";
-import EditResourceGeneral from "./edit-resource-general/edit-resource-general";
-import EditResourceAttributes from "./edit-resource-attributes/edit-resource-attributes";
+import { Button, Row, Tab, Nav, Col, Container } from "react-bootstrap";
+import EditResourceGeneral from "../edit-resource/edit-resource-general/edit-resource-general";
+import EditResourceAttributes from "../edit-resource/edit-resource-attributes/edit-resource-attributes";
 import { ResourceDetailsResponse } from "../../api/dtos/resources/resources/resourceDetailsResponse";
 import {
-  resourceAttributesForTypeChangeRequest,
-  resourceDetailsRequest,
+  createResourceRequest,
+  resourcesTypeAttributesRequest,
   resourcesTypesListRequest,
-  updateResourceRequest,
 } from "../../api/clients/resourcesClient";
 import { useFieldArray, useForm } from "react-hook-form";
 import { UpdateResourceFormData } from "../../common/models/forms/updateResourceFormData";
@@ -24,15 +14,14 @@ import { toast } from "react-toastify";
 import { ResourceTypeForListResponse } from "../../api/dtos/resources/resourceTypes/resourceTypeForListResponse";
 import { ResourceAttributeResponse } from "../../api/dtos/resources/resourceAttributes/resourceAttributeResponse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowRight,
-  faArrowLeft,
-  faLongArrowAltLeft,
-} from "@fortawesome/free-solid-svg-icons";
+import { faLongArrowAltLeft } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { AttributeForListResponse } from "../../api/dtos/resources/attributes/attributeForListResponse";
+import { useHistory } from "react-router-dom";
+import { AddResourceResponse } from "../../api/dtos/resources/resources/addResourceResponse";
 
-function EditResource(props: any) {
+function AddResource() {
+  const history = useHistory();
   const [
     resourceDetails,
     setResourceDetails,
@@ -40,6 +29,7 @@ function EditResource(props: any) {
   const [resourceTypes, setResourceTypes] = useState<
     Array<ResourceTypeForListResponse>
   >();
+
   const {
     control,
     register,
@@ -52,7 +42,7 @@ function EditResource(props: any) {
   });
 
   const { fields, remove, insert } = useFieldArray<
-    ResourceAttributeResponse,
+    AttributeForListResponse,
     "customId"
   >({
     control,
@@ -61,31 +51,29 @@ function EditResource(props: any) {
   });
 
   useEffect(() => {
-    //TODO: REMOVE CHAIN
-    resourceDetailsRequest(props.match.params.id)
-      .then((resourceDetailsResponse: ResourceDetailsResponse) => {
-        resourcesTypesListRequest()
-          .then((resourceTypesResponse: Array<ResourceTypeForListResponse>) => {
-            setResourceTypes(resourceTypesResponse);
-            reset({
-              resourceAttributes: resourceDetailsResponse.resourceAttributes,
-            });
-            setResourceDetails(resourceDetailsResponse);
-          })
-          .catch(() => {});
+    resourcesTypesListRequest()
+      .then((resourceTypesResponse: Array<ResourceTypeForListResponse>) => {
+        setResourceTypes(resourceTypesResponse);
+        setResourceDetails({
+          id: 0,
+          name: "",
+          description: "",
+          pricePerHour: 0,
+          resourceStatusId: 1,
+          resourceTypeId: resourceTypes ? resourceTypes[0].id : 0,
+          resourceAttributes: [],
+        });
+        onResourceTypeIdChange();
       })
       .catch(() => {});
   }, []);
 
   const onResourceTypeIdChange = async () => {
-    resourceAttributesForTypeChangeRequest(
-      props.match.params.id,
-      getValues("resourceTypeId")
-    )
-      .then((data: Array<ResourceAttributeResponse>) => {
+    resourcesTypeAttributesRequest(getValues("resourceTypeId"))
+      .then((data: Array<AttributeForListResponse>) => {
         remove();
         insert(0, data);
-      })
+    })
       .catch(() => {});
   };
 
@@ -93,17 +81,16 @@ function EditResource(props: any) {
     if (data.resourceAttributes) {
       data.resourceAttributes.map(
         (element: ResourceAttributeResponse, index: number) => {
-          element.attributeId = fields[index].attributeId ?? 0;
-          element.name = fields[index].name ?? "";
+          element.attributeId = fields[index].id ?? 0;
         }
       );
+      createResourceRequest(data)
+        .then((response: AddResourceResponse) => {
+          history.push("/edit-resource/" + response.id);
+          toast.success("Zasób poprawnie dodany");
+        })
+        .catch(() => {});
     }
-    updateResourceRequest(props.match.params.id, data)
-      .then(() => {
-        reset(data);
-        toast.success("Pomyślnie zapisano zmiany");
-      })
-      .catch(() => {});
   };
 
   return (
@@ -126,9 +113,7 @@ function EditResource(props: any) {
                 </Link>
               </Col>
               <Col className="text-center mt-2 col-4">
-                <h2>
-                  Zasób ID: <strong>{props.match.params.id}</strong>
-                </h2>
+                <h2>Dodaj nowy zasób</h2>
               </Col>
               <Col className="col-4 mt-2">
                 <Button
@@ -137,7 +122,7 @@ function EditResource(props: any) {
                   variant="success"
                   className="float-right"
                 >
-                  Zapisz zmiany
+                  Dodaj zasób
                 </Button>
               </Col>
             </Row>
@@ -182,4 +167,4 @@ function EditResource(props: any) {
   );
 }
 
-export default EditResource;
+export default AddResource;

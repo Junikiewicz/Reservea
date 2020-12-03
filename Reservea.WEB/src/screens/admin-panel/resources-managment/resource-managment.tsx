@@ -5,6 +5,7 @@ import Table from "react-bootstrap/esm/Table";
 import { resourcesListRequest } from "../../../api/clients/resourcesClient";
 import { ResourceForListResponse } from "../../../api/dtos/resources/resources/resourceForListResponse";
 import { Link } from "react-router-dom";
+import { Button, Row } from "react-bootstrap";
 
 function ResourceManagment() {
   const [resourcesList, setResourcesList] = useState<
@@ -38,7 +39,10 @@ function ResourceManagment() {
               <td>{element.resourceStatusId}</td>
               <td>{element.resourceTypeId}</td>
               <td>
-                <Link className="customLink" to={`/edit-resource/${element.id}`}>
+                <Link
+                  className="customLink"
+                  to={`/edit-resource/${element.id}`}
+                >
                   <FontAwesomeIcon
                     size="lg"
                     icon={faEdit}
@@ -55,6 +59,9 @@ function ResourceManagment() {
           ))}
         </tbody>
       </Table>
+      <Button href="/add-resource" className="float-right" variant="success">
+        Dodaj nowy
+      </Button>
     </div>
   );
 }

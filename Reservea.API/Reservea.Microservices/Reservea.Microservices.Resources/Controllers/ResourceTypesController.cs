@@ -55,6 +55,24 @@ namespace Reservea.Microservices.Resources.Controllers
         }
 
         /// <summary>
+        /// Pobiera listę atrybotów przypisaną do danego typu zasobu
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="id">Identyfikator typu zasobu</param>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns>Lista atrybutów przypisanych do danego typu zasobu</returns>
+        /// <response code="200">Pobranie danych powiodło się</response>
+        [HttpGet("{id}/attributes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetResourceTypeAttributesAsync(int id, CancellationToken cancellationToken)
+        {
+            var response = await _resourceTypesService.GetResourceTypeAttributesAsync(id, cancellationToken);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Tworzy nowy typ zasobu w systemie
         /// </summary>
         /// <remarks>

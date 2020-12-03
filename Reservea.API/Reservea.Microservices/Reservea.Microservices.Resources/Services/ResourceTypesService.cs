@@ -38,6 +38,13 @@ namespace Reservea.Microservices.Resources.Services
             return result;
         }
 
+        public async Task<IEnumerable<AttributeForListResponse>> GetResourceTypeAttributesAsync(int resourceTypeId, CancellationToken cancellationToken)
+        {
+            var result = await _unitOfWork.ResourceTypesRepository.GetResourceTypeAttributes(resourceTypeId, cancellationToken);
+
+            return _mapper.Map<IEnumerable<AttributeForListResponse>>(result);
+        }
+
         public async Task UpdateResourceTypeAsync(int resourceTypeId, UpdateResourceTypeRequest request, CancellationToken cancellationToken)
         {
             var resourceTypeFromDatabase = await _unitOfWork.ResourceTypesRepository.GetByIdAsync(resourceTypeId, cancellationToken);

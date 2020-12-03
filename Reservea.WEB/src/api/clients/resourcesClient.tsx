@@ -2,6 +2,8 @@ import { ResourceForListResponse } from "../dtos/resources/resources/resourceFor
 import { ResourceTypeForListResponse } from "../dtos/resources/resourceTypes/resourceTypeForListResponse";
 import { AttributeForListResponse } from "../dtos/resources/attributes/attributeForListResponse";
 import { ResourceDetailsResponse } from "../dtos/resources/resources/resourceDetailsResponse";
+import { AddResourceResponse } from "../dtos/resources/resources/addResourceResponse";
+
 import { UpdateResourceRequest } from "../dtos/resources/resources/updateResourceRequest";
 
 import { apiClient } from "./apiClient";
@@ -23,6 +25,16 @@ export const resourcesTypesListRequest = async (): Promise<
   return response.data;
 };
 
+export const resourcesTypeAttributesRequest = async (
+  id: number
+): Promise<Array<AttributeForListResponse>> => {
+  const response = await apiClient.get(
+    "/api/resources/ResourceTypes/" + id + "/attributes"
+  );
+
+  return response.data;
+};
+
 export const attributesListRequest = async (): Promise<
   Array<AttributeForListResponse>
 > => {
@@ -31,15 +43,16 @@ export const attributesListRequest = async (): Promise<
   return response.data;
 };
 
-export const resourceAttributesForTypeChangeRequest = async (resourceId: number,
-  resourceTypeId: number,): Promise<
-  Array<ResourceAttributeResponse>
-> => {
-  const response = await apiClient.get("/api/resources/Resources/"+resourceId+"/"+ resourceTypeId);
+export const resourceAttributesForTypeChangeRequest = async (
+  resourceId: number,
+  resourceTypeId: number
+): Promise<Array<ResourceAttributeResponse>> => {
+  const response = await apiClient.get(
+    "/api/resources/Resources/" + resourceId + "/" + resourceTypeId
+  );
 
   return response.data;
 };
-
 
 export const resourceDetailsRequest = async (
   resourceId: number
@@ -55,8 +68,16 @@ export const updateResourceRequest = async (
   resourceId: number,
   resourceData: UpdateResourceRequest
 ) => {
-  await apiClient.put(
-    "/api/resources/Resources/" + resourceId,
+  await apiClient.put("/api/resources/Resources/" + resourceId, resourceData);
+};
+
+export const createResourceRequest = async (
+  resourceData: UpdateResourceRequest
+): Promise<AddResourceResponse> => {
+  const response = await apiClient.post(
+    "/api/resources/Resources/",
     resourceData
   );
+
+  return response.data;
 };
