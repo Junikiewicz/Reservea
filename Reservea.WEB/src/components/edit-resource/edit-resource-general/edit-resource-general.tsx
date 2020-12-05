@@ -9,7 +9,7 @@ function EditResourceGeneral({
   resourceDetails,
   resourceTypes,
   register,
-  onResourceTypeIdChange
+  onResourceTypeIdChange,
 }: any) {
   if (!resourceDetails) {
     return <LoadingSpinner />;
@@ -25,6 +25,9 @@ function EditResourceGeneral({
               id="name"
               name="name"
               ref={register}
+              disabled={
+                resourceDetails?.resourceStatusId == ResourceStatus.Removed
+              }
               className="bg-dark text-light"
               type="text"
               defaultValue={resourceDetails.name}
@@ -36,6 +39,9 @@ function EditResourceGeneral({
               id="description"
               name="description"
               ref={register}
+              disabled={
+                resourceDetails?.resourceStatusId == ResourceStatus.Removed
+              }
               className="bg-dark text-light"
               as="textarea"
               defaultValue={resourceDetails.description}
@@ -50,6 +56,9 @@ function EditResourceGeneral({
               id="pricePerHour"
               name="pricePerHour"
               ref={register}
+              disabled={
+                resourceDetails?.resourceStatusId == ResourceStatus.Removed
+              }
               className="bg-dark text-light"
               type="number"
               defaultValue={resourceDetails.pricePerHour}
@@ -60,7 +69,10 @@ function EditResourceGeneral({
             <Form.Control
               id="resourceTypeId"
               name="resourceTypeId"
-              onChange = {onResourceTypeIdChange}
+              onChange={onResourceTypeIdChange}
+              disabled={
+                resourceDetails?.resourceStatusId == ResourceStatus.Removed
+              }
               defaultValue={resourceDetails.resourceTypeId}
               ref={register}
               className="bg-dark text-light"
@@ -76,16 +88,25 @@ function EditResourceGeneral({
             <Form.Control
               id="resourceStatusId"
               name="resourceStatusId"
+              disabled={
+                resourceDetails?.resourceStatusId == ResourceStatus.Removed
+              }
               defaultValue={resourceDetails.resourceStatusId}
               ref={register}
               className="bg-dark text-light"
               as="select"
             >
-              {Object.keys(ResourceStatus).filter(k => !isNaN(Number(k))).map((key: string) => (
-                <option aria-selected="true" value={parseInt(key)}>
-                  {ResourceStatus[parseInt(key)]}
-                </option>
-              ))}
+              {Object.keys(ResourceStatus)
+                .filter((k) => !isNaN(Number(k)))
+                .map((key: string) => (
+                  <option
+                    disabled={parseInt(key) === ResourceStatus.Removed}
+                    aria-selected="true"
+                    value={parseInt(key)}
+                  >
+                    {ResourceStatus[parseInt(key)]}
+                  </option>
+                ))}
             </Form.Control>
           </Form.Group>
         </Col>

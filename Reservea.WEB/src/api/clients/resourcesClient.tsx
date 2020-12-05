@@ -81,3 +81,11 @@ export const createResourceRequest = async (
 
   return response.data;
 };
+
+export const deleteResourceRequest = async (
+  resourceId: Number
+) => {
+  await apiClient.delete(
+    "/api/resources/Resources/" + resourceId
+  );
+};

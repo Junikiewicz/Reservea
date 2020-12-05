@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Modal,
-  Button,
-  Row,
-  Tab,
-  Nav,
-  Col,
-  Container,
-  Breadcrumb,
-} from "react-bootstrap";
+import { Button, Row, Tab, Nav, Col, Container } from "react-bootstrap";
 import EditResourceGeneral from "./edit-resource-general/edit-resource-general";
 import EditResourceAttributes from "./edit-resource-attributes/edit-resource-attributes";
 import { ResourceDetailsResponse } from "../../api/dtos/resources/resources/resourceDetailsResponse";
@@ -24,13 +15,9 @@ import { toast } from "react-toastify";
 import { ResourceTypeForListResponse } from "../../api/dtos/resources/resourceTypes/resourceTypeForListResponse";
 import { ResourceAttributeResponse } from "../../api/dtos/resources/resourceAttributes/resourceAttributeResponse";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowRight,
-  faArrowLeft,
-  faLongArrowAltLeft,
-} from "@fortawesome/free-solid-svg-icons";
+import { faLongArrowAltLeft } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { AttributeForListResponse } from "../../api/dtos/resources/attributes/attributeForListResponse";
+import { ResourceStatus } from "../../common/enums/resourceStatus";
 
 function EditResource(props: any) {
   const [
@@ -131,14 +118,23 @@ function EditResource(props: any) {
                 </h2>
               </Col>
               <Col className="col-4 mt-2">
-                <Button
-                  disabled={!formState.isDirty}
-                  onClick={handleSubmit(onSubmit)}
-                  variant="success"
-                  className="float-right"
-                >
-                  Zapisz zmiany
-                </Button>
+                {resourceDetails?.resourceStatusId ===
+                ResourceStatus.Removed ? (
+                  <span className="float-right" style={{ color: "red" }}>Zaspób został usunięty!</span>
+                ) : (
+                  <Button
+                    disabled={
+                      !formState.isDirty ||
+                      resourceDetails?.resourceStatusId ==
+                        ResourceStatus.Removed
+                    }
+                    onClick={handleSubmit(onSubmit)}
+                    variant="success"
+                    className="float-right"
+                  >
+                    Zapisz zmiany
+                  </Button>
+                )}
               </Col>
             </Row>
             <Row className="justify-content-center">
@@ -147,10 +143,26 @@ function EditResource(props: any) {
                   <Nav.Link eventKey="general">Ogólne</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="attributes">Atrybuty</Nav.Link>
+                  <Nav.Link
+                    disabled={
+                      resourceDetails?.resourceStatusId ==
+                      ResourceStatus.Removed
+                    }
+                    eventKey="attributes"
+                  >
+                    Atrybuty
+                  </Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                  <Nav.Link eventKey="avaiability">Dostępność</Nav.Link>
+                  <Nav.Link
+                    disabled={
+                      resourceDetails?.resourceStatusId ==
+                      ResourceStatus.Removed
+                    }
+                    eventKey="avaiability"
+                  >
+                    Dostępność
+                  </Nav.Link>
                 </Nav.Item>
               </Nav>
             </Row>

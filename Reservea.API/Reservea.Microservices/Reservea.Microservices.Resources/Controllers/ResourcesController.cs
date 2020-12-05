@@ -59,7 +59,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// </summary>
         /// <remarks>
         /// </remarks>
-        /// <param name="resouceId">Identyfikator zasobu</param>
+        /// <param name="resourceId">Identyfikator zasobu</param>
         /// <param name="resourceTypeId">Identyfikator nowego typu zasobu</param>
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns>Szczegółowe dane zasobu zdefiniowanego w systemie</returns>
@@ -106,6 +106,24 @@ namespace Reservea.Microservices.Resources.Controllers
         public async Task<IActionResult> UpdateResourceAsync(int id, UpdateResourceRequest request, CancellationToken cancellationToken)
         {
             await _resourcesService.UpdateResourceAsync(id, request, cancellationToken);
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Oznacza zasób jako usunięty
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="id">Identyfikator zasobu do usunięcia</param>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns></returns>
+        /// <response code="204">Zasób został oznaczony jako usunięty</response>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> DeleteResourceAsync(int id, CancellationToken cancellationToken)
+        {
+            await _resourcesService.RemoveResourceAsync(id, cancellationToken);
 
             return NoContent();
         }

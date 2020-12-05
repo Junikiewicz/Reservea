@@ -2,10 +2,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/esm/Table";
-import { resourcesListRequest } from "../../../api/clients/resourcesClient";
+import {
+  deleteResourceRequest,
+  resourcesListRequest,
+} from "../../../api/clients/resourcesClient";
 import { ResourceForListResponse } from "../../../api/dtos/resources/resources/resourceForListResponse";
 import { Link } from "react-router-dom";
 import { Button, Row } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { ResourceStatus } from "../../../common/enums/resourceStatus";
 
 function ResourceManagment() {
   const [resourcesList, setResourcesList] = useState<
@@ -19,6 +24,17 @@ function ResourceManagment() {
       })
       .catch(() => {});
   }, []);
+
+  const deleteResource = async (resourrceId: number) => {
+    deleteResourceRequest(resourrceId)
+      .then(() => {
+        let newArray = [...resourcesList];
+        newArray[newArray.findIndex(x=>x.id == resourrceId)].resourceStatusId = ResourceStatus.Removed;
+        setResourcesList(newArray);
+        toast.info("Obiekt oznaczony jako usunięty");
+      })
+      .catch(() => {});
+  };
 
   return (
     <div>
@@ -49,11 +65,16 @@ function ResourceManagment() {
                     style={{ cursor: "pointer" }}
                   />
                 </Link>
-                <FontAwesomeIcon
-                  size="lg"
-                  icon={faTrashAlt}
-                  style={{ cursor: "pointer" }}
-                />
+                {element.resourceStatusId !== ResourceStatus.Removed && (
+                  <FontAwesomeIcon
+                    onClick={() => {
+                      deleteResource(element.id);
+                    }}
+                    size="lg"
+                    icon={faTrashAlt}
+                    style={{ cursor: "pointer" }}
+                  />
+                )}
               </td>
             </tr>
           ))}
