@@ -19,5 +19,6 @@ namespace Reservea.Microservices.Resources.Dtos.Responses
         public string Name { get; set; }
         public int ResourceId { get; set; }
         public string Value { get; set; }
+        public bool IsActive { get; set; }
     }
 }

@@ -36,6 +36,8 @@ namespace Reservea.Microservices.Resources.Services
         {
             var result = await _unitOfWork.ResourcesRepository.GetByIdAsync<int, ResourceForDetailedResponse>(resourceId, cancellationToken);
 
+            result.ResourceAttributes = result.ResourceAttributes.Where(x => x.IsActive).ToList();//Temp
+
             return result;
         }
         public async Task<IEnumerable<ResourceAttributeForDetailedResourceResponse>> GetResourceAttributesForTypeChange(int resourceId, int resourceTypeId, CancellationToken cancellationToken)
@@ -67,7 +69,7 @@ namespace Reservea.Microservices.Resources.Services
             var resourceFromDatabase = await _unitOfWork.ResourcesRepository.GetByIdAsync(resourceId, cancellationToken, include: i => i.Include(x => x.ResourceAttributes));
 
             var resourceTypeAttributesIds = await _unitOfWork.ResourceTypesRepository.GetResourceTypeAttributesIds(request.ResourceTypeId, cancellationToken);
-            var attributesToDelete = resourceFromDatabase.ResourceAttributes.Where(x => !resourceTypeAttributesIds.Contains(x.AttributeId));
+            var attributesToSetInactive = resourceFromDatabase.ResourceAttributes.Where(x => !resourceTypeAttributesIds.Contains(x.AttributeId));
             foreach (var newAttributeId in resourceTypeAttributesIds)
             {
                 var attributeValueToSet = request.ResourceAttributes?.SingleOrDefault(x => x.AttributeId == newAttributeId)?.Value;
@@ -75,13 +77,15 @@ namespace Reservea.Microservices.Resources.Services
                 if (alreadyPresentAttribute != null)
                 {
                     alreadyPresentAttribute.Value = attributeValueToSet;
+                    alreadyPresentAttribute.IsActive = true;
                 }
                 else
                 {
-                    resourceFromDatabase.ResourceAttributes.Add(new ResourceAttribute { AttributeId = newAttributeId, ResourceId = resourceId, Value = attributeValueToSet });
+                    resourceFromDatabase.ResourceAttributes.Add(new ResourceAttribute { AttributeId = newAttributeId, ResourceId = resourceId, Value = attributeValueToSet, IsActive = true });
                 }
             }
-            _unitOfWork.ResourceAttributesRepository.RemoveRange(attributesToDelete);
+
+            attributesToSetInactive.ForEach(x => x.IsActive = false);
 
             _mapper.Map(request, resourceFromDatabase);
 
@@ -92,6 +96,7 @@ namespace Reservea.Microservices.Resources.Services
         {
             var newResource = _mapper.Map<Resource>(request);
             newResource.ResourceStatusId = (int)Enums.ResourceStatus.New;
+            newResource.ResourceAttributes.ForEach(x => x.IsActive = true);
 
             _unitOfWork.ResourcesRepository.Add(newResource);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

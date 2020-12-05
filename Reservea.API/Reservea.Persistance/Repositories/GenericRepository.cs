@@ -120,7 +120,7 @@ namespace Reservea.Persistance.Repositories
         }
 
         #region Private helpers
-        private Expression<Func<TEntity, bool>> CreateFindByPrimaryKeyLambda<TId>(IEnumerable<TId> ids)
+        protected Expression<Func<TEntity, bool>> CreateFindByPrimaryKeyLambda<TId>(IEnumerable<TId> ids)
         {
             var primaryKeyProperties = _context.Model.FindEntityType(typeof(TEntity)).FindPrimaryKey().Properties;
 
@@ -138,7 +138,7 @@ namespace Reservea.Persistance.Repositories
             return Expression.Lambda<Func<TEntity, bool>>(call, parameter);
         }
 
-        private Expression<Func<TEntity, bool>> CreateFindByPrimaryKeyLambda<TId>(TId id)
+        protected Expression<Func<TEntity, bool>> CreateFindByPrimaryKeyLambda<TId>(TId id)
         {
             var primaryKeyProperties = _context.Model.FindEntityType(typeof(TEntity)).FindPrimaryKey().Properties;
 
