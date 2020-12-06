@@ -3,14 +3,13 @@ import { getUserToken } from "../../common/helpers/localStorageHelper";
 import axios, { AxiosRequestConfig, AxiosError, AxiosResponse } from "axios";
 import http from "http";
 import https from "https";
-import configuration from "../../common/configuration";
 import { REQUEST_START_TIME_HEADER } from "../../common/variables/headers";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBug, faUserSlash } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 
-const apiUrl = process.env.NODE_ENV !== 'production' ? configuration.API_BASE_URL : process.env.REACT_APP_API_BASE_URL;
+const apiUrl = (window as any)._env_.API_BASE_URL;
 
 const httpAgent = new http.Agent({ keepAlive: true });
 const httpsAgent = new https.Agent({ keepAlive: true });
