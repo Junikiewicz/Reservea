@@ -6,6 +6,7 @@ on:
     paths:
       - "Reservea.API/Reservea.Microservices/Reservea.Microservices.CMS/**"
       - "Reservea.API/Reservea.Common/**"
+      - "Reservea.API/Reservea.Persistance/**"
       - ".github/workflows/CMSMicroservice.yml"
 jobs:
   build-and-deploy:
