@@ -6,7 +6,7 @@ import { AddResourceResponse } from "../dtos/resources/resources/addResourceResp
 import { ResourceTypeDetailsResponse } from "../dtos/resources/resourceTypes/resourceTypeDetailsResponse";
 import { UpdateResourceTypeRequest} from "../dtos/resources/resourceTypes/updateResourceTypeRequest";
 import { UpdateResourceRequest } from "../dtos/resources/resources/updateResourceRequest";
-
+import { AddResourceTypeResponse} from "../dtos/resources/resourceTypes/addResourceTypeResponse";
 import { apiClient } from "./apiClient";
 import { ResourceAttributeResponse } from "../dtos/resources/resourceAttributes/resourceAttributeResponse";
 
@@ -90,8 +90,10 @@ export const updateResourceTypeRequest = async (
 
 export const createResourceTypeRequest = async (
   resourceData: UpdateResourceTypeRequest
-) => {
-  await apiClient.post("/api/resources/ResourceTypes/", resourceData);
+): Promise<AddResourceTypeResponse> => {
+  const response = await apiClient.post("/api/resources/ResourceTypes/", resourceData);
+
+  return response.data;
 };
 
 export const createResourceRequest = async (

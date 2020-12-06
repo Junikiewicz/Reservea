@@ -87,6 +87,8 @@ namespace Reservea.Microservices.Resources.Services
         {
             var newResourceType = _mapper.Map<ResourceType>(request);
 
+            //newResourceType.ResourceTypeAttributes = request.ResourceTypeAttributes.Select(x => new ResourceTypeAttribute { AttributeId = x.AttributeId}).ToList();
+
             _unitOfWork.ResourceTypesRepository.Add(newResourceType);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 

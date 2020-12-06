@@ -5,6 +5,7 @@ import Table from "react-bootstrap/esm/Table";
 import { ResourceTypeForListResponse } from "../../../api/dtos/resources/resourceTypes/resourceTypeForListResponse";
 import { resourcesTypesListRequest } from "../../../api/clients/resourcesClient";
 import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 function ResourceTypes() {
   const [resourceTypesList, setResourceTypesList] = useState<
@@ -20,7 +21,8 @@ function ResourceTypes() {
   }, []);
 
   return (
-    <Table striped bordered hover variant="dark" className="text-center">
+    <div>
+       <Table striped bordered hover variant="dark" className="text-center">
       <thead>
         <tr>
           <th>Id</th>
@@ -54,6 +56,10 @@ function ResourceTypes() {
         ))}
       </tbody>
     </Table>
+      <Button href="/add-resource-type" className="float-right" variant="success">
+        Dodaj nowy
+      </Button>
+    </div>
   );
 }
 export default ResourceTypes;

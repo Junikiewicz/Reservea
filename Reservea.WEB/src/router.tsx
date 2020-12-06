@@ -6,6 +6,7 @@ import Home from "./screens/home/home";
 import EditResource from "./components/edit-resource/edit-resource";
 import AddResource from "./components/add-resource/add-resource";
 import EditResourceType from "./components/edit-resource-type/edit-resource-type";
+import AddResourceType from "./components/add-resource-type/add-resource-type";
 
 const Router = () => (
   <BrowserRouter>
@@ -13,6 +14,7 @@ const Router = () => (
       <Route path="/edit-resource/:id" component={EditResource} />
       <Route path="/edit-resource-type/:id" component={EditResourceType} />
       <Route path="/add-resource" component={AddResource} />
+      <Route path="/add-resource-type" component={AddResourceType} />
       <Route path="/admin-panel/:tab" component={AdminPanel}>
       </Route>
       <Route path="/admin-panel/">
