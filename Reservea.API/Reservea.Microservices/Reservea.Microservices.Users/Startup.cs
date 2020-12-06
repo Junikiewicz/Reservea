@@ -43,12 +43,6 @@ namespace Reservea.Microservices.Users
             services.AddSingleton<ISystemClock, SystemClock>(); //Temporary
             #endregion
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAllOrigins",
-                    builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            });
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = Configuration.GetValue<string>("ApplicationName"), Version = "v1" });
@@ -67,8 +61,6 @@ namespace Reservea.Microservices.Users
             }
 
             app.UseMiddleware<ExceptionMiddleware>();
-
-            app.UseCors("AllowAllOrigins");
 
             app.UseHttpsRedirection();
 

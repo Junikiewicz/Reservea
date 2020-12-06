@@ -30,13 +30,7 @@ namespace Reservea.Microservices.Resources
 
             AddDependencyInjection(services);
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAllOrigins",
-                    builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            });
-
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(c => 
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = Configuration.GetValue<string>("ApplicationName"), Version = "v1" });
                 var xmlFilePath = "Swagger_doc.xml";
@@ -64,8 +58,6 @@ namespace Reservea.Microservices.Resources
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseCors("AllowAllOrigins");
 
             app.UseHttpsRedirection();
 
