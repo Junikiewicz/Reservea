@@ -8,6 +8,7 @@ namespace Reservea.Persistance.Repositories
     {
         public ResourceTypeAttributesRepository(DataContext context, IMapper mapper) : base(context, mapper)
         {
+
         }
     }
 }

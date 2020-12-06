@@ -1,6 +1,7 @@
 export enum HttpStatusType {
     //2xx
     OK = 200,
+    NoContent  = 204,
     // 3xx
     MovedPermanently = 301,
     Found = 302,

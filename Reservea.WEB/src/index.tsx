@@ -13,7 +13,7 @@ ReactDOM.render(
     <NavbarLayout />
     <Container
       className="mt-4"
-      style={{ minHeight: "100vh", overflow: "hidden" }}
+      style={{ overflow: "hidden" }}
     >
       <Router />
     </Container>

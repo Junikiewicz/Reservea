@@ -15,16 +15,16 @@ namespace Reservea.Persistance.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
+                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -47,7 +47,7 @@ namespace Reservea.Persistance.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -105,36 +105,36 @@ namespace Reservea.Persistance.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Resources.Models.Attribute", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.Attribute", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(63)")
-                        .HasMaxLength(63);
+                        .HasMaxLength(63)
+                        .HasColumnType("nvarchar(63)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Attributes");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Resources.Models.Resource", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.Resource", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(511)")
-                        .HasMaxLength(511);
+                        .HasMaxLength(511)
+                        .HasColumnType("nvarchar(511)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(63)")
-                        .HasMaxLength(63);
+                        .HasMaxLength(63)
+                        .HasColumnType("nvarchar(63)");
 
                     b.Property<decimal>("PricePerHour")
                         .HasColumnType("decimal(18,2)");
@@ -154,7 +154,7 @@ namespace Reservea.Persistance.Migrations
                     b.ToTable("Resources");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Resources.Models.ResourceAttribute", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.ResourceAttribute", b =>
                 {
                     b.Property<int>("AttributeId")
                         .HasColumnType("int");
@@ -162,9 +162,12 @@ namespace Reservea.Persistance.Migrations
                     b.Property<int>("ResourceId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("AttributeId", "ResourceId");
 
@@ -173,43 +176,46 @@ namespace Reservea.Persistance.Migrations
                     b.ToTable("ResourceAttributes");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Resources.Models.ResourceStatus", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.ResourceStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(63)")
-                        .HasMaxLength(63);
+                        .HasMaxLength(63)
+                        .HasColumnType("nvarchar(63)");
 
                     b.HasKey("Id");
 
                     b.ToTable("ResourceStatuses");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Resources.Models.ResourceType", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.ResourceType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(511)")
-                        .HasMaxLength(511);
+                        .HasMaxLength(511)
+                        .HasColumnType("nvarchar(511)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(63)")
-                        .HasMaxLength(63);
+                        .HasMaxLength(63)
+                        .HasColumnType("nvarchar(63)");
 
                     b.HasKey("Id");
 
                     b.ToTable("ResourceTypes");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Resources.Models.ResourceTypeAttribute", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.ResourceTypeAttribute", b =>
                 {
                     b.Property<int>("AttributeId")
                         .HasColumnType("int");
@@ -224,41 +230,41 @@ namespace Reservea.Persistance.Migrations
                     b.ToTable("ResourceTypeAttributes");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Users.Models.Role", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Users.Models.User", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -268,22 +274,22 @@ namespace Reservea.Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -292,12 +298,12 @@ namespace Reservea.Persistance.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -315,23 +321,23 @@ namespace Reservea.Persistance.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Users.Models.UserRole", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.UserRole", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -348,7 +354,7 @@ namespace Reservea.Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("Reservea.Persistance.Users.Models.Role", null)
+                    b.HasOne("Reservea.Persistance.Models.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -357,7 +363,7 @@ namespace Reservea.Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("Reservea.Persistance.Users.Models.User", null)
+                    b.HasOne("Reservea.Persistance.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -366,7 +372,7 @@ namespace Reservea.Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("Reservea.Persistance.Users.Models.User", null)
+                    b.HasOne("Reservea.Persistance.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -375,71 +381,121 @@ namespace Reservea.Persistance.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("Reservea.Persistance.Users.Models.User", null)
+                    b.HasOne("Reservea.Persistance.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Resources.Models.Resource", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.Resource", b =>
                 {
-                    b.HasOne("Reservea.Persistance.Resources.Models.ResourceStatus", "ResourceStatus")
+                    b.HasOne("Reservea.Persistance.Models.ResourceStatus", "ResourceStatus")
                         .WithMany("Resources")
                         .HasForeignKey("ResourceStatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reservea.Persistance.Resources.Models.ResourceType", "ResourceType")
+                    b.HasOne("Reservea.Persistance.Models.ResourceType", "ResourceType")
                         .WithMany("Resources")
                         .HasForeignKey("ResourceTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ResourceStatus");
+
+                    b.Navigation("ResourceType");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Resources.Models.ResourceAttribute", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.ResourceAttribute", b =>
                 {
-                    b.HasOne("Reservea.Persistance.Resources.Models.Attribute", "Attribute")
+                    b.HasOne("Reservea.Persistance.Models.Attribute", "Attribute")
                         .WithMany("ResourceAttributes")
                         .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reservea.Persistance.Resources.Models.Resource", "Resource")
+                    b.HasOne("Reservea.Persistance.Models.Resource", "Resource")
                         .WithMany("ResourceAttributes")
                         .HasForeignKey("ResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Attribute");
+
+                    b.Navigation("Resource");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Resources.Models.ResourceTypeAttribute", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.ResourceTypeAttribute", b =>
                 {
-                    b.HasOne("Reservea.Persistance.Resources.Models.Attribute", "Attribute")
+                    b.HasOne("Reservea.Persistance.Models.Attribute", "Attribute")
                         .WithMany("ResourceTypeAttributes")
                         .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reservea.Persistance.Resources.Models.ResourceType", "ResourceType")
+                    b.HasOne("Reservea.Persistance.Models.ResourceType", "ResourceType")
                         .WithMany("ResourceTypeAttributes")
                         .HasForeignKey("ResourceTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Attribute");
+
+                    b.Navigation("ResourceType");
                 });
 
-            modelBuilder.Entity("Reservea.Persistance.Users.Models.UserRole", b =>
+            modelBuilder.Entity("Reservea.Persistance.Models.UserRole", b =>
                 {
-                    b.HasOne("Reservea.Persistance.Users.Models.Role", "Role")
+                    b.HasOne("Reservea.Persistance.Models.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reservea.Persistance.Users.Models.User", "User")
+                    b.HasOne("Reservea.Persistance.Models.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Reservea.Persistance.Models.Attribute", b =>
+                {
+                    b.Navigation("ResourceAttributes");
+
+                    b.Navigation("ResourceTypeAttributes");
+                });
+
+            modelBuilder.Entity("Reservea.Persistance.Models.Resource", b =>
+                {
+                    b.Navigation("ResourceAttributes");
+                });
+
+            modelBuilder.Entity("Reservea.Persistance.Models.ResourceStatus", b =>
+                {
+                    b.Navigation("Resources");
+                });
+
+            modelBuilder.Entity("Reservea.Persistance.Models.ResourceType", b =>
+                {
+                    b.Navigation("Resources");
+
+                    b.Navigation("ResourceTypeAttributes");
+                });
+
+            modelBuilder.Entity("Reservea.Persistance.Models.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Reservea.Persistance.Models.User", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

@@ -17,7 +17,7 @@ const httpsAgent = new https.Agent({ keepAlive: true });
 
 export const apiClient = axios.create({
   baseURL: apiUrl,
-  validateStatus: (status: number) => status === HttpStatusType.OK,
+  validateStatus: (status: number) => status === HttpStatusType.OK || status === HttpStatusType.NoContent,
   httpAgent,
   httpsAgent,
 });

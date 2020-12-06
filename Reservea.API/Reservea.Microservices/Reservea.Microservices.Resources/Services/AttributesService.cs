@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Reservea.Microservices.Resources.Dtos.Requests;
 using Reservea.Microservices.Resources.Dtos.Responses;
 using Reservea.Microservices.Resources.Interfaces.Services;
@@ -39,7 +40,7 @@ namespace Reservea.Microservices.Resources.Services
 
         public async Task UpdateAttributeAsync(int id, UpdateAttributeRequest request, CancellationToken cancellationToken)
         {
-            var attributeFromDatabase = await _unitOfWork.AttributesRepository.GetByIdAsync(id, cancellationToken);
+            var attributeFromDatabase = await _unitOfWork.AttributesRepository.GetSingleAsync(x => x.Id == id, cancellationToken);
 
             _mapper.Map(request, attributeFromDatabase);
 
@@ -48,7 +49,11 @@ namespace Reservea.Microservices.Resources.Services
 
         public async Task RemoveAttributeAsync(int id, CancellationToken cancellationToken)
         {
-            await _unitOfWork.AttributesRepository.RemoveByIdAsync(id, cancellationToken);
+            var attributeFromDatabase = await _unitOfWork.AttributesRepository.GetSingleAsync(x => x.Id == id, cancellationToken, i=>i.Include(x=>x.ResourceAttributes).Include(x=>x.ResourceTypeAttributes));
+
+            _unitOfWork.ResourceTypeAttributesRepository.RemoveRange(attributeFromDatabase.ResourceTypeAttributes);
+            _unitOfWork.ResourceAttributesRepository.RemoveRange(attributeFromDatabase.ResourceAttributes);
+            _unitOfWork.AttributesRepository.Remove(attributeFromDatabase);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }

@@ -4,6 +4,7 @@
     {
         public int AttributeId { get; set; }
         public int ResourceId { get; set; }
+        public bool IsActive { get; set; }
         public string Value { get; set; }
         
         public virtual Attribute Attribute { get; set; }

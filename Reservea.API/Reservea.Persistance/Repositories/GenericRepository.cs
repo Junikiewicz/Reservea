@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using Reservea.Persistance.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
@@ -21,52 +22,58 @@ namespace Reservea.Persistance.Repositories
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
         {
             return await _context.Set<TEntity>().ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<TResult>> GetAllAsync<TResult>(CancellationToken cancellationToken)
+        public async Task<IEnumerable<TResult>> GetAllAsync<TResult>(CancellationToken cancellationToken, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
         {
             var query = _mapper.ProjectTo<TResult>(_context.Set<TEntity>());
 
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async virtual Task<TEntity> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken)
+        public async virtual Task<IEnumerable<TResult>> GetAsync<TResult>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
         {
-            var lambda = CreateFindByPrimaryKeyLambda<TId, TEntity>(id);
+            var query = _context.Set<TEntity>().Where(predicate);
 
-            var query = _context.Set<TEntity>();
+            var mappedQuery = _mapper.ProjectTo<TResult>(query);
 
-            return await query.SingleAsync(lambda, cancellationToken);
+            return await mappedQuery.ToListAsync(cancellationToken);
         }
 
-        public async virtual Task<TResult> GetByIdAsync<TId, TResult>(TId id, CancellationToken cancellationToken)
+        public async virtual Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
         {
-            var lambda = CreateFindByPrimaryKeyLambda<TId, TResult>(id);
+            var query = _context.Set<TEntity>().Where(predicate);
 
-            var query = _mapper.ProjectTo<TResult>(_context.Set<TEntity>());
-
-            return await query.SingleAsync(lambda, cancellationToken);
-        }
-
-        public async virtual Task<IEnumerable<TEntity>> GetByListOfIdsAsync<TId>(IEnumerable<TId> ids, CancellationToken cancellationToken)
-        {
-            var lambda = CreateFindByPrimaryKeyLambda<TId, TEntity>(ids);
-
-            var query = _context.Set<TEntity>().Where(lambda);
+            if (include != null)
+            {
+                query = include.Invoke(query);
+            }
 
             return await query.ToListAsync(cancellationToken);
         }
 
-        public async virtual Task<IEnumerable<TResult>> GetByListOfIdsAsync<TId, TResult>(IEnumerable<TId> ids, CancellationToken cancellationToken)
+        public async virtual Task<TResult> GetSingleAsync<TResult>(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
         {
-            var lambda = CreateFindByPrimaryKeyLambda<TId, TResult>(ids);
+            var query = _context.Set<TEntity>().Where(predicate);
 
-            var query = _mapper.ProjectTo<TResult>(_context.Set<TEntity>()).Where(lambda);
+            var mappedQuery = _mapper.ProjectTo<TResult>(query);
 
-            return await query.ToListAsync(cancellationToken);
+            return await mappedQuery.SingleAsync(cancellationToken);
+        }
+
+        public async virtual Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
+        {
+            var query = _context.Set<TEntity>().Where(predicate);
+
+            if (include != null)
+            {
+                query = include.Invoke(query);
+            }
+
+            return await query.SingleAsync(cancellationToken);
         }
 
         public void Add(TEntity entity)
@@ -88,56 +95,5 @@ namespace Reservea.Persistance.Repositories
         {
             _context.Set<TEntity>().RemoveRange(entity);
         }
-
-        public virtual async Task RemoveByIdAsync<TId>(TId id, CancellationToken cancellationToken)
-        {
-            var entity = await GetByIdAsync(id, cancellationToken);
-
-            Remove(entity);
-        }
-
-        public virtual async Task RemoveByListOfIdsAsync<TId>(IEnumerable<TId> ids, CancellationToken cancellationToken)
-        {
-            var entity = await GetByListOfIdsAsync(ids, cancellationToken);
-
-            RemoveRange(entity);
-        }
-
-        #region Private helpers
-        private Expression<Func<TResult, bool>> CreateFindByPrimaryKeyLambda<TId, TResult>(IEnumerable<TId> ids)
-        {
-            var primaryKeyProperties = _context.Model.FindEntityType(typeof(TEntity)).FindPrimaryKey().Properties;
-
-            if (primaryKeyProperties.Count != 1) throw new Exception();
-
-            var pkPropertyName = primaryKeyProperties.Select(x => x.Name).Single();
-            var propertyInfo = typeof(TResult).GetProperty(pkPropertyName);
-            var method = ids.GetType().GetMethod("Contains");
-
-            var parameter = Expression.Parameter(typeof(TResult), "x");
-            var member = Expression.MakeMemberAccess(parameter, propertyInfo);
-            var constant = Expression.Constant(ids, ids.GetType());
-            var call = Expression.Call(constant, method, member);
-
-            return Expression.Lambda<Func<TResult, bool>>(call, parameter);
-        }
-
-        private Expression<Func<TResult, bool>> CreateFindByPrimaryKeyLambda<TId, TResult>(TId id)
-        {
-            var primaryKeyProperties = _context.Model.FindEntityType(typeof(TEntity)).FindPrimaryKey().Properties;
-
-            if (primaryKeyProperties.Count != 1) throw new Exception();
-
-            var pkPropertyName = primaryKeyProperties.Select(x => x.Name).Single();
-            var propertyInfo = typeof(TResult).GetProperty(pkPropertyName);
-
-            var parameter = Expression.Parameter(typeof(TResult), "x");
-            var member = Expression.MakeMemberAccess(parameter, propertyInfo);
-            var constant = Expression.Constant(id, id.GetType());
-            var equation = Expression.Equal(member, constant);
-
-            return Expression.Lambda<Func<TResult, bool>>(equation, parameter);
-        }
-        #endregion
     }
 }
