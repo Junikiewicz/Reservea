@@ -126,24 +126,5 @@ namespace Reservea.Microservices.Resources.Controllers
 
             return NoContent();
         }
-
-        /// <summary>
-        /// Aktualizuje listę atrybutów przypisaną do danego typu zasobu
-        /// </summary>
-        /// <remarks>
-        /// </remarks>
-        /// <param name="id">Identyfikator typu zasobu którego atrybuty chcemy zaaktualizować</param>
-        /// <param name="request">Dwie listy: identyfikatory atrybutów do usunięcia oraz atrybutów do dodania</param>
-        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
-        /// <returns></returns>
-        /// <response code="204">Lista atrybutów została poprawnie zaaktualizowana</response>
-        [HttpPut("{id}/attributes")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateResourceTypeAttributesAsync(int id, UpdateResourceTypeAttributesRequest request, CancellationToken cancellationToken)
-        {
-            await _resourceTypesService.UpdateResourceTypeAttributesAsync(id, request, cancellationToken);
-
-            return NoContent();
-        }
     }
 }

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/esm/Table";
 import { ResourceTypeForListResponse } from "../../../api/dtos/resources/resourceTypes/resourceTypeForListResponse";
 import { resourcesTypesListRequest } from "../../../api/clients/resourcesClient";
+import { Link } from "react-router-dom";
 
 function ResourceTypes() {
   const [resourceTypesList, setResourceTypesList] = useState<
@@ -33,11 +34,16 @@ function ResourceTypes() {
             <td>{element.id}</td>
             <td>{element.name}</td>
             <td>
-              <FontAwesomeIcon
-                size="lg"
-                icon={faEdit}
-                style={{ cursor: "pointer" }}
-              />
+            <Link
+                  className="customLink"
+                  to={`/edit-resource-type/${element.id}`}
+                >
+                  <FontAwesomeIcon
+                    size="lg"
+                    icon={faEdit}
+                    style={{ cursor: "pointer" }}
+                  />
+                </Link>
               <FontAwesomeIcon
                 size="lg"
                 icon={faTrashAlt}

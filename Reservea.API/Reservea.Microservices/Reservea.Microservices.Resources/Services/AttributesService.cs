@@ -39,7 +39,7 @@ namespace Reservea.Microservices.Resources.Services
 
         public async Task UpdateAttributeAsync(int id, UpdateAttributeRequest request, CancellationToken cancellationToken)
         {
-            var attributeFromDatabase = await _unitOfWork.AttributesRepository.GetByIdAsync(id, cancellationToken);
+            var attributeFromDatabase = await _unitOfWork.AttributesRepository.GetSingleAsync(x => x.Id == id, cancellationToken);
 
             _mapper.Map(request, attributeFromDatabase);
 
@@ -48,7 +48,7 @@ namespace Reservea.Microservices.Resources.Services
 
         public async Task RemoveAttributeAsync(int id, CancellationToken cancellationToken)
         {
-            await _unitOfWork.AttributesRepository.RemoveByIdAsync(id, cancellationToken);
+            await _unitOfWork.AttributesRepository.GetSingleAsync(x => x.Id == id, cancellationToken);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }

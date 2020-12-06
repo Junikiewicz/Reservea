@@ -84,13 +84,13 @@ function AddResource() {
           element.attributeId = fields[index].id ?? 0;
         }
       );
-      createResourceRequest(data)
-        .then((response: AddResourceResponse) => {
-          history.push("/edit-resource/" + response.id);
-          toast.success("Zasób poprawnie dodany");
-        })
-        .catch(() => {});
     }
+    createResourceRequest(data)
+    .then((response: AddResourceResponse) => {
+      history.push("/edit-resource/" + response.id);
+      toast.success("Zasób poprawnie dodany");
+    })
+    .catch(() => {});
   };
 
   return (

@@ -5,11 +5,13 @@ import Reservations from "./screens/reservations/reservations";
 import Home from "./screens/home/home";
 import EditResource from "./components/edit-resource/edit-resource";
 import AddResource from "./components/add-resource/add-resource";
+import EditResourceType from "./components/edit-resource-type/edit-resource-type";
 
 const Router = () => (
   <BrowserRouter>
     <Switch>
       <Route path="/edit-resource/:id" component={EditResource} />
+      <Route path="/edit-resource-type/:id" component={EditResourceType} />
       <Route path="/add-resource" component={AddResource} />
       <Route path="/admin-panel/:tab" component={AdminPanel}>
       </Route>

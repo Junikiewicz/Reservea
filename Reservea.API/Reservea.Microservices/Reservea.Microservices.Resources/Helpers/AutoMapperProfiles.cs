@@ -26,6 +26,9 @@ namespace Reservea.Microservices.Resources.Helpers
             CreateMap<ResourceAttribute, ResourceAttributeForDetailedResourceResponse>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute.Name));
 
+            CreateMap<ResourceTypeAttribute, ResourceTypeAttributeForDetailedResourceResponse>()
+               .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute.Name));
+
             CreateMap<Attribute, AttributeForListResponse>();
             CreateMap<Attribute, AddAttributeResponse>();
 
@@ -47,7 +50,7 @@ namespace Reservea.Microservices.Resources.Helpers
             CreateMap<AddAttributeRequest, Attribute>();
             CreateMap<UpdateAttributeRequest, Attribute>();
 
-            CreateMap<UpdateResourceTypeRequest, ResourceType>();
+            CreateMap<UpdateResourceTypeRequest, ResourceType>().ForMember(dest => dest.ResourceTypeAttributes, opts => opts.Ignore());
             CreateMap<AddResourceTypeRequest, ResourceType>();
         }
     }

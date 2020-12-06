@@ -3,7 +3,8 @@ import { ResourceTypeForListResponse } from "../dtos/resources/resourceTypes/res
 import { AttributeForListResponse } from "../dtos/resources/attributes/attributeForListResponse";
 import { ResourceDetailsResponse } from "../dtos/resources/resources/resourceDetailsResponse";
 import { AddResourceResponse } from "../dtos/resources/resources/addResourceResponse";
-
+import { ResourceTypeDetailsResponse } from "../dtos/resources/resourceTypes/resourceTypeDetailsResponse";
+import { UpdateResourceTypeRequest} from "../dtos/resources/resourceTypes/updateResourceTypeRequest";
 import { UpdateResourceRequest } from "../dtos/resources/resources/updateResourceRequest";
 
 import { apiClient } from "./apiClient";
@@ -16,6 +17,15 @@ export const resourcesListRequest = async (): Promise<
 
   return response.data;
 };
+
+export const resourcesTypeDetailsRequest = async (id: number): Promise<
+ResourceTypeDetailsResponse
+> => {
+  const response = await apiClient.get("/api/resources/ResourceTypes/"+ id);
+
+  return response.data;
+};
+
 
 export const resourcesTypesListRequest = async (): Promise<
   Array<ResourceTypeForListResponse>
@@ -69,6 +79,19 @@ export const updateResourceRequest = async (
   resourceData: UpdateResourceRequest
 ) => {
   await apiClient.put("/api/resources/Resources/" + resourceId, resourceData);
+};
+
+export const updateResourceTypeRequest = async (
+  resourceTypeId: number,
+  resourceData: UpdateResourceTypeRequest
+) => {
+  await apiClient.put("/api/resources/ResourceTypes/" + resourceTypeId, resourceData);
+};
+
+export const createResourceTypeRequest = async (
+  resourceData: UpdateResourceTypeRequest
+) => {
+  await apiClient.post("/api/resources/ResourceTypes/", resourceData);
 };
 
 export const createResourceRequest = async (

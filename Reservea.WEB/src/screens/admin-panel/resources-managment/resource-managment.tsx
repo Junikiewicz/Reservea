@@ -29,7 +29,9 @@ function ResourceManagment() {
     deleteResourceRequest(resourrceId)
       .then(() => {
         let newArray = [...resourcesList];
-        newArray[newArray.findIndex(x=>x.id == resourrceId)].resourceStatusId = ResourceStatus.Removed;
+        newArray[
+          newArray.findIndex((x) => x.id == resourrceId)
+        ].resourceStatusId = ResourceStatus.Removed;
         setResourcesList(newArray);
         toast.info("Obiekt oznaczony jako usunięty");
       })
@@ -45,6 +47,7 @@ function ResourceManagment() {
             <th>Nazwa</th>
             <td>Status</td>
             <td>Typ</td>
+            <td>Akcje</td>
           </tr>
         </thead>
         <tbody>
@@ -54,7 +57,7 @@ function ResourceManagment() {
               <td>{element.name}</td>
               <td>{element.resourceStatusId}</td>
               <td>{element.resourceTypeId}</td>
-              <td>
+              <td width="100px">
                 <Link
                   className="customLink"
                   to={`/edit-resource/${element.id}`}
@@ -70,9 +73,9 @@ function ResourceManagment() {
                     onClick={() => {
                       deleteResource(element.id);
                     }}
+                    className="ml-3 trashClickableIcon"
                     size="lg"
                     icon={faTrashAlt}
-                    style={{ cursor: "pointer" }}
                   />
                 )}
               </td>

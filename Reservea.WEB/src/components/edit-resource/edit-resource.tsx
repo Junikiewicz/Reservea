@@ -77,6 +77,7 @@ function EditResource(props: any) {
   };
 
   const onSubmit = async (data: UpdateResourceFormData): Promise<void> => {
+    console.log(data);
     if (data.resourceAttributes) {
       data.resourceAttributes.map(
         (element: ResourceAttributeResponse, index: number) => {
