@@ -60,6 +60,7 @@ function AddResourceType(props: any) {
       name: "",
       description: "",
       resourceTypeAttributes: [],
+      isDeleted: false
     });
     register({ name: "resourceTypeAttributes", type: "custom" });
     setValue("resourceTypeAttributes", [], { shouldDirty: false });
@@ -107,7 +108,7 @@ function AddResourceType(props: any) {
       <div className="pageHeader">
         <Container>
           <Row>
-            <Col className="col-4 mt-3">
+            <Col className="col-3 mt-3">
               <Link
                 className="customLink"
                 to="/admin-panel/resourceTypesManagment"
@@ -120,19 +121,19 @@ function AddResourceType(props: any) {
                 Lista typów zasobów
               </Link>
             </Col>
-            <Col className="text-center mt-2 col-4">
+            <Col className="text-center mt-2 col-6">
               <h2>
                 Stwórz nowy typ zasobu
               </h2>
             </Col>
-            <Col className="col-4 mt-2">
+            <Col className="col-3 mt-2">
               <Button
                 onClick={handleSubmit(onSubmit)}
                 disabled={!formState.isDirty}
                 variant="success"
                 className="float-right"
               >
-                Utwórz typ zasób
+                Stwórz nowy typ zasobu
               </Button>
             </Col>
           </Row>
@@ -175,7 +176,7 @@ function AddResourceType(props: any) {
                 </Col>
                 <Col className="col-4 float-right">
                   <Button variant="success" onClick={handleShow}>
-                    Dodaj nowy
+                    Dodaj atrybut
                   </Button>
                 </Col>
               </Row>

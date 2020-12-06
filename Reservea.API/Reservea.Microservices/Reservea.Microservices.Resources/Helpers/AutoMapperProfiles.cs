@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Reservea.Microservices.Resources.Dtos.Requests;
 using Reservea.Microservices.Resources.Dtos.Responses;
-using Reservea.Microservices.Resources.Models;
 using Reservea.Persistance.Interfaces.Repositories;
 using Reservea.Persistance.Models;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Reservea.Microservices.Resources.Helpers
 {
@@ -19,7 +17,8 @@ namespace Reservea.Microservices.Resources.Helpers
 
         private void CreateMapsFromEntitiesToDtos()
         {
-            CreateMap<Resource, ResourceForListResponse>();
+            CreateMap<Resource, ResourceForListResponse>()
+                .ForMember(dest => dest.ResourceTypeName, opts => opts.MapFrom(src => src.ResourceType.Name));
             CreateMap<Resource, ResourceForDetailedResponse>();
             CreateMap<Resource, AddResourceResponse>();
 
@@ -35,7 +34,8 @@ namespace Reservea.Microservices.Resources.Helpers
             CreateMap<ResourceType, ResourceTypeForDetailedResponse>();
             CreateMap<ResourceType, ResourceTypeForListResponse>();
             CreateMap<ResourceType, AddResourceTypeResponse>();
-            CreateMap<ResourceType, IEnumerable<ResourceTypeAttribute>>().ConstructUsing(x => x.ResourceTypeAttributes);
+            CreateMap<ResourceType, IEnumerable<ResourceTypeAttribute>>()
+                .ConstructUsing(x => x.ResourceTypeAttributes);
         }
 
         private void CreateMapsFromDtosToEntities()
@@ -51,7 +51,8 @@ namespace Reservea.Microservices.Resources.Helpers
             CreateMap<AddAttributeRequest, Attribute>();
             CreateMap<UpdateAttributeRequest, Attribute>();
 
-            CreateMap<UpdateResourceTypeRequest, ResourceType>().ForMember(dest => dest.ResourceTypeAttributes, opts => opts.Ignore());
+            CreateMap<UpdateResourceTypeRequest, ResourceType>()
+                .ForMember(dest => dest.ResourceTypeAttributes, opts => opts.Ignore());
             CreateMap<AddResourceTypeRequest, ResourceType>();
         }
     }

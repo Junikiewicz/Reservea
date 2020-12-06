@@ -5,4 +5,5 @@ export interface ResourceTypeDetailsResponse {
     name: string;
     description: string;
     resourceTypeAttributes: Array<ResourceTypeAttributeResponse>;
+    isDeleted: boolean;
 }

@@ -97,7 +97,9 @@ function EditResourceType(props: any) {
       .then(() => {
         reset(data);
         register({ name: "resourceTypeAttributes", type: "custom" });
-        setValue("resourceTypeAttributes", data.resourceTypeAttributes, { shouldDirty: false });
+        setValue("resourceTypeAttributes", data.resourceTypeAttributes, {
+          shouldDirty: false,
+        });
         toast.success("Pomyślnie zapisano zmiany");
       })
       .catch(() => {});
@@ -127,14 +129,20 @@ function EditResourceType(props: any) {
               </h2>
             </Col>
             <Col className="col-4 mt-2">
-              <Button
-                onClick={handleSubmit(onSubmit)}
-                disabled={!formState.isDirty}
-                variant="success"
-                className="float-right"
-              >
-                Zapisz zmiany
-              </Button>
+              {resourceTypeDetails?.isDeleted ? (
+                <span className="float-right" style={{ color: "red" }}>
+                  Ten typ zasobu został usunięty!
+                </span>
+              ) : (
+                <Button
+                  onClick={handleSubmit(onSubmit)}
+                  disabled={!formState.isDirty}
+                  variant="success"
+                  className="float-right"
+                >
+                  Zapisz zmiany
+                </Button>
+              )}
             </Col>
           </Row>
         </Container>
@@ -149,6 +157,7 @@ function EditResourceType(props: any) {
                   <Form.Control
                     id="name"
                     name="name"
+                    disabled={resourceTypeDetails?.isDeleted}
                     ref={register}
                     className="bg-dark text-light"
                     type="text"
@@ -161,6 +170,7 @@ function EditResourceType(props: any) {
                     id="description"
                     name="description"
                     ref={register}
+                    disabled={resourceTypeDetails?.isDeleted}
                     className="bg-dark text-light"
                     as="textarea"
                     defaultValue={resourceTypeDetails?.description}
@@ -175,8 +185,12 @@ function EditResourceType(props: any) {
                   <h3>Lista atrybutów:</h3>
                 </Col>
                 <Col className="col-4 float-right">
-                  <Button variant="success" onClick={handleShow}>
-                    Dodaj nowy
+                  <Button
+                    disabled={resourceTypeDetails?.isDeleted}
+                    variant="success"
+                    onClick={handleShow}
+                  >
+                    Dodaj atrybut
                   </Button>
                 </Col>
               </Row>
@@ -213,7 +227,7 @@ function EditResourceType(props: any) {
       </div>
       <AddAttributeModal
         show={show}
-        existingAttributes = {resourceTypeDetails?.resourceTypeAttributes}
+        existingAttributes={resourceTypeDetails?.resourceTypeAttributes}
         handleChoose={handleChoose}
         handleClose={handleClose}
       />

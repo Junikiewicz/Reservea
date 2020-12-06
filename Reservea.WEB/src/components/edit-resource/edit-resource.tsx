@@ -121,7 +121,7 @@ function EditResource(props: any) {
               <Col className="col-4 mt-2">
                 {resourceDetails?.resourceStatusId ===
                 ResourceStatus.Removed ? (
-                  <span className="float-right" style={{ color: "red" }}>Zaspób został usunięty!</span>
+                  <span className="float-right" style={{ color: "red" }}>Ten zasób został usunięty!</span>
                 ) : (
                   <Button
                     disabled={

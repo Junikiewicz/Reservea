@@ -3,7 +3,7 @@ import { Form, Col, Row, Spinner } from "react-bootstrap";
 import { ResourceDetailsResponse } from "../../../api/dtos/resources/resources/resourceDetailsResponse";
 import { ResourceTypeForListResponse } from "../../../api/dtos/resources/resourceTypes/resourceTypeForListResponse";
 import LoadingSpinner from "../../loading-spinner/loading-spinner";
-import { ResourceStatus } from "../../../common/enums/resourceStatus";
+import { getResourceStatusName, ResourceStatus } from "../../../common/enums/resourceStatus";
 
 function EditResourceGeneral({
   resourceDetails,
@@ -104,7 +104,7 @@ function EditResourceGeneral({
                     aria-selected="true"
                     value={parseInt(key)}
                   >
-                    {ResourceStatus[parseInt(key)]}
+                    {getResourceStatusName(parseInt(key))}
                   </option>
                 ))}
             </Form.Control>

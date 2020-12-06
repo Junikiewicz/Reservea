@@ -10,17 +10,21 @@ import { ResourceForListResponse } from "../../../api/dtos/resources/resources/r
 import { Link } from "react-router-dom";
 import { Button, Row } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { ResourceStatus } from "../../../common/enums/resourceStatus";
+import { getResourceStatusName, ResourceStatus } from "../../../common/enums/resourceStatus";
+import LoadingSpinner from "../../../components/loading-spinner/loading-spinner";
 
 function ResourceManagment() {
   const [resourcesList, setResourcesList] = useState<
     Array<ResourceForListResponse>
   >([]);
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
 
   useEffect(() => {
+    setShowSpinner(true);
     resourcesListRequest()
       .then((response: Array<ResourceForListResponse>) => {
         setResourcesList(response);
+        setShowSpinner(false);
       })
       .catch(() => {});
   }, []);
@@ -35,6 +39,10 @@ function ResourceManagment() {
       })
       .catch(() => {});
   };
+
+  if (showSpinner) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div>
@@ -53,8 +61,8 @@ function ResourceManagment() {
             <tr key={element.id}>
               <td width="100px">{element.id}</td>
               <td>{element.name}</td>
-              <td>{element.resourceStatusId}</td>
-              <td>{element.resourceTypeId}</td>
+              <td>{getResourceStatusName(element.resourceStatusId)}</td>
+              <td>{element.resourceTypeName}</td>
               <td width="100px">
                 <Link
                   className="customLink"

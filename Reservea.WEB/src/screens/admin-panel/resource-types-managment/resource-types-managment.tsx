@@ -10,11 +10,14 @@ import {
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { toast } from "react-toastify";
+import LoadingSpinner from "../../../components/loading-spinner/loading-spinner";
 
 function ResourceTypes() {
   const [resourceTypesList, setResourceTypesList] = useState<
     Array<ResourceTypeForListResponse>
   >([]);
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+
 
   const deleteResourceType = async (resourrceTypeId: number) => {
     deleteResourceTypeRequest(resourrceTypeId)
@@ -28,12 +31,18 @@ function ResourceTypes() {
   };
 
   useEffect(() => {
+    setShowSpinner(true);
     resourcesTypesListRequest()
       .then((response: Array<ResourceTypeForListResponse>) => {
         setResourceTypesList(response);
+        setShowSpinner(false);
       })
       .catch(() => {});
   }, []);
+
+  if (showSpinner) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div>

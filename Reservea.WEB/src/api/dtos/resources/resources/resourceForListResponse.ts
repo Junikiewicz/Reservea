@@ -3,4 +3,5 @@ export interface ResourceForListResponse {
     name: string;
     resourceStatusId: number;
     resourceTypeId: number;
+    resourceTypeName: string;
 }
