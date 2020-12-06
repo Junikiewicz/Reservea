@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBug, faUserSlash } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 
-const apiUrl = configuration.API_BASE_URL;
+const apiUrl = process.env.NODE_ENV !== 'production' ? configuration.API_BASE_URL : process.env.REACT_APP_API_BASE_URL;
 
 const httpAgent = new http.Agent({ keepAlive: true });
 const httpsAgent = new https.Agent({ keepAlive: true });
