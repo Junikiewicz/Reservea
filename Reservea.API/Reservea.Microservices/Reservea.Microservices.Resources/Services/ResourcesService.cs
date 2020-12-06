@@ -27,7 +27,7 @@ namespace Reservea.Microservices.Resources.Services
 
         public async Task<IEnumerable<ResourceForListResponse>> GetAllResourcesForListAsync(CancellationToken cancellationToken)
         {
-            var resourcesForList = await _unitOfWork.ResourcesRepository.GetAllAsync<ResourceForListResponse>(cancellationToken);
+            var resourcesForList = await _unitOfWork.ResourcesRepository.GetAsync<ResourceForListResponse>(x => x.ResourceStatusId != (int)Enums.ResourceStatus.Removed, cancellationToken);
 
             return resourcesForList;
         }
@@ -42,7 +42,7 @@ namespace Reservea.Microservices.Resources.Services
         }
         public async Task<IEnumerable<ResourceAttributeForDetailedResourceResponse>> GetResourceAttributesForTypeChange(int resourceId, int resourceTypeId, CancellationToken cancellationToken)
         {
-            var resourceAttributes = await _unitOfWork.ResourceAttributesRepository.GetAsync(x=>x.ResourceId == resourceId, cancellationToken); 
+            var resourceAttributes = await _unitOfWork.ResourceAttributesRepository.GetAsync(x => x.ResourceId == resourceId, cancellationToken);
             var resourceTypeAttributes = await _unitOfWork.ResourceTypesRepository.GetResourceTypeAttributes(resourceTypeId, cancellationToken);
             var attributesList = new List<ResourceAttributeForDetailedResourceResponse>();
 
@@ -71,7 +71,7 @@ namespace Reservea.Microservices.Resources.Services
                 throw new Exception("Żeby usunać zasób skorzystaj z endpointu delete.");//temp (until validation implementation)
             }
 
-            var resourceFromDatabase = await _unitOfWork.ResourcesRepository.GetSingleAsync(x=>x.Id == resourceId, cancellationToken, include: i => i.Include(x => x.ResourceAttributes));
+            var resourceFromDatabase = await _unitOfWork.ResourcesRepository.GetSingleAsync(x => x.Id == resourceId, cancellationToken, include: i => i.Include(x => x.ResourceAttributes));
 
             var resourceTypeAttributesIds = await _unitOfWork.ResourceTypesRepository.GetResourceTypeAttributesIds(request.ResourceTypeId, cancellationToken);
             var attributesToSetInactive = resourceFromDatabase.ResourceAttributes.Where(x => !resourceTypeAttributesIds.Contains(x.AttributeId));
@@ -111,7 +111,7 @@ namespace Reservea.Microservices.Resources.Services
 
         public async Task RemoveResourceAsync(int resourceId, CancellationToken cancellationToken)
         {
-            var resourceFromDatabase = await _unitOfWork.ResourcesRepository.GetSingleAsync(x=>x.Id == resourceId, cancellationToken, include: i => i.Include(x => x.ResourceAttributes));
+            var resourceFromDatabase = await _unitOfWork.ResourcesRepository.GetSingleAsync(x => x.Id == resourceId, cancellationToken, include: i => i.Include(x => x.ResourceAttributes));
 
             resourceFromDatabase.ResourceStatusId = (int)Enums.ResourceStatus.Removed;
             _unitOfWork.ResourceAttributesRepository.RemoveRange(resourceFromDatabase.ResourceAttributes);

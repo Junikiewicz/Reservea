@@ -26,7 +26,7 @@ namespace Reservea.Microservices.Resources.Services
 
         public async Task<IEnumerable<ResourceTypeForListResponse>> GetAllResourceTypesForListAsync(CancellationToken cancellationToken)
         {
-            var resourceTypeForList = await _unitOfWork.ResourceTypesRepository.GetAllAsync<ResourceTypeForListResponse>(cancellationToken);
+            var resourceTypeForList = await _unitOfWork.ResourceTypesRepository.GetAsync<ResourceTypeForListResponse>(x => !x.IsDeleted, cancellationToken);
 
             return resourceTypeForList;
         }
@@ -87,8 +87,6 @@ namespace Reservea.Microservices.Resources.Services
         {
             var newResourceType = _mapper.Map<ResourceType>(request);
 
-            //newResourceType.ResourceTypeAttributes = request.ResourceTypeAttributes.Select(x => new ResourceTypeAttribute { AttributeId = x.AttributeId}).ToList();
-
             _unitOfWork.ResourceTypesRepository.Add(newResourceType);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -97,7 +95,8 @@ namespace Reservea.Microservices.Resources.Services
 
         public async Task RemoveResourceTypeAsync(int resourceTypeId, CancellationToken cancellationToken)
         {
-            //await _unitOfWork.ResourceTypesRepository.RemoveByIdAsync(resourceTypeId, cancellationToken);
+            var resourceTypeFromDatabase = await _unitOfWork.ResourceTypesRepository.GetSingleAsync(x => x.Id == resourceTypeId, cancellationToken);
+            resourceTypeFromDatabase.IsDeleted = true;
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }

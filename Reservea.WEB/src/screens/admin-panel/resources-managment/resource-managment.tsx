@@ -29,9 +29,7 @@ function ResourceManagment() {
     deleteResourceRequest(resourrceId)
       .then(() => {
         let newArray = [...resourcesList];
-        newArray[
-          newArray.findIndex((x) => x.id == resourrceId)
-        ].resourceStatusId = ResourceStatus.Removed;
+        newArray = newArray.filter(x=>x.id != resourrceId);
         setResourcesList(newArray);
         toast.info("Obiekt oznaczony jako usunięty");
       })
@@ -47,13 +45,13 @@ function ResourceManagment() {
             <th>Nazwa</th>
             <td>Status</td>
             <td>Typ</td>
-            <td>Akcje</td>
+            <td></td>
           </tr>
         </thead>
         <tbody>
           {resourcesList.map((element) => (
             <tr key={element.id}>
-              <td>{element.id}</td>
+              <td width="100px">{element.id}</td>
               <td>{element.name}</td>
               <td>{element.resourceStatusId}</td>
               <td>{element.resourceTypeId}</td>
