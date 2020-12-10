@@ -98,3 +98,8 @@
 .my-modal .modal-content {
     background-color: #343a40;
   }
+
+.my-carousel {
+    border-radius: 10px;
+    overflow: hidden;
+}
