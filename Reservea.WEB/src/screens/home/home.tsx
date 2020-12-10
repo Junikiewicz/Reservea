@@ -13,7 +13,7 @@ const Home = () => (
           </Col>
         </Row>
         <div className="mt-4">
-          <Row><h4>O NAS</h4></Row>
+          <Row><h4>O NAS edt</h4></Row>
           <Row style={{textAlign:"justify"}}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
             laoreet felis non volutpat molestie. Integer vestibulum nunc et nisl
