@@ -9,6 +9,8 @@ import { UpdateResourceRequest } from "../dtos/resources/resources/updateResourc
 import { AddResourceTypeResponse } from "../dtos/resources/resourceTypes/addResourceTypeResponse";
 import { apiClient } from "./apiClient";
 import { ResourceAttributeResponse } from "../dtos/resources/resourceAttributes/resourceAttributeResponse";
+import { ResourceTypeWithDetailsForListResponse } from "../dtos/resources/resourceTypes/resourceTypeWithDetailsForListResponse";
+import { ResoucerTypeAvaliabilitiesResponse } from "../dtos/resources/resources/resoucerTypeAvaliabilitiesResponse";
 
 export const resourcesListRequest = async (): Promise<
   Array<ResourceForListResponse>
@@ -30,6 +32,14 @@ export const resourcesTypesListRequest = async (): Promise<
   Array<ResourceTypeForListResponse>
 > => {
   const response = await apiClient.get("/api/resources/ResourceTypes");
+
+  return response.data;
+};
+
+export const resourcesTypesWithDetailsListRequest = async (): Promise<
+  Array<ResourceTypeWithDetailsForListResponse>
+> => {
+  const response = await apiClient.get("/api/resources/ResourceTypes/details");
 
   return response.data;
 };
@@ -56,7 +66,7 @@ export const addAttributeRequest = async (
   attributeName: string
 ): Promise<AttributeForListResponse> => {
   const response = await apiClient.post("/api/resources/Attributes", {
-    name: attributeName
+    name: attributeName,
   });
 
   return response.data;
@@ -67,16 +77,13 @@ export const updateAttributeRequest = async (
   attributeName: string
 ) => {
   await apiClient.put("/api/resources/Attributes/" + attributeId, {
-    name: attributeName
+    name: attributeName,
   });
 };
 
-export const deleteAttributeRequest = async (
-  attributeId: number
-) => {
+export const deleteAttributeRequest = async (attributeId: number) => {
   await apiClient.delete("/api/resources/Attributes/" + attributeId);
 };
-
 
 export const resourceAttributesForTypeChangeRequest = async (
   resourceId: number,
@@ -144,4 +151,16 @@ export const deleteResourceRequest = async (resourceId: Number) => {
 
 export const deleteResourceTypeRequest = async (resourceTypeId: Number) => {
   await apiClient.delete("/api/resources/ResourceTypes/" + resourceTypeId);
+};
+
+export const resourceTypeAvaliabilitiesRequest = async (
+  resourceTypeId: Number
+): Promise<Array<ResoucerTypeAvaliabilitiesResponse>> => {
+  const response = await apiClient.get<
+    Promise<Array<ResoucerTypeAvaliabilitiesResponse>>
+  >("/api/resources/Resources/availability/", {
+    params: { resourceTypeId },
+  });
+
+  return response.data;
 };

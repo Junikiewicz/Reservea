@@ -55,6 +55,42 @@ namespace Reservea.Microservices.Resources.Controllers
         }
 
         /// <summary>
+        /// Pobiera informacje na temat dostępności danego zasobu
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="id">Identyfikator zasobu</param>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns>Lista definiująca dostępność danego zasobu</returns>
+        /// <response code="200">Pobranie danych powiodło się</response>
+        [HttpGet("availability")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetResourcesAvailabilityAsync([FromQuery]int resourceTypeId, CancellationToken cancellationToken)
+        {
+            var resourceDetails = await _resourcesService.GetResourcesAvailabilityAsync(resourceTypeId, cancellationToken);
+
+            return Ok(resourceDetails);
+        }
+
+        /// <summary>
+        /// Pobiera informacje na temat dostępności danego zasobu
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="id">Identyfikator zasobu</param>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns>Lista definiująca dostępność danego zasobu</returns>
+        /// <response code="200">Pobranie danych powiodło się</response>
+        [HttpGet("{id}/availability")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetResourceAvailabilityAsync(int id, CancellationToken cancellationToken)
+        {
+            var resourceDetails = await _resourcesService.GetResourceAvailabilityAsync(id, cancellationToken);
+
+            return Ok(resourceDetails);
+        }
+
+        /// <summary>
         /// Pobiera liste atrybutów do zmiany typu
         /// </summary>
         /// <remarks>

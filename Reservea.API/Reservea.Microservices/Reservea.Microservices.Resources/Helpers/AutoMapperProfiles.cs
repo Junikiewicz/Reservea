@@ -21,6 +21,7 @@ namespace Reservea.Microservices.Resources.Helpers
                 .ForMember(dest => dest.ResourceTypeName, opts => opts.MapFrom(src => src.ResourceType.Name));
             CreateMap<Resource, ResourceForDetailedResponse>();
             CreateMap<Resource, AddResourceResponse>();
+            CreateMap<Resource, ResourceWithAvaiabilityResponse>();
 
             CreateMap<ResourceAttribute, ResourceAttributeForDetailedResourceResponse>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute.Name));
@@ -34,8 +35,11 @@ namespace Reservea.Microservices.Resources.Helpers
             CreateMap<ResourceType, ResourceTypeForDetailedResponse>();
             CreateMap<ResourceType, ResourceTypeForListResponse>();
             CreateMap<ResourceType, AddResourceTypeResponse>();
+            CreateMap<ResourceType, ResourceTypeWithDetailsForListResponse>();
             CreateMap<ResourceType, IEnumerable<ResourceTypeAttribute>>()
                 .ConstructUsing(x => x.ResourceTypeAttributes);
+
+            CreateMap<ResourceAvailability, ResourceAvailabilityResponse>();
         }
 
         private void CreateMapsFromDtosToEntities()

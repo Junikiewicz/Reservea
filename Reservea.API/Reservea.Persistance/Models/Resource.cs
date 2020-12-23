@@ -14,5 +14,6 @@ namespace Reservea.Persistance.Models
         public virtual ResourceStatus ResourceStatus { get; set; }
         public virtual ResourceType ResourceType { get; set; }
         public virtual ICollection<ResourceAttribute> ResourceAttributes { get; set; }
+        public virtual ICollection<ResourceAvailability> ResourceAvailabilities { get; set; }
     }
 }
