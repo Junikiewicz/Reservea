@@ -48,6 +48,7 @@ namespace Reservea.Microservices.Resources.Helpers
             CreateMap<UpdateResourceRequest, Resource>()
                 .ForMember(dest => dest.ResourceAttributes, opts => opts.Ignore());
 
+            CreateMap<ResourceAvaiabilityForAddOrUpdateRequest, ResourceAvailability>();
             CreateMap<ResourceAttributeForAddOrUpdateRequest, ResourceAttribute>();
             CreateMap<ResourceTypeAttributeRequest, ResourceTypeAttribute>();
             CreateMap<ResourceTypeAttributePrimaryKey, ResourceTypeAttribute>();

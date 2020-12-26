@@ -12,6 +12,7 @@ namespace Reservea.Microservices.Resources.Dtos.Responses
         public int ResourceTypeId { get; set; }
 
         public virtual ICollection<ResourceAttributeForDetailedResourceResponse> ResourceAttributes { get; set; }
+        public virtual ICollection<ResourceAvailabilityResponse> ResourceAvailabilities { get; set; }
     }
     public class ResourceAttributeForDetailedResourceResponse
     {

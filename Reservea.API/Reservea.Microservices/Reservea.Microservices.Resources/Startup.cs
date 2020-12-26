@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Reservea.Microservices.Resources.Helpers;
 using Reservea.Microservices.Resources.Interfaces.Services;
 using Reservea.Microservices.Resources.Services;
 using Reservea.Persistance;
@@ -26,11 +27,12 @@ namespace Reservea.Microservices.Resources
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new TimeSpanConverter()));
 
             AddDependencyInjection(services);
 
-            services.AddSwaggerGen(c => 
+            services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = Configuration.GetValue<string>("ApplicationName"), Version = "v1" });
                 var xmlFilePath = "Swagger_doc.xml";

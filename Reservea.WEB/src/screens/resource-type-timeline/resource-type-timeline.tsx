@@ -51,7 +51,6 @@ function ResourceTypeTimeline(props: any) {
 
     resourceTypeAvaliabilitiesRequest(resourceType)
       .then(async (response: Array<ResoucerTypeAvaliabilitiesResponse>) => {
-        console.log(response);
         const timelineGroups = response.map((x) => ({
           id: x.id,
           title: x.name,
@@ -59,13 +58,26 @@ function ResourceTypeTimeline(props: any) {
         let availabilities: any[] = [];
 
         for (let resource of response) {
-          let temp = resource.resourceAvailabilities.map((x) => ({
-            resourceId: x.resourceId,
-            isReccuring: x.isReccuring,
-            interval: x.interval ? x.interval.totalMinutes : null,
-            start: new Date(x.start),
-            end: new Date(x.end),
-          }));
+          let temp = resource.resourceAvailabilities.map((x) => {
+            if(x.interval)
+            {
+              const a = x.interval.split(":");
+              return {
+                resourceId: x.resourceId,
+                isReccuring: x.isReccuring,
+                interval: +a[0] * 60 + +a[1],
+                start: new Date(x.start),
+                end: new Date(x.end),
+              };
+            }
+            return {
+              resourceId: x.resourceId,
+              isReccuring: x.isReccuring,
+              interval: null,
+              start: new Date(x.start),
+              end: new Date(x.end),
+            };
+          });
           availabilities = availabilities.concat(temp);
         }
         const reservations: Array<any> = [];

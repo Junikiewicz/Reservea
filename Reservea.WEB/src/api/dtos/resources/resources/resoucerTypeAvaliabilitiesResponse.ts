@@ -6,13 +6,9 @@ export interface ResoucerTypeAvaliabilitiesResponse {
 
 export interface ResoucerTypeAvaliabilitiesResponse {
   id: number;
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   isReccuring: boolean;
-  interval: TimeSpan;
+  interval: any;
   resourceId: number;
-}
-
-export interface TimeSpan {
-  totalMinutes: number;
 }

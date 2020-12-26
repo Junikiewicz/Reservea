@@ -114,20 +114,31 @@ namespace Reservea.Microservices.Resources.Services
             attributesToSetInactive.ForEach(x => x.IsActive = false);
 
             // avalabilities
-            var avalabilitesToAdd = request.ResourceAvaiabilities.Where(x => x.Id == null);
-            foreach(var avability in avalabilitesToAdd)
+            if (request.ResourceAvailabilities is null)
             {
-                resourceFromDatabase.ResourceAvailabilities.Add(_mapper.Map<ResourceAvailability>(avability));
+                _unitOfWork.ResourceAvailabilitiesRepository.RemoveRange(resourceFromDatabase.ResourceAvailabilities);
             }
-           
-            var avalabilitesToDelete = resourceFromDatabase.ResourceAvailabilities.Where(x => !request.ResourceAvaiabilities.Select(x => x.Id).Contains(x.Id));
-            _unitOfWork.ResourceAvailabilitiesRepository.RemoveRange(avalabilitesToDelete);
-            
-            var avalabilitesToUpdate = resourceFromDatabase.ResourceAvailabilities.Where(x => request.ResourceAvaiabilities.Select(x => x.Id).Contains(x.Id));
-            foreach(var avalability in avalabilitesToUpdate)
+            else
             {
-                var newAvability = request.ResourceAvaiabilities.Single(x => x.Id == avalability.Id);
-                _mapper.Map(newAvability, avalability);
+                var avalabilitesToDelete = resourceFromDatabase.ResourceAvailabilities.Where(x => !request.ResourceAvailabilities.Select(x => x.Id).Contains(x.Id));
+                if (avalabilitesToDelete.Any())
+                {
+                    _unitOfWork.ResourceAvailabilitiesRepository.RemoveRange(avalabilitesToDelete);
+                }
+
+                var avalabilitesToUpdate = resourceFromDatabase.ResourceAvailabilities.Where(x => request.ResourceAvailabilities.Select(x => x.Id).Contains(x.Id));
+                foreach (var avalability in avalabilitesToUpdate)
+                {
+                    var newAvability = request.ResourceAvailabilities.Single(x => x.Id == avalability.Id);
+                    _mapper.Map(newAvability, avalability);
+                }
+
+                var avalabilitesToAdd = request.ResourceAvailabilities.Where(x => x.Id == -1);
+                foreach (var avability in avalabilitesToAdd)
+                {
+                    avability.Id = 0;
+                    resourceFromDatabase.ResourceAvailabilities.Add(_mapper.Map<ResourceAvailability>(avability));
+                }
             }
 
             _mapper.Map(request, resourceFromDatabase);
@@ -140,6 +151,7 @@ namespace Reservea.Microservices.Resources.Services
             var newResource = _mapper.Map<Resource>(request);
             newResource.ResourceStatusId = (int)Enums.ResourceStatus.New;
             newResource.ResourceAttributes.ForEach(x => x.IsActive = true);
+            newResource.ResourceAvailabilities.ForEach(x => x.Id = 0);
 
             _unitOfWork.ResourcesRepository.Add(newResource);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

@@ -108,9 +108,20 @@ export const resourceDetailsRequest = async (
 
 export const updateResourceRequest = async (
   resourceId: number,
-  resourceData: UpdateResourceRequest
+  resourceData: any
 ) => {
-  await apiClient.put("/api/resources/Resources/" + resourceId, resourceData);
+  
+  const requestData = JSON.parse(JSON.stringify(resourceData));
+
+  for (const element of requestData.resourceAvailabilities) {
+    element.interval = `${Math.floor(element.interval / 60)}:${
+      element.interval % 60 < 10
+        ? (element.interval % 60) + "0"
+        : element.interval % 60
+    }:00`;
+  }
+
+  await apiClient.put("/api/resources/Resources/" + resourceId, requestData);
 };
 
 export const updateResourceTypeRequest = async (
@@ -137,6 +148,15 @@ export const createResourceTypeRequest = async (
 export const createResourceRequest = async (
   resourceData: UpdateResourceRequest
 ): Promise<AddResourceResponse> => {
+  for (const element of resourceData.resourceAvailabilities) {
+    element.interval = `${Math.floor(element.interval / 60)}:${
+      element.interval % 60 < 10
+        ? (element.interval % 60) + "0"
+        : element.interval % 60
+    }:00`;
+  }
+
+
   const response = await apiClient.post(
     "/api/resources/Resources/",
     resourceData

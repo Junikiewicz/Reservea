@@ -11,7 +11,7 @@ namespace Reservea.Microservices.Resources.Dtos.Requests
         public int ResourceTypeId { get; set; }
         public int ResourceStatusId { get; set; }
         public IEnumerable<ResourceAttributeForAddOrUpdateRequest> ResourceAttributes { get; set; }
-        public IEnumerable<ResourceAvaiabilityForAddOrUpdateRequest> ResourceAvaiabilities { get; set; }
+        public IEnumerable<ResourceAvaiabilityForAddOrUpdateRequest> ResourceAvailabilities { get; set; }
     }
 
     public class ResourceAvaiabilityForAddOrUpdateRequest

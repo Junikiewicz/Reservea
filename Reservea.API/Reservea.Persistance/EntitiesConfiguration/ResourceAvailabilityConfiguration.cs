@@ -8,7 +8,7 @@ namespace Reservea.Persistance.EntitiesConfiguration
     {
         public void Configure(EntityTypeBuilder<ResourceAvailability> builder)
         {
-
+            builder.Property(x => x.Interval).HasColumnType("bigint");
         }
     }
 }
