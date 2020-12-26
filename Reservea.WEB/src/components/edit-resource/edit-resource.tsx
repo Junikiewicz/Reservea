@@ -18,6 +18,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLongArrowAltLeft } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { ResourceStatus } from "../../common/enums/resourceStatus";
+import EditResourceAvailabilities from "./edit-resource-availabilities/edit-resource-availabilities";
+import { ResoucerTypeAvaliabilitiesResponse } from "../../api/dtos/resources/resources/resoucerTypeAvaliabilitiesResponse";
 
 function EditResource(props: any) {
   const [
@@ -38,6 +40,16 @@ function EditResource(props: any) {
     mode: "onSubmit",
   });
 
+  const {
+    fields: availabilitiesFields,
+    remove: availabilitiesRemove,
+    insert: availabilitiesInsert,
+  } = useFieldArray<any, "customId">({
+    control,
+    name: "resourceAvailabilities",
+    keyName: "customId",
+  });
+
   const { fields, remove, insert } = useFieldArray<
     ResourceAttributeResponse,
     "customId"
@@ -54,8 +66,27 @@ function EditResource(props: any) {
         resourcesTypesListRequest()
           .then((resourceTypesResponse: Array<ResourceTypeForListResponse>) => {
             setResourceTypes(resourceTypesResponse);
+            for (const element of resourceDetailsResponse.resourceAvailabilities) {
+              if (element.interval) {
+                const a = element.interval.split(":");
+                element.interval = +a[0] * 60 + +a[1];
+              }
+
+              element.start = new Date(
+                new Date(element.start).toString().split("GMT")[0] + " UTC"
+              )
+                .toISOString()
+                .slice(0, -1);
+              element.end = new Date(
+                new Date(element.end).toString().split("GMT")[0] + " UTC"
+              )
+                .toISOString()
+                .slice(0, -1);
+            }
             reset({
               resourceAttributes: resourceDetailsResponse.resourceAttributes,
+              resourceAvailabilities:
+                resourceDetailsResponse.resourceAvailabilities,
             });
             setResourceDetails(resourceDetailsResponse);
           })
@@ -76,8 +107,35 @@ function EditResource(props: any) {
       .catch(() => {});
   };
 
+  const addNewResourceAvailability = () => {
+    let avaiability = {
+      id: -1,
+      start: new Date(new Date().toString().split("GMT")[0] + " UTC")
+        .toISOString()
+        .slice(0, -1),
+      end: new Date(new Date().toString().split("GMT")[0] + " UTC")
+        .toISOString()
+        .slice(0, -1),
+      isReccuring: false,
+      interval: { totalMinutes: 0 },
+      resourceId: props.match.params.id,
+    };
+
+    availabilitiesInsert(availabilitiesFields.length, avaiability);
+  };
+
+  const removeResourceAvailability = (index: number) => {
+    availabilitiesRemove(index);
+  };
+
   const onSubmit = async (data: UpdateResourceFormData): Promise<void> => {
-    console.log(data);
+    if (data.resourceAvailabilities) {
+      data.resourceAvailabilities.map(
+        (element: ResoucerTypeAvaliabilitiesResponse, index: number) => {
+          element.id = availabilitiesFields[index].id ?? 0;
+        }
+      );
+    }
     if (data.resourceAttributes) {
       data.resourceAttributes.map(
         (element: ResourceAttributeResponse, index: number) => {
@@ -121,7 +179,9 @@ function EditResource(props: any) {
               <Col className="col-4 mt-2">
                 {resourceDetails?.resourceStatusId ===
                 ResourceStatus.Removed ? (
-                  <span className="float-right" style={{ color: "red" }}>Ten zasób został usunięty!</span>
+                  <span className="float-right" style={{ color: "red" }}>
+                    Ten zasób został usunięty!
+                  </span>
                 ) : (
                   <Button
                     disabled={
@@ -186,7 +246,14 @@ function EditResource(props: any) {
                   register={register}
                 />
               </Tab.Pane>
-              <Tab.Pane eventKey="avaiability"></Tab.Pane>
+              <Tab.Pane eventKey="avaiability">
+                <EditResourceAvailabilities
+                  resourceAvailabilities={availabilitiesFields}
+                  addNewResourceAvailability={addNewResourceAvailability}
+                  removeResourceAvailability={removeResourceAvailability}
+                  register={register}
+                />
+              </Tab.Pane>
             </Tab.Content>
           </Container>
         </div>

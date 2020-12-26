@@ -9,5 +9,6 @@ namespace Reservea.Persistance.Interfaces.UnitsOfWork
         IAttributesRepository AttributesRepository { get; }
         IResourceTypesRepository ResourceTypesRepository { get; }
         IResourceTypeAttributesRepository ResourceTypeAttributesRepository { get; }
+        IResourceAvailabilitiesRepository ResourceAvailabilitiesRepository { get; }
     }
 }

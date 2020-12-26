@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Reservea.Persistance;
 
 namespace Reservea.Persistance.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201212114524_AddResourceAvailability")]
+    partial class AddResourceAvailability
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,8 +188,8 @@ namespace Reservea.Persistance.Migrations
                     b.Property<DateTime>("End")
                         .HasColumnType("datetime2");
 
-                    b.Property<long?>("Interval")
-                        .HasColumnType("bigint");
+                    b.Property<TimeSpan?>("Interval")
+                        .HasColumnType("time");
 
                     b.Property<bool>("IsReccuring")
                         .HasColumnType("bit");
@@ -458,7 +460,7 @@ namespace Reservea.Persistance.Migrations
             modelBuilder.Entity("Reservea.Persistance.Models.ResourceAvailability", b =>
                 {
                     b.HasOne("Reservea.Persistance.Models.Resource", "Resource")
-                        .WithMany("ResourceAvailabilities")
+                        .WithMany()
                         .HasForeignKey("ResourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -514,8 +516,6 @@ namespace Reservea.Persistance.Migrations
             modelBuilder.Entity("Reservea.Persistance.Models.Resource", b =>
                 {
                     b.Navigation("ResourceAttributes");
-
-                    b.Navigation("ResourceAvailabilities");
                 });
 
             modelBuilder.Entity("Reservea.Persistance.Models.ResourceStatus", b =>

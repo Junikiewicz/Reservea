@@ -3,7 +3,10 @@ import { Form, Col, Row, Spinner } from "react-bootstrap";
 import { ResourceDetailsResponse } from "../../../api/dtos/resources/resources/resourceDetailsResponse";
 import { ResourceTypeForListResponse } from "../../../api/dtos/resources/resourceTypes/resourceTypeForListResponse";
 import LoadingSpinner from "../../loading-spinner/loading-spinner";
-import { getResourceStatusName, ResourceStatus } from "../../../common/enums/resourceStatus";
+import {
+  getResourceStatusName,
+  ResourceStatus,
+} from "../../../common/enums/resourceStatus";
 
 function EditResourceGeneral({
   resourceDetails,
@@ -79,7 +82,9 @@ function EditResourceGeneral({
               as="select"
             >
               {resourceTypes.map((element: ResourceTypeForListResponse) => (
-                <option value={element.id}>{element.name}</option>
+                <option key={element.id} value={element.id}>
+                  {element.name}
+                </option>
               ))}
             </Form.Control>
           </Form.Group>
@@ -100,6 +105,7 @@ function EditResourceGeneral({
                 .filter((k) => !isNaN(Number(k)))
                 .map((key: string) => (
                   <option
+                    key={key}
                     disabled={parseInt(key) === ResourceStatus.Removed}
                     aria-selected="true"
                     value={parseInt(key)}

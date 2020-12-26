@@ -37,6 +37,24 @@ namespace Reservea.Microservices.Resources.Controllers
         }
 
         /// <summary>
+        /// Pobiera wszystkie typy zasobów zdefiniowane w systemie, wraz z ich opisami
+        /// </summary>
+        /// <remarks>
+        /// Tu będzie informacja o paginacji, jak już ją wprowadze
+        /// </remarks>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns>Lista wszystkich typów zasobów zdefiniowanych w systemie, wraz z ich opisami</returns>
+        /// <response code="200">Pobranie danych powiodło się</response>
+        [HttpGet("details")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllResourceTypesWithDetailsForListAsync(CancellationToken cancellationToken)
+        {
+            var response = await _resourceTypesService.GetAllResourceTypesWithDetailsForListAsync(cancellationToken);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Pobiera szczegółowe informacje na temat danego typu zasobu
         /// </summary>
         /// <remarks>

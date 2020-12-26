@@ -17,16 +17,18 @@ function EditResourceAttributes({ resourceAttributes, register }: any) {
         </tr>
       </thead>
       <tbody>
-        {resourceAttributes.map((element: ResourceAttributeResponse, index: number ) => (
-          <tr>
-            <td >{element.name}</td>
-            <td><Form.Control
-              name={`resourceAttributes[${index}].value`}
-              ref={register()}
-              className="bg-dark text-light"
-              type="text"
-              defaultValue={element.value}
-            /></td>
+        {resourceAttributes.map((element: any, index: number) => (
+          <tr key={element.customId}>
+            <td>{element.name}</td>
+            <td>
+              <Form.Control
+                name={`resourceAttributes[${index}].value`}
+                ref={register()}
+                className="bg-dark text-light"
+                type="text"
+                defaultValue={element.value}
+              />
+            </td>
           </tr>
         ))}
       </tbody>

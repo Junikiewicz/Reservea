@@ -12,7 +12,9 @@ namespace Reservea.Microservices.Resources.Interfaces.Services
         Task<ResourceForDetailedResponse> GetResourceDetailsAsync(int resourceId, CancellationToken cancellationToken);
         Task<IEnumerable<ResourceAttributeForDetailedResourceResponse>> GetResourceAttributesForTypeChange(int resourceId, int resourceTypeId, CancellationToken cancellationToken);
         Task UpdateResourceAsync(int resourceId, UpdateResourceRequest request, CancellationToken cancellationToken);
+        Task<IEnumerable<ResourceWithAvaiabilityResponse>> GetResourcesAvailabilityAsync(int resourceTypeId, CancellationToken cancellationToken);
         Task<AddResourceResponse> AddResourceAsync(AddResourceRequest request, CancellationToken cancellationToken);
         Task RemoveResourceAsync(int resourceId, CancellationToken cancellationToken);
+        Task<ResourceAvailabilityResponse> GetResourceAvailabilityAsync(int resourceId, CancellationToken cancellationToken);
     }
 }

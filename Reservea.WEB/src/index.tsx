@@ -7,14 +7,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
 import { Container } from "react-bootstrap";
 import { ToastContainer } from "react-toastify";
-
 ReactDOM.render(
   <>
     <NavbarLayout />
-    <Container
-      className="mt-4"
-      style={{ overflow: "hidden" }}
-    >
+    <Container className="mt-4" style={{ overflow: "hidden" }}>
       <Router />
     </Container>
     <ToastContainer

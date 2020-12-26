@@ -31,6 +31,13 @@ namespace Reservea.Microservices.Resources.Services
             return resourceTypeForList;
         }
 
+        public async Task<IEnumerable<ResourceTypeWithDetailsForListResponse>> GetAllResourceTypesWithDetailsForListAsync(CancellationToken cancellationToken)
+        {
+            var resourceTypeForList = await _unitOfWork.ResourceTypesRepository.GetAsync<ResourceTypeWithDetailsForListResponse>(x => !x.IsDeleted, cancellationToken);
+
+            return resourceTypeForList;
+        }
+
         public async Task<ResourceTypeForDetailedResponse> GetResourceTypeDetailsAsync(int resourceTypeId, CancellationToken cancellationToken)
         {
             var result = await _unitOfWork.ResourceTypesRepository.GetSingleAsync<ResourceTypeForDetailedResponse>(x => x.Id == resourceTypeId, cancellationToken);

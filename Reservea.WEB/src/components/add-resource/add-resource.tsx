@@ -19,6 +19,8 @@ import { Link } from "react-router-dom";
 import { AttributeForListResponse } from "../../api/dtos/resources/attributes/attributeForListResponse";
 import { useHistory } from "react-router-dom";
 import { AddResourceResponse } from "../../api/dtos/resources/resources/addResourceResponse";
+import EditResourceAvailabilities from "../edit-resource/edit-resource-availabilities/edit-resource-availabilities";
+import { ResoucerTypeAvaliabilitiesResponse } from "../../api/dtos/resources/resources/resoucerTypeAvaliabilitiesResponse";
 
 function AddResource() {
   const history = useHistory();
@@ -41,6 +43,16 @@ function AddResource() {
     mode: "onSubmit",
   });
 
+  const {
+    fields: availabilitiesFields,
+    remove: availabilitiesRemove,
+    insert: availabilitiesInsert,
+  } = useFieldArray<any, "customId">({
+    control,
+    name: "resourceAvailabilities",
+    keyName: "customId",
+  });
+
   const { fields, remove, insert } = useFieldArray<
     AttributeForListResponse,
     "customId"
@@ -49,6 +61,26 @@ function AddResource() {
     name: "resourceAttributes",
     keyName: "customId",
   });
+
+  const addNewResourceAvailability = () => {
+    let avaiability = {
+      id: -1,
+      start: new Date(new Date().toString().split("GMT")[0] + " UTC")
+        .toISOString()
+        .slice(0, -1),
+      end: new Date(new Date().toString().split("GMT")[0] + " UTC")
+        .toISOString()
+        .slice(0, -1),
+      isReccuring: false,
+      interval: { totalMinutes: 0 }
+    };
+
+    availabilitiesInsert(availabilitiesFields.length, avaiability);
+  };
+
+  const removeResourceAvailability = (index: number) => {
+    availabilitiesRemove(index);
+  };
 
   useEffect(() => {
     resourcesTypesListRequest()
@@ -62,6 +94,7 @@ function AddResource() {
           resourceStatusId: 1,
           resourceTypeId: resourceTypes ? resourceTypes[0].id : 0,
           resourceAttributes: [],
+          resourceAvailabilities: [],
         });
         onResourceTypeIdChange();
       })
@@ -73,11 +106,18 @@ function AddResource() {
       .then((data: Array<AttributeForListResponse>) => {
         remove();
         insert(0, data);
-    })
+      })
       .catch(() => {});
   };
 
   const onSubmit = async (data: UpdateResourceFormData): Promise<void> => {
+    if (data.resourceAvailabilities) {
+      data.resourceAvailabilities.map(
+        (element: ResoucerTypeAvaliabilitiesResponse, index: number) => {
+          element.id = availabilitiesFields[index].id ?? 0;
+        }
+      );
+    }
     if (data.resourceAttributes) {
       data.resourceAttributes.map(
         (element: ResourceAttributeResponse, index: number) => {
@@ -86,11 +126,11 @@ function AddResource() {
       );
     }
     createResourceRequest(data)
-    .then((response: AddResourceResponse) => {
-      history.push("/edit-resource/" + response.id);
-      toast.success("Zasób poprawnie dodany");
-    })
-    .catch(() => {});
+      .then((response: AddResourceResponse) => {
+        history.push("/edit-resource/" + response.id);
+        toast.success("Zasób poprawnie dodany");
+      })
+      .catch(() => {});
   };
 
   return (
@@ -158,7 +198,14 @@ function AddResource() {
                   register={register}
                 />
               </Tab.Pane>
-              <Tab.Pane eventKey="avaiability"></Tab.Pane>
+              <Tab.Pane eventKey="avaiability">
+                <EditResourceAvailabilities
+                  resourceAvailabilities={availabilitiesFields}
+                  addNewResourceAvailability={addNewResourceAvailability}
+                  removeResourceAvailability={removeResourceAvailability}
+                  register={register}
+                />
+              </Tab.Pane>
             </Tab.Content>
           </Container>
         </div>
