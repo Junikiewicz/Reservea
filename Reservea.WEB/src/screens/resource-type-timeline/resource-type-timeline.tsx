@@ -47,7 +47,7 @@ function ResourceTypeTimeline(props: any) {
     const resourceType = props.match.params.resourceTypeID;
     let itemsIterator = 1;
     const min = new Date();
-    const max = addHours(new Date(), 48);
+    const max = addHours(new Date(), 24 * 7 * 4);
 
     resourceTypeAvaliabilitiesRequest(resourceType)
       .then(async (response: Array<ResoucerTypeAvaliabilitiesResponse>) => {
