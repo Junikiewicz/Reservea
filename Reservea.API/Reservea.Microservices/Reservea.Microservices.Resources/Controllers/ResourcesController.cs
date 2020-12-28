@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Reservea.Microservices.Resources.Dtos.Requests;
 using Reservea.Microservices.Resources.Interfaces.Services;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -108,6 +109,26 @@ namespace Reservea.Microservices.Resources.Controllers
 
             return Ok(attributes);
         }
+
+
+        /// <summary>
+        /// Tworzy nowy zasób w systemie
+        /// </summary>
+        /// <remarks>
+        /// </remarks>
+        /// <param name="reservations"></param>
+        /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
+        /// <returns>Szczegółowe dane nowo utworzonego zasobu</returns>
+        /// <response code="200">Dodanie zasobu powiodło się</response>
+        [HttpPost("validate-avaiability")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> ValidateAvaiability(IEnumerable<ReservationValidationRequest> reservations, CancellationToken cancellationToken)
+        {
+            var result = await _resourcesService.Validate(reservations, cancellationToken);
+
+            return Ok(result);
+        }
+
 
         /// <summary>
         /// Tworzy nowy zasób w systemie

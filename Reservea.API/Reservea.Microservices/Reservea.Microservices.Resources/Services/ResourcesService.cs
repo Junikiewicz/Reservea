@@ -146,6 +146,49 @@ namespace Reservea.Microservices.Resources.Services
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
+        public async Task<bool> Validate(IEnumerable<ReservationValidationRequest> reservations, CancellationToken cancellationToken)
+        {
+            var allResourcesAvaiabilites = await _unitOfWork.ResourceAvailabilitiesRepository.GetAsync(
+                predicate: x => reservations.Select(x => x.ResourceId).Contains(x.ResourceId),
+                cancellationToken);
+
+            foreach (var reservation in reservations)
+            {
+                var resourceAvaiabilites = allResourcesAvaiabilites.Where(x => x.ResourceId == reservation.ResourceId);
+                if (!resourceAvaiabilites.Any())
+                {
+                    return false;
+                }
+                var populatedAvaiabilities = resourceAvaiabilites.Where(x => x.IsReccuring == false).ToList();
+                foreach (var avaiability in resourceAvaiabilites.Where(x => x.IsReccuring == true))
+                {
+                    var tempIterator = avaiability.Start;
+                    while (tempIterator < reservation.End)
+                    {
+                        populatedAvaiabilities.Add(new ResourceAvailability { Start = tempIterator, End = tempIterator.Add(avaiability.End - avaiability.Start) });
+                        tempIterator = tempIterator.Add(avaiability.Interval.Value);
+                    }
+                }
+
+                var iterator = reservation.Start;
+
+                while (iterator < reservation.End)
+                {
+                    var filtered = populatedAvaiabilities.Where(x => x.Start <= iterator && x.End > iterator);
+                    if (!filtered.Any())
+                    {
+                        return false;
+                    }
+
+                    var largest = filtered.Aggregate((i1, i2) => i1.End > i2.End ? i1 : i2);
+
+                    iterator = largest.End;
+                }
+            }
+
+            return true;
+        }
+
         public async Task<AddResourceResponse> AddResourceAsync(AddResourceRequest request, CancellationToken cancellationToken)
         {
             var newResource = _mapper.Map<Resource>(request);

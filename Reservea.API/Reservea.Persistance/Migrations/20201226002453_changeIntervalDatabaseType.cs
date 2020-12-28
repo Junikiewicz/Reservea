@@ -30,8 +30,6 @@ namespace Reservea.Persistance.Migrations
                 table: "ResourceAvailabilities",
                 type: "time",
                 nullable: true);
-
-
         }
     }
 }

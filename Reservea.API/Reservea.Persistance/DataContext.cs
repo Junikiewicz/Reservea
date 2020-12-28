@@ -15,6 +15,8 @@ namespace Reservea.Persistance
         public virtual DbSet<ResourceType> ResourceTypes { get; set; }
         public virtual DbSet<ResourceTypeAttribute> ResourceTypeAttributes { get; set; }
         public virtual DbSet<ResourceAvailability> ResourceAvailabilities { get; set; }
+        public virtual DbSet<Reservation> Reservations { get; set; }
+        public virtual DbSet<ReservationStatus> ReservationStatuses { get; set; }
 
         public DataContext(DbContextOptions<DataContext> contextOptions) : base(contextOptions) { }
 
