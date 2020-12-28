@@ -51,7 +51,6 @@ namespace Reservea.Microservices.Resources.Helpers
             CreateMap<ResourceAvaiabilityForAddOrUpdateRequest, ResourceAvailability>();
             CreateMap<ResourceAttributeForAddOrUpdateRequest, ResourceAttribute>();
             CreateMap<ResourceTypeAttributeRequest, ResourceTypeAttribute>();
-            CreateMap<ResourceTypeAttributePrimaryKey, ResourceTypeAttribute>();
 
             CreateMap<AddAttributeRequest, Attribute>();
             CreateMap<UpdateAttributeRequest, Attribute>();

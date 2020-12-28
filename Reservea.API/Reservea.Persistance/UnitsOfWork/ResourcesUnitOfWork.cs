@@ -11,7 +11,12 @@ namespace Reservea.Persistance.UnitsOfWork
         {
             get
             {
-                return _resourceAttributesRepository ?? new ResourceAttributesRepository(_context, _mapper);
+                if(_resourceAttributesRepository is null)
+                {
+                    _resourceAttributesRepository = new ResourceAttributesRepository(_context, _mapper);
+                }
+
+                return _resourceAttributesRepository;
             }
         }
 
@@ -19,7 +24,12 @@ namespace Reservea.Persistance.UnitsOfWork
         {
             get
             {
-                return _resourcesRepository ?? new ResourcesRepository(_context, _mapper);
+                if (_resourcesRepository is null)
+                {
+                    _resourcesRepository = new ResourcesRepository(_context, _mapper);
+                }
+
+                return _resourcesRepository;
             }
         }
 
@@ -27,7 +37,12 @@ namespace Reservea.Persistance.UnitsOfWork
         {
             get
             {
-                return _attributesRepository ?? new AttributesRepository(_context, _mapper);
+                if (_attributesRepository is null)
+                {
+                    _attributesRepository = new AttributesRepository(_context, _mapper);
+                }
+
+                return _attributesRepository;
             }
         }
 
@@ -35,7 +50,12 @@ namespace Reservea.Persistance.UnitsOfWork
         {
             get
             {
-                return _resourceTypesRepository ?? new ResourceTypesRepository(_context, _mapper);
+                if (_resourceTypesRepository is null)
+                {
+                    _resourceTypesRepository = new ResourceTypesRepository(_context, _mapper);
+                }
+
+                return _resourceTypesRepository;
             }
         }
 
@@ -43,7 +63,12 @@ namespace Reservea.Persistance.UnitsOfWork
         {
             get
             {
-                return _resourceTypeAttributesRepository ?? new ResourceTypeAttributesRepository(_context, _mapper);
+                if (_resourceTypeAttributesRepository is null)
+                {
+                    _resourceTypeAttributesRepository = new ResourceTypeAttributesRepository(_context, _mapper);
+                }
+
+                return _resourceTypeAttributesRepository;
             }
         }
 
@@ -51,7 +76,12 @@ namespace Reservea.Persistance.UnitsOfWork
         {
             get
             {
-                return _resourceAvailabilitiesRepository ?? new ResourceAvailabilitiesRepository(_context, _mapper);
+                if (_resourceAvailabilitiesRepository is null)
+                {
+                    _resourceAvailabilitiesRepository = new ResourceAvailabilitiesRepository(_context, _mapper);
+                }
+
+                return _resourceAvailabilitiesRepository;
             }
         }
 

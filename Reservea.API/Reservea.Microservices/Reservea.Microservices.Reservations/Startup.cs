@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,7 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Reservea.Microservices.Reservations.Interfaces.Services;
+using Reservea.Microservices.Reservations.Services;
 using Reservea.Persistance;
+using Reservea.Persistance.Interfaces.UnitsOfWork;
+using Reservea.Persistance.UnitsOfWork;
+using System.Reflection;
 
 namespace Reservea.Microservices.Reservations
 {
@@ -22,6 +28,9 @@ namespace Reservea.Microservices.Reservations
         {
             services.AddControllers();
 
+            services.AddScoped<IReservationsService, ReservationsService>();
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddScoped<IReservationsUnitOfWork, ReservationsUnitOfWork>();
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSwaggerGen(c =>

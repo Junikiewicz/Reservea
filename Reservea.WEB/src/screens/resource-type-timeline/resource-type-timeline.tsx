@@ -3,7 +3,6 @@ import {
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Console } from "console";
 import React, { ReactText, useEffect, useState } from "react";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import Timeline, {
@@ -11,6 +10,12 @@ import Timeline, {
 } from "react-calendar-timeline";
 import "react-calendar-timeline/lib/Timeline.css";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import {
+  createReservation,
+  getResourceTypeReservations,
+  ReservationRequest,
+} from "../../api/clients/reservationsClient";
 import { resourceTypeAvaliabilitiesRequest } from "../../api/clients/resourcesClient";
 import { ResoucerTypeAvaliabilitiesResponse } from "../../api/dtos/resources/resources/resoucerTypeAvaliabilitiesResponse";
 import "./resource-type-timeline.css";
@@ -49,96 +54,113 @@ function ResourceTypeTimeline(props: any) {
     const min = new Date();
     const max = addHours(new Date(), 24 * 7 * 4);
 
-    resourceTypeAvaliabilitiesRequest(resourceType)
+    resourceTypeAvaliabilitiesRequest(resourceType) //TODO: Remove chain
       .then(async (response: Array<ResoucerTypeAvaliabilitiesResponse>) => {
-        const timelineGroups = response.map((x) => ({
-          id: x.id,
-          title: x.name,
-        }));
-        let availabilities: any[] = [];
-
-        for (let resource of response) {
-          let temp = resource.resourceAvailabilities.map((x) => {
-            if(x.interval)
-            {
-              const a = x.interval.split(":");
-              return {
-                resourceId: x.resourceId,
-                isReccuring: x.isReccuring,
-                interval: +a[0] * 60 + +a[1],
+        getResourceTypeReservations(resourceType)
+          .then(async (reservationsResponse: Array<ReservationRequest>) => {
+            const timelineGroups = response.map((x) => ({
+              id: x.id,
+              title: x.name,
+            }));
+            let availabilities: any[] = [];
+            const reservations: Array<ReservationRequest> = reservationsResponse.map(
+              (x) => ({
                 start: new Date(x.start),
                 end: new Date(x.end),
-              };
+                resourceId: x.resourceId,
+              })
+            );
+
+            for (let resource of response) {
+              let temp = resource.resourceAvailabilities.map((x) => {
+                if (x.interval) {
+                  const a = x.interval.replace(/\./g, ":").split(":"); //TEMP
+                  if (a.length > 3) {
+                    x.interval = +a[0] * 60 * 24 + +a[1] * 60 + +a[2];
+                  } else {
+                    x.interval = +a[0] * 60 + +a[1];
+                  }
+
+                  return {
+                    resourceId: x.resourceId,
+                    isReccuring: x.isReccuring,
+                    interval: x.interval,
+                    start: new Date(x.start),
+                    end: new Date(x.end),
+                  };
+                }
+
+                return {
+                  resourceId: x.resourceId,
+                  isReccuring: x.isReccuring,
+                  interval: null,
+                  start: new Date(x.start),
+                  end: new Date(x.end),
+                };
+              });
+              availabilities = availabilities.concat(temp);
             }
-            return {
-              resourceId: x.resourceId,
-              isReccuring: x.isReccuring,
-              interval: null,
-              start: new Date(x.start),
-              end: new Date(x.end),
-            };
-          });
-          availabilities = availabilities.concat(temp);
-        }
-        const reservations: Array<any> = [];
-        let timelineItems: Array<any> = [];
 
-        //Not reccuring
-        for (const availability of availabilities.filter(
-          (x) => x.isReccuring === false
-        )) {
-          timelineItems.push({
-            id: itemsIterator,
-            group: availability.resourceId,
-            canMove: false,
-            canResize: false,
-            start_time: availability.start.getTime(),
-            end_time: availability.end.getTime(),
-            isReservation: false,
-            newReservation: false,
-          });
-          itemsIterator += 1;
-        }
-        //Recurring
-        for (const availability of availabilities.filter(
-          (x) => x.isReccuring === true
-        )) {
-          let temp = { ...availability };
-          temp.start = new Date(temp.start);
-          temp.end = new Date(temp.end);
-          while (temp.start < max) {
-            timelineItems.push({
-              id: itemsIterator,
-              group: temp.resourceId,
-              canMove: false,
-              canResize: false,
-              start_time: temp.start.getTime(),
-              end_time: temp.end.getTime(),
-              isReservation: false,
-              newReservation: false,
-            });
-            itemsIterator += 1;
-            temp.start = addMinutes(temp.start, temp.interval);
-            temp.end = addMinutes(temp.end, temp.interval);
-          }
-        }
-        for (const reservation of reservations) {
-          timelineItems.push({
-            id: itemsIterator,
-            canMove: false,
-            canResize: false,
-            group: reservation.resourceId,
-            start_time: reservation.start.getTime(),
-            end_time: reservation.end.getTime(),
-            isReservation: true,
-            newReservation: false,
-          });
-          itemsIterator += 1;
-        }
+            let timelineItems: Array<any> = [];
 
-        setGroups(timelineGroups);
-        setItems(timelineItems);
-        setItemsIterator(itemsIterator);
+            //Not reccuring
+            for (const availability of availabilities.filter(
+              (x) => x.isReccuring === false
+            )) {
+              timelineItems.push({
+                id: itemsIterator,
+                group: availability.resourceId,
+                canMove: false,
+                canResize: false,
+                start_time: availability.start.getTime(),
+                end_time: availability.end.getTime(),
+                isReservation: false,
+                newReservation: false,
+              });
+              itemsIterator += 1;
+            }
+            //Recurring
+            for (const availability of availabilities.filter(
+              (x) => x.isReccuring === true
+            )) {
+              let temp = { ...availability };
+              temp.start = new Date(temp.start);
+              temp.end = new Date(temp.end);
+              while (temp.start < max) {
+                timelineItems.push({
+                  id: itemsIterator,
+                  group: temp.resourceId,
+                  canMove: false,
+                  canResize: false,
+                  start_time: temp.start.getTime(),
+                  end_time: temp.end.getTime(),
+                  isReservation: false,
+                  newReservation: false,
+                });
+                itemsIterator += 1;
+                temp.start = addMinutes(temp.start, temp.interval);
+                temp.end = addMinutes(temp.end, temp.interval);
+              }
+            }
+            for (const reservation of reservations) {
+              timelineItems.push({
+                id: itemsIterator,
+                canMove: false,
+                canResize: false,
+                group: reservation.resourceId,
+                start_time: reservation.start.getTime(),
+                end_time: reservation.end.getTime(),
+                isReservation: true,
+                newReservation: false,
+              });
+              itemsIterator += 1;
+            }
+
+            setGroups(timelineGroups);
+            setItems(timelineItems);
+            setItemsIterator(itemsIterator);
+          })
+          .catch(() => {});
       })
       .catch(() => {});
   }, []);
@@ -264,6 +286,23 @@ function ResourceTypeTimeline(props: any) {
     }
   };
 
+  const sendNewReservations = () => {
+    const reservations = items
+      .filter((x) => x.newReservation)
+      .map((x) => ({
+        start: new Date(x.start_time),
+        end: new Date(x.end_time),
+        resourceId: x.group,
+      }));
+    createReservation(reservations)
+      .then(() => {
+        toast.success("Pomyślnie utworzono rezerwacje");
+        window.location.reload(false);
+      })
+      .catch(() => {
+      });
+  };
+
   const removeItem = async (itemId: number) => {
     let newItems = [...items];
     let newSelected = [...selected];
@@ -293,7 +332,7 @@ function ResourceTypeTimeline(props: any) {
       if (validate(newItems, itemsIterator)) {
         setItemsIterator(itemsIterator + 1);
         setItems(newItems);
-        await timeout(1); //I HAVE NO IDEA WHAT IM DOING
+        await timeout(1); //xD
         setSelected(newSelected);
         setIsSelectingPlace(false);
       }
@@ -402,7 +441,11 @@ function ResourceTypeTimeline(props: any) {
       </div>
       {items.filter((x) => x.newReservation).length > 0 && (
         <Row className="mt-2">
-          <Button className="ml-auto mr-3" variant={"success"}>
+          <Button
+            className="ml-auto mr-3"
+            onClick={sendNewReservations}
+            variant={"success"}
+          >
             Złóż rezerwacje
           </Button>
         </Row>

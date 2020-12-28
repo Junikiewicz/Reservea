@@ -68,8 +68,15 @@ function EditResource(props: any) {
             setResourceTypes(resourceTypesResponse);
             for (const element of resourceDetailsResponse.resourceAvailabilities) {
               if (element.interval) {
-                const a = element.interval.split(":");
-                element.interval = +a[0] * 60 + +a[1];
+                const a = element.interval.replace(/\./g, ':').split(":");
+                if(a.length > 3)
+                {
+                  element.interval = +a[0] * 60 * 24 + +a[1] * 60 + +a[2];
+                }
+                else
+                {
+                  element.interval = +a[0] * 60 + +a[1];
+                }
               }
 
               element.start = new Date(

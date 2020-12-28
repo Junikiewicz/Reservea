@@ -6,10 +6,4 @@ namespace Reservea.Persistance.Interfaces.Repositories
     {
        
     }
-
-    public class ResourceTypeAttributePrimaryKey
-    {
-        public int ResourceTypeId { get; set; }
-        public int AttributeId { get; set; }
-    }
 }

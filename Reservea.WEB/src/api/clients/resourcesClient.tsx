@@ -110,15 +110,19 @@ export const updateResourceRequest = async (
   resourceId: number,
   resourceData: any
 ) => {
-  
   const requestData = JSON.parse(JSON.stringify(resourceData));
 
   for (const element of requestData.resourceAvailabilities) {
-    element.interval = `${Math.floor(element.interval / 60)}:${
-      element.interval % 60 < 10
-        ? (element.interval % 60) + "0"
-        : element.interval % 60
-    }:00`;
+    let remaining = element.interval;
+    let days = Math.floor(remaining / (60 * 24));
+    remaining = remaining % (60 * 24);
+    let hours = Math.floor(remaining / 60);
+    remaining = remaining % 60;
+    let minutes = remaining;
+    element.interval = `${zeroPad(days, 2)}:${zeroPad(hours, 2)}:${zeroPad(
+      minutes,
+      2
+    )}:00`;
   }
 
   await apiClient.put("/api/resources/Resources/" + resourceId, requestData);
@@ -145,17 +149,24 @@ export const createResourceTypeRequest = async (
   return response.data;
 };
 
+const zeroPad = (num: number, places: number) =>
+  String(num).padStart(places, "0");
+
 export const createResourceRequest = async (
   resourceData: UpdateResourceRequest
 ): Promise<AddResourceResponse> => {
   for (const element of resourceData.resourceAvailabilities) {
-    element.interval = `${Math.floor(element.interval / 60)}:${
-      element.interval % 60 < 10
-        ? (element.interval % 60) + "0"
-        : element.interval % 60
-    }:00`;
+    let remaining = element.interval;
+    let days = Math.floor(remaining / (60 * 24));
+    remaining = remaining % (60 * 24);
+    let hours = Math.floor(remaining / 60);
+    remaining = remaining % 60;
+    let minutes = remaining;
+    element.interval = `${zeroPad(days, 2)}:${zeroPad(hours, 2)}:${zeroPad(
+      minutes,
+      2
+    )}:00`;
   }
-
 
   const response = await apiClient.post(
     "/api/resources/Resources/",
