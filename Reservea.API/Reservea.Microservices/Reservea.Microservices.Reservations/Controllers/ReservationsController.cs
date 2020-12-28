@@ -30,7 +30,13 @@ namespace Reservea.Microservices.Reservations.Controllers
         [HttpGet]
         public async Task<IActionResult> GetResourceTypeReservations([FromQuery]int resourceTypeId, CancellationToken cancellationToken)
         {
-            return Ok(await _reservationsService.GetResourceTypeReservations(resourceTypeId,cancellationToken));
+            return Ok(await _reservationsService.GetResourceTypeReservationsAsync(resourceTypeId,cancellationToken));
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllReservations(CancellationToken cancellationToken)
+        {
+            return Ok(await _reservationsService.GetReservationsForListAsync(cancellationToken));
         }
     }
 }

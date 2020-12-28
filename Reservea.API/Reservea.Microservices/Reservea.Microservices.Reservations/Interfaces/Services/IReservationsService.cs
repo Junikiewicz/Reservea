@@ -8,7 +8,8 @@ namespace Reservea.Microservices.Reservations.Interfaces.Services
 {
     public interface IReservationsService
     {
-        Task<IEnumerable<ReservationForTimelineResponse>> GetResourceTypeReservations(int resourceTypeId, CancellationToken cancellationToken);
+        Task<IEnumerable<ReservationForTimelineResponse>> GetResourceTypeReservationsAsync(int resourceTypeId, CancellationToken cancellationToken);
         Task CreateReservationAsync(IEnumerable<NewReservationRequest> reservations, int userId, CancellationToken cancellationToken);
+        Task<IEnumerable<ReservationForListResponse>> GetReservationsForListAsync(CancellationToken cancellationToken);
     }
 }

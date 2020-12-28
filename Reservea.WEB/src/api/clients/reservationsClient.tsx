@@ -15,6 +15,17 @@ const dateToISOLikeButLocal = (date: Date) => {
   return isoLocal;
 };
 
+export interface ReservationForListResponse {
+  id: number;
+  resourceId: number;
+  resourceName: string;
+  start: Date;
+  end: Date;
+  reservationStatusId: number;
+  userId: number;
+  username: string;
+}
+
 export const createReservation = async (data: Array<ReservationRequest>) => {
   let request = data.map((x) => ({
     start: dateToISOLikeButLocal(x.start),
@@ -33,6 +44,16 @@ export const getResourceTypeReservations = async (
     {
       params: { resourceTypeId },
     }
+  );
+
+  return response.data;
+};
+
+export const getReservationsList = async (): Promise<
+  Array<ReservationForListResponse>
+> => {
+  let response = await apiClient.get<Array<ReservationForListResponse>>(
+    "/api/reservation/Reservations/all"
   );
 
   return response.data;

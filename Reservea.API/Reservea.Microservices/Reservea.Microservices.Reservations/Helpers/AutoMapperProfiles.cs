@@ -16,6 +16,9 @@ namespace Reservea.Microservices.Reservations.Helpers
         private void CreateMapsFromEntitiesToDtos()
         {
             CreateMap<Reservation, ReservationForTimelineResponse>();
+            CreateMap<Reservation, ReservationForListResponse>()
+                .ForMember(dest => dest.ResourceName, opts => opts.MapFrom(src => src.Resource.Name))
+                .ForMember(dest => dest.Username, opts => opts.MapFrom(src => src.User.Email));
         }
 
         private void CreateMapsFromDtosToEntities()
