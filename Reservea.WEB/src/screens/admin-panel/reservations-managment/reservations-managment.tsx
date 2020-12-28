@@ -11,6 +11,7 @@ import {
   ReservationStatus,
   getReservationStatusName,
 } from "../../../common/enums/reservationStatus";
+import { Link } from "react-router-dom";
 
 function ReservationsManagment() {
   const [reservationsList, setReservationsLIst] = useState<
@@ -48,9 +49,17 @@ function ReservationsManagment() {
         {reservationsList.map((element) => (
           <tr>
             <td width="100px">{element.id}</td>
-            <td width="100px">{element.resourceId}</td>
+            <td width="100px">
+              <Link className="customLink" to={`/edit-resource/${element.resourceId}`}>
+                {element.resourceId}
+              </Link>{" "}
+            </td>
             <td width="100px">{element.userId}</td>
-            <td width="400px">{`${new Date(element.start).toLocaleString()} - ${new Date(element.end).toLocaleString()}`}</td>
+            <td width="400px">{`${new Date(
+              element.start
+            ).toLocaleString()} - ${new Date(
+              element.end
+            ).toLocaleString()}`}</td>
             <td>{getReservationStatusName(element.reservationStatusId)}</td>
             <td>
               <FontAwesomeIcon
