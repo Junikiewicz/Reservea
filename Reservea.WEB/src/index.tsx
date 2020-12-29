@@ -9,10 +9,7 @@ import { Container } from "react-bootstrap";
 import { ToastContainer } from "react-toastify";
 ReactDOM.render(
   <>
-    <NavbarLayout />
-    <Container className="mt-4" style={{ overflow: "hidden" }}>
-      <Router />
-    </Container>
+    <Router />
     <ToastContainer
       position="bottom-right"
       autoClose={5000}

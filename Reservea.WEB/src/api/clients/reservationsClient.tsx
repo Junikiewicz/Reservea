@@ -58,3 +58,13 @@ export const getReservationsList = async (): Promise<
 
   return response.data;
 };
+
+export const getUserReservations = async (): Promise<
+  Array<ReservationForListResponse>
+> => {
+  let response = await apiClient.get<Array<ReservationForListResponse>>(
+    "/api/reservation/Reservations/user"
+  );
+
+  return response.data;
+};

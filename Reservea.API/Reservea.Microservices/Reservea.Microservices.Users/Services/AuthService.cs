@@ -40,6 +40,8 @@ namespace Reservea.Microservices.Users.Services
             };
             var userCreationResult = await _userManager.CreateAsync(userToCreate, password);
 
+            await _userManager.AddToRoleAsync(userToCreate, "Customer");
+
             if (!userCreationResult.Succeeded) throw new UserCreationException(userCreationResult.Errors.ToString());
         }
 

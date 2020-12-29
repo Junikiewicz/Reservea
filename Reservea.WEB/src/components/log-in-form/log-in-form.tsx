@@ -11,13 +11,15 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { LoginResponse } from "../../api/dtos/user/auth/loginResponse";
 import { getUserNameFromJWTToken } from "../../common/helpers/jwtTokenHelper";
+import { useHistory, withRouter } from "react-router";
 function LogInForm(): JSX.Element {
+  const history = useHistory();
   const [loggedIn, setLoggedIn] = useState(getUserToken() != null);
   const [userName, setUserName] = useState(
     loggedIn ? getUserNameFromJWTToken() : null
   );
 
-  const { register, errors, handleSubmit } = useForm<LoginFormData>({
+  const { register, handleSubmit } = useForm<LoginFormData>({
     mode: "onSubmit",
   });
 
@@ -28,12 +30,15 @@ function LogInForm(): JSX.Element {
         setUserToken(response.jwtToken);
         setLoggedIn(true);
         setUserName(getUserNameFromJWTToken());
+        window.location.reload(false);
       })
       .catch(() => {});
   };
+
   const logOut = () => {
     removeUserToken();
     setLoggedIn(false);
+    history.push("/");
     toast.info("Wylogowano");
   };
 
@@ -59,6 +64,13 @@ function LogInForm(): JSX.Element {
         <Button type="submit" variant="outline-secondary text-light">
           Zaloguj
         </Button>
+        <Button
+          href="/register"
+          variant="outline-secondary text-light"
+          className="ml-1"
+        >
+          Załóż konto
+        </Button>
       </Form>
     );
   } else {
@@ -68,7 +80,9 @@ function LogInForm(): JSX.Element {
           <span>Witaj {userName}!</span>
         </Dropdown.Toggle>
         <Dropdown.Menu align="right" className="mt-3">
-          <Dropdown.Item as="button">Twoje rezerwacje</Dropdown.Item>
+          <Dropdown.Item tag="a" href="/user-reservations">
+            Twoje rezerwacje
+          </Dropdown.Item>
           <Dropdown.Item as="button">Edytuj konto</Dropdown.Item>
           <Dropdown.Divider />
           <Dropdown.Item as="button" onClick={logOut}>
@@ -79,4 +93,4 @@ function LogInForm(): JSX.Element {
     );
   }
 }
-export default LogInForm;
+export default withRouter(LogInForm);

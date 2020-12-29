@@ -11,5 +11,6 @@ namespace Reservea.Microservices.Reservations.Interfaces.Services
         Task<IEnumerable<ReservationForTimelineResponse>> GetResourceTypeReservationsAsync(int resourceTypeId, CancellationToken cancellationToken);
         Task CreateReservationAsync(IEnumerable<NewReservationRequest> reservations, int userId, CancellationToken cancellationToken);
         Task<IEnumerable<ReservationForListResponse>> GetReservationsForListAsync(CancellationToken cancellationToken);
+        Task<IEnumerable<ReservationForListResponse>> GetUserReservations(int userId, CancellationToken cancellationToken);
     }
 }
