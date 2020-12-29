@@ -34,6 +34,11 @@ namespace Reservea.Microservices.Reservations.Services
             return await _reservationsUnitOfWork.ReservationsRepository.GetAllAsync<ReservationForListResponse>(cancellationToken);
         }
 
+        public async Task<IEnumerable<ReservationForListResponse>> GetUserReservations(int userId, CancellationToken cancellationToken)
+        {
+            return await _reservationsUnitOfWork.ReservationsRepository.GetAsync<ReservationForListResponse>(x=>x.UserId == userId,cancellationToken);
+        }
+
         public async Task<IEnumerable<ReservationForTimelineResponse>> GetResourceTypeReservationsAsync(int resourceTypeId, CancellationToken cancellationToken)
         {
             return await _reservationsUnitOfWork.ReservationsRepository.GetAsync<ReservationForTimelineResponse>(x => x.Resource.ResourceTypeId == resourceTypeId, cancellationToken);

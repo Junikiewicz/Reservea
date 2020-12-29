@@ -1,5 +1,6 @@
 import React from "react";
-import { Nav, Navbar, Container } from "react-bootstrap";
+import { Nav, Navbar, Container, Button } from "react-bootstrap";
+import { checkIfLoggedIn } from "../../common/helpers/jwtTokenHelper";
 import LogInForm from "../log-in-form/log-in-form";
 
 function NavbarLayout(): JSX.Element {
@@ -10,7 +11,9 @@ function NavbarLayout(): JSX.Element {
         <Nav className="mr-auto">
           <Nav.Link href="/">Strona główna</Nav.Link>
           <Nav.Link href="/reservations">Rezerwacje</Nav.Link>
-          <Nav.Link href="/admin-panel">Panel administratora</Nav.Link>
+          {checkIfLoggedIn() && (
+            <Nav.Link href="/admin-panel">Panel administratora</Nav.Link>
+          )}
         </Nav>
         <LogInForm></LogInForm>
       </Container>

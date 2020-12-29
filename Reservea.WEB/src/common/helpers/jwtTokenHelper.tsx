@@ -1,32 +1,42 @@
 import jwt_decode from "jwt-decode";
 
-import { getUserToken, removeUserToken } from "../../common/helpers/localStorageHelper";
+import {
+  getUserToken,
+  removeUserToken,
+} from "../../common/helpers/localStorageHelper";
 
 var decodedToken: any;
 
-export const getUserNameFromJWTToken = (): string =>{
-    if(!decodedToken) setJWTToken();
-    
-    return decodedToken.unique_name;
-}
+export const getUserNameFromJWTToken = (): string => {
+  if (!decodedToken) setJWTToken();
 
-export const checkIfValidToken = (): boolean => {
-    if(!decodedToken) setJWTToken();
-
-    if(Date.now() >= decodedToken.exp * 1000)
-    {
-        removeUserToken();
-        return false;
-    } 
-    
-    return true;
+  return decodedToken.unique_name;
 };
 
-const setJWTToken = () =>{
-    var userToken = getUserToken();
-    decodedToken = decodeJWTToken(userToken);
-}
+export const checkIfValidToken = (): boolean => {
+  if (!decodedToken) setJWTToken();
+
+  if (Date.now() >= decodedToken.exp * 1000) {
+    removeUserToken();
+    return false;
+  }
+
+  return true;
+};
+
+export const checkIfLoggedIn = (): boolean => {
+  try {
+    return checkIfValidToken();
+  } catch {
+    return false;
+  }
+};
+
+const setJWTToken = () => {
+  var userToken = getUserToken();
+  decodedToken = decodeJWTToken(userToken);
+};
 
 const decodeJWTToken = (token: string): any => {
-    return jwt_decode(token);
+  return jwt_decode(token);
 };

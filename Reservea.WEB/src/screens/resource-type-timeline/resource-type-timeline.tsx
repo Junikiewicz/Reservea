@@ -9,7 +9,7 @@ import Timeline, {
   ReactCalendarItemRendererProps,
 } from "react-calendar-timeline";
 import "react-calendar-timeline/lib/Timeline.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   createReservation,
@@ -18,6 +18,7 @@ import {
 } from "../../api/clients/reservationsClient";
 import { resourceTypeAvaliabilitiesRequest } from "../../api/clients/resourcesClient";
 import { ResoucerTypeAvaliabilitiesResponse } from "../../api/dtos/resources/resources/resoucerTypeAvaliabilitiesResponse";
+import { checkIfLoggedIn } from "../../common/helpers/jwtTokenHelper";
 import "./resource-type-timeline.css";
 
 function addHours(date: Date, hours: number) {
@@ -47,6 +48,7 @@ function ResourceTypeTimeline(props: any) {
   const [groups, setGroups] = useState<Array<any>>([]);
   const [isSelectingPlace, setIsSelectingPlace] = useState<boolean>(false);
   const [itemsIterator, setItemsIterator] = useState<number>(0);
+  const history = useHistory();
 
   useEffect(() => {
     const resourceType = props.match.params.resourceTypeID;
@@ -297,10 +299,9 @@ function ResourceTypeTimeline(props: any) {
     createReservation(reservations)
       .then(() => {
         toast.success("Pomyślnie utworzono rezerwacje");
-        window.location.reload(false);
+        history.push("/user-reservations");
       })
-      .catch(() => {
-      });
+      .catch(() => {});
   };
 
   const removeItem = async (itemId: number) => {
@@ -367,8 +368,17 @@ function ResourceTypeTimeline(props: any) {
             <Col className="">
               <h3>Lista terminów oraz rezerwacji:</h3>
             </Col>
+            {!checkIfLoggedIn() && (
+              <span className="col-5 mt-2" style={{ color: "red" }}>
+                Przed złożeniem rezerwacji musisz się zalogować
+              </span>
+            )}
             <Col className="col-2">
-              <Button onClick={startSelectingPlace} variant={"success"}>
+              <Button
+                disabled={!checkIfLoggedIn()}
+                onClick={startSelectingPlace}
+                variant={"success"}
+              >
                 Dodaj rezerwacje
               </Button>
             </Col>

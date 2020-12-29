@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ using Reservea.Microservices.Users.Interfaces.Services;
 using Reservea.Microservices.Users.Services;
 using Reservea.Persistance;
 using Reservea.Persistance.Models;
+using System.Reflection;
 
 namespace Reservea.Microservices.Users
 {
@@ -29,8 +31,11 @@ namespace Reservea.Microservices.Users
             services.AddControllers();
 
             #region Depndency Injection
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IRolesService, RolesService>();
             #endregion
 
             #region IdentityConfiguration

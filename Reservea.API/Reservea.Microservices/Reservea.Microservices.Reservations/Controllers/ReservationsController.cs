@@ -38,5 +38,13 @@ namespace Reservea.Microservices.Reservations.Controllers
         {
             return Ok(await _reservationsService.GetReservationsForListAsync(cancellationToken));
         }
+
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUserReservations(CancellationToken cancellationToken)
+        {
+            var userId = 1; //temp
+
+            return Ok(await _reservationsService.GetUserReservations(userId, cancellationToken));
+        }
     }
 }
