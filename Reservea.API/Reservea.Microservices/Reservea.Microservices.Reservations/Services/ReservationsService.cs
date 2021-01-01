@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Reservea.Common.Extensions;
+using Reservea.Common.Helpers;
+using Reservea.Common.Interfaces;
+using Reservea.Common.Mails;
+using Reservea.Common.Mails.Models;
 using Reservea.Microservices.Reservations.Dtos.Requests;
 using Reservea.Microservices.Reservations.Dtos.Responses;
 using Reservea.Microservices.Reservations.Interfaces.Services;
@@ -9,6 +14,7 @@ using Reservea.Persistance.Interfaces.UnitsOfWork;
 using Reservea.Persistance.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -20,13 +26,17 @@ namespace Reservea.Microservices.Reservations.Services
     {
         private readonly IReservationsUnitOfWork _reservationsUnitOfWork;
         private readonly IMapper _mapper;
+        private readonly IMailSendingService _mailSendingService;
         private readonly IConfiguration _configuration;
+        private readonly CannonService _cannonService;
 
-        public ReservationsService(IConfiguration configuration, IReservationsUnitOfWork reservationsUnitOfWork, IMapper mapper)
+        public ReservationsService(IConfiguration configuration, IReservationsUnitOfWork reservationsUnitOfWork, IMapper mapper, IMailSendingService mailSendingService, CannonService cannonService)
         {
             _reservationsUnitOfWork = reservationsUnitOfWork;
             _configuration = configuration;
             _mapper = mapper;
+            _mailSendingService = mailSendingService;
+            _cannonService = cannonService;
         }
 
         public async Task<IEnumerable<ReservationForListResponse>> GetReservationsForListAsync(CancellationToken cancellationToken)
@@ -36,7 +46,7 @@ namespace Reservea.Microservices.Reservations.Services
 
         public async Task<IEnumerable<ReservationForListResponse>> GetUserReservations(int userId, CancellationToken cancellationToken)
         {
-            return await _reservationsUnitOfWork.ReservationsRepository.GetAsync<ReservationForListResponse>(x=>x.UserId == userId,cancellationToken);
+            return await _reservationsUnitOfWork.ReservationsRepository.GetAsync<ReservationForListResponse>(x => x.UserId == userId, cancellationToken);
         }
 
         public async Task<IEnumerable<ReservationForTimelineResponse>> GetResourceTypeReservationsAsync(int resourceTypeId, CancellationToken cancellationToken)
@@ -81,6 +91,27 @@ namespace Reservea.Microservices.Reservations.Services
             _reservationsUnitOfWork.ReservationsRepository.AddRange(newReservations);
 
             await _reservationsUnitOfWork.SaveChangesAsync(cancellationToken);
+
+            //send confirmation mail
+            _cannonService.FireAsync<IReservationsUnitOfWork>(async (reservationsUnitOfWork) =>
+            {
+                var reservationDetails = await reservationsUnitOfWork.ReservationsRepository
+                     .GetAsync(x => newReservations.Select(y => y.Id).Contains(x.Id),
+                     cancellationToken,
+                     x => x.Include(y => y.User).Include(y => y.Resource));
+
+                var model = new ReservationConfirmationMailTemplateModel
+                {
+                    Subject = "Potwierdzenie rezerwacji",
+                    Name = reservationDetails.First().User.FirstName,
+                    ReservationsListUrl = $"{_configuration["FrontendUrl"]}/user-reservations",
+                    To = $"{reservationDetails.First().User.FirstName} {reservationDetails.First().User.LastName}",
+                    ToAddress = reservationDetails.First().User.Email,
+                    Reservations = reservationDetails.Select(x => new ReservationModel { Id = x.Id, Start = x.Start, End = x.End, ResourceName = x.Resource.Name })
+                };
+
+                await _mailSendingService.SendMailFromTemplateAsync(MailTemplates.ReservationConfirmation, model);
+            });
         }
     }
 }

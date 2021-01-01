@@ -16,7 +16,7 @@ namespace Reservea.Persistance.Repositories
 
         public async Task<bool> CheckIfCollidingReservationExists(Reservation reservation, CancellationToken cancellationToken)
         {
-            return await _context.Reservations.AnyAsync(x => x.Start < reservation.End && x.End > reservation.Start, cancellationToken);
+            return await _context.Reservations.AnyAsync(x => x.ResourceId == reservation.ResourceId && x.Start < reservation.End && x.End > reservation.Start, cancellationToken);
         }
     }
 }

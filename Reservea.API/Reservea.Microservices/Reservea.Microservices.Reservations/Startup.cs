@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Reservea.Common.Helpers;
+using Reservea.Common.Interfaces;
 using Reservea.Microservices.Reservations.Interfaces.Services;
 using Reservea.Microservices.Reservations.Services;
 using Reservea.Persistance;
@@ -30,6 +32,9 @@ namespace Reservea.Microservices.Reservations
 
             services.AddScoped<IReservationsService, ReservationsService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddScoped<IMailSendingService, MailSendingService>();
+            services.AddSingleton<CannonService>();
+            services.AddScoped<IMailTemplatesHelper, MailTemplatesHelper>();
             services.AddScoped<IReservationsUnitOfWork, ReservationsUnitOfWork>();
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 

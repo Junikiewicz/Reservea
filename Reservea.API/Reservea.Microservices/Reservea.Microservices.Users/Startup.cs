@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Reservea.Common.Helpers;
+using Reservea.Common.Interfaces;
 using Reservea.Common.Middleware;
 using Reservea.Microservices.Users.Interfaces.Services;
 using Reservea.Microservices.Users.Services;
@@ -32,6 +34,8 @@ namespace Reservea.Microservices.Users
 
             #region Depndency Injection
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddScoped<IMailSendingService, MailSendingService>();
+            services.AddScoped<IMailTemplatesHelper, MailTemplatesHelper>();
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUsersService, UsersService>();
