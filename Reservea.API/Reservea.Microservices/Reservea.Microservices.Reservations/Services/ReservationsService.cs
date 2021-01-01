@@ -93,9 +93,9 @@ namespace Reservea.Microservices.Reservations.Services
             await _reservationsUnitOfWork.SaveChangesAsync(cancellationToken);
 
             //send confirmation mail
-            _cannonService.FireAsync<IReservationsUnitOfWork>(async (reservationsUnitOfWork) =>
-            {
-                var reservationDetails = await reservationsUnitOfWork.ReservationsRepository
+            /*_cannonService.FireAsync<IReservationsUnitOfWork>(async (reservationsUnitOfWork) =>
+            {*/
+                var reservationDetails = await _reservationsUnitOfWork.ReservationsRepository
                      .GetAsync(x => newReservations.Select(y => y.Id).Contains(x.Id),
                      cancellationToken,
                      x => x.Include(y => y.User).Include(y => y.Resource));
@@ -111,7 +111,7 @@ namespace Reservea.Microservices.Reservations.Services
                 };
 
                 await _mailSendingService.SendMailFromTemplateAsync(MailTemplates.ReservationConfirmation, model);
-            });
+            //});
         }
     }
 }
