@@ -1,0 +1,21 @@
+﻿@Model RegisterMailTemplateModel
+
+<!DOCTYPE html>
+
+<html lang="pl">
+<head>
+    <meta charset="utf-8" />
+    <title>
+        Potwierdzenie rejestracji konta
+    </title>
+</head>
+<body>
+    <p>
+        Witaj @Model.Name,
+    </p>
+    <p>
+        dziękujemy za założenie konta w serwisie Reserva, aby aktywować konto należy otworzyć (kliknąć) poniższy link:<br />
+        @Model.ActivationUrl
+    </p>
+</body>
+</html>
