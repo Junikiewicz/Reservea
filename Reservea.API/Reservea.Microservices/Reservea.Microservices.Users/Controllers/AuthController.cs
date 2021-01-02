@@ -51,5 +51,13 @@ namespace Reservea.Microservices.Users.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("confirmEmail")]
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailRequest confirmEmailRequest)
+        {
+            await _authenticationService.ConfirmEmail(confirmEmailRequest);
+
+            return NoContent();
+        }
     }
 }

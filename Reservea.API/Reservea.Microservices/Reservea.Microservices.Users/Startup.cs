@@ -15,6 +15,7 @@ using Reservea.Microservices.Users.Interfaces.Services;
 using Reservea.Microservices.Users.Services;
 using Reservea.Persistance;
 using Reservea.Persistance.Models;
+using System;
 using System.Reflection;
 
 namespace Reservea.Microservices.Users
@@ -35,6 +36,7 @@ namespace Reservea.Microservices.Users
             #region Depndency Injection
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddScoped<IMailSendingService, MailSendingService>();
+            services.AddSingleton<CannonService>();
             services.AddScoped<IMailTemplatesHelper, MailTemplatesHelper>();
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IAuthService, AuthService>();
@@ -49,7 +51,8 @@ namespace Reservea.Microservices.Users
             builder.AddRoleValidator<RoleValidator<Role>>();
             builder.AddRoleManager<RoleManager<Role>>();
             builder.AddSignInManager<SignInManager<User>>();
-            services.AddSingleton<ISystemClock, SystemClock>(); //Temporary
+            builder.AddDefaultTokenProviders();
+            services.AddAuthentication();
             #endregion
 
             services.AddSwaggerGen(c =>

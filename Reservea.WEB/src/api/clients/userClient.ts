@@ -51,3 +51,7 @@ export const getAllRolesRequest = async (): Promise<Array<RoleResponse>> => {
 
   return result.data;
 };
+
+export const confirmEmailRequest = async (token: string, id: number) => {
+  await apiClient.post("api/user/Auth/confirmEmail", { token, id });
+};
