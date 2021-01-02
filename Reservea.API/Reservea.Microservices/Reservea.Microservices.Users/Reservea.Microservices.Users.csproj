@@ -4,6 +4,8 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<UserSecretsId>605cc69e-e47b-4606-a479-116038530017</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<PreserveCompilationReferences>true</PreserveCompilationReferences>
+		<PreserveCompilationContext>true</PreserveCompilationContext>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Reservea.Common.Exceptions;
 using Reservea.Common.Helpers;
+using Reservea.Common.Interfaces;
+using Reservea.Common.Mails;
+using Reservea.Common.Mails.Models;
+using Reservea.Microservices.Users.Dtos.Requests;
 using Reservea.Microservices.Users.Dtos.Responses;
 using Reservea.Microservices.Users.Interfaces.Services;
 using Reservea.Persistance.Models;
@@ -11,6 +16,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Reservea.Microservices.Users.Services
@@ -20,12 +26,61 @@ namespace Reservea.Microservices.Users.Services
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IMailSendingService _mailSendingService;
+        private readonly CannonService _cannonService;
 
-        public AuthService(IConfiguration configuration, UserManager<User> userManager, SignInManager<User> signInManager)
+        public AuthService(IConfiguration configuration, UserManager<User> userManager, SignInManager<User> signInManager, IMailSendingService mailSendingService, CannonService cannonService)
         {
             _configuration = configuration;
             _userManager = userManager;
             _signInManager = signInManager;
+            _mailSendingService = mailSendingService;
+            _cannonService = cannonService;
+        }
+
+        public async Task ConfirmEmail(ConfirmEmailRequest request)
+        {
+            var userFromDatabase = await _userManager.FindByIdAsync(request.Id.ToString());
+
+            var codeDecodedBytes = WebEncoders.Base64UrlDecode(request.Token);
+            var codeDecoded = Encoding.UTF8.GetString(codeDecodedBytes);
+
+            await _userManager.ConfirmEmailAsync(userFromDatabase, codeDecoded);
+        }
+
+        public async Task ResetPassword(ResetPasswordRequest request)
+        {
+            var userFromDatabase = await _userManager.FindByIdAsync(request.UserId.ToString());
+
+            var codeDecodedBytes = WebEncoders.Base64UrlDecode(request.Token);
+            var codeDecoded = Encoding.UTF8.GetString(codeDecodedBytes);
+
+            var result = await _userManager.ResetPasswordAsync(userFromDatabase, codeDecoded, request.NewPassword);
+
+            if (!result.Succeeded) throw new Exception("temp3");
+        }
+
+        public async Task SendResetPasswordEmail(string email)
+        {
+            _cannonService.FireAsync<UserManager<User>>(async (userManager) =>
+            {
+                var userFromDatabase = await userManager.FindByEmailAsync(email);
+                var resetPasswordToken = await userManager.GeneratePasswordResetTokenAsync(userFromDatabase);
+
+                var tokenGeneratedBytes = Encoding.UTF8.GetBytes(resetPasswordToken);
+                var codeEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+
+                var model = new ResetPasswordMailTemplateModel
+                {
+                    Subject = "Resetowanie hasła",
+                    Name = userFromDatabase.FirstName,
+                    To = $"{userFromDatabase.FirstName} {userFromDatabase.LastName}",
+                    ToAddress = email,
+                    ResetPasswordUrl = $"{_configuration["FrontendUrl"]}/reset-password?id={userFromDatabase.Id}&token={codeEncoded}"
+                };
+
+                await _mailSendingService.SendMailFromTemplateAsync(MailTemplates.ResetPassword, model);
+            });
         }
 
         public async Task Register(string email, string password, string firstName, string lastName)
@@ -43,13 +98,33 @@ namespace Reservea.Microservices.Users.Services
             await _userManager.AddToRoleAsync(userToCreate, "Customer");
 
             if (!userCreationResult.Succeeded) throw new UserCreationException(userCreationResult.Errors.ToString());
+
+            //send confirmation mail
+            _cannonService.FireAsync<UserManager<User>>(async (userManager) =>
+            {
+                var confirmEmailToken = await userManager.GenerateEmailConfirmationTokenAsync(userToCreate);
+
+                var tokenGeneratedBytes = Encoding.UTF8.GetBytes(confirmEmailToken);
+                var codeEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+
+                var model = new RegisterMailTemplateModel
+                {
+                    Subject = "Potwierdzenie rezerwacji",
+                    Name = firstName,
+                    To = $"{firstName} {lastName}",
+                    ToAddress = email,
+                    ActivationUrl = $"{_configuration["FrontendUrl"]}/confirm-email?id={userToCreate.Id}&token={codeEncoded}"
+                };
+
+                await _mailSendingService.SendMailFromTemplateAsync(MailTemplates.Register, model);
+            });
         }
 
         public async Task<LoginResponse> Login(string email, string password)
         {
             var userFromDatabase = await _userManager.FindByEmailAsync(email);
 
-            if (userFromDatabase == null || !userFromDatabase.IsActive) throw new AuthenticationException("Invalid username or password");
+            if (userFromDatabase == null || !userFromDatabase.IsActive || !userFromDatabase.EmailConfirmed) throw new AuthenticationException("Invalid username or password");
 
             var signInResult = await _signInManager.CheckPasswordSignInAsync(userFromDatabase, password, false);
 

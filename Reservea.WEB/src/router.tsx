@@ -13,6 +13,9 @@ import Register from "./screens/register/register";
 import UserReservations from "./screens/user-reservations/user-reservations";
 import NavbarLayout from "./components/navbar/navbar";
 import { Container } from "react-bootstrap";
+import ConfirmEmail from "./screens/confirm-email/confirm-email";
+import ResetPassword from "./screens/reset-password/reset-password"
+import CreateResetPassword from "./screens/create-reset-password/create-reset-password"
 
 const Router = () => (
   <BrowserRouter>
@@ -25,6 +28,9 @@ const Router = () => (
           path="/createReservation/:resourceTypeID"
           component={ResourceTypeTimeline}
         />
+        <Route path="/confirm-email" component={ConfirmEmail} />
+        <Route path="/reset-password" component={ResetPassword} />
+        <Route path="/create-reset-password" component={CreateResetPassword} />
         <Route path="/user-reservations" component={UserReservations} />
         <Route path="/register" component={Register} />
         <Route path="/edit-resource-type/:id" component={EditResourceType} />

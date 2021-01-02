@@ -39,6 +39,7 @@ function LogInForm(): JSX.Element {
     removeUserToken();
     setLoggedIn(false);
     history.push("/");
+    window.location.reload(false);
     toast.info("Wylogowano");
   };
 
@@ -64,6 +65,15 @@ function LogInForm(): JSX.Element {
         <Button type="submit" variant="outline-secondary text-light">
           Zaloguj
         </Button>
+        <Button
+          href="/create-reset-password"
+          type="submit"
+          variant="outline-secondary text-light"
+          className="ml-1"
+        >
+          Resetuj hasło
+        </Button>
+
         <Button
           href="/register"
           variant="outline-secondary text-light"

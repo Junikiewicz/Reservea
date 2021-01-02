@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8" />
     <title>
-        Potwierdzenie rezerwacji konta
+        Potwierdzenie rezerwacji
     </title>
 </head>
 <body>
@@ -14,7 +14,7 @@
         Witaj @Model.Name,
     </p>
     <p>
-        dziękujemy za złożenie rezerwacji w naszym serwisie. Sczegóły złożonych rezerwacji: <br />
+        dziękujemy za złożenie rezerwacji w naszym serwisie. Szczegóły złożonych rezerwacji: <br />
         <table style="border:1px solid black">
             <tr style="border:1px solid black">
                 <th style="border:1px solid black">Id</th>
@@ -23,11 +23,11 @@
             </tr>
             @foreach (var item in Model.Reservations)
             {
-                <tr style="border:1px solid black">
-                    <td style="border:1px solid black">@item.Id</td>
-                    <td style="border:1px solid black">@item.ResourceName</td>
-                    <td style="border:1px solid black">@($"{item.Start.ToString()} - {item.End.ToString()}")</td>
-                </tr>
+            <tr style="border:1px solid black">
+                <td style="border:1px solid black">@item.Id</td>
+                <td style="border:1px solid black">@item.ResourceName</td>
+                <td style="border:1px solid black">@($"{item.Start.ToString()} - {item.End.ToString()}")</td>
+            </tr>
             }
         </table>
         <br />

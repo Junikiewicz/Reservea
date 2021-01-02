@@ -4,5 +4,6 @@
     {
         public const string Register = "RegisterMailTemplate";
         public const string ReservationConfirmation = "ReservationConfirmationMailTemplate";
+        public const string ResetPassword = "ResetPasswordMailTemplate";
     }
 }
