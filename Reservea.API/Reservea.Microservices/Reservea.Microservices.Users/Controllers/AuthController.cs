@@ -59,5 +59,21 @@ namespace Reservea.Microservices.Users.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("send-reset-password")]
+        public async Task<IActionResult> SendResetPasswordEmail(SendResetPasswordEmailRequest request)
+        {
+            await _authenticationService.SendResetPasswordEmail(request.Email);
+
+            return NoContent();
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        {
+            await _authenticationService.ResetPassword(request);
+
+            return NoContent();
+        }
     }
 }

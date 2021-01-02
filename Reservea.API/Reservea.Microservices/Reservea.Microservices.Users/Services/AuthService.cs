@@ -48,6 +48,41 @@ namespace Reservea.Microservices.Users.Services
             await _userManager.ConfirmEmailAsync(userFromDatabase, codeDecoded);
         }
 
+        public async Task ResetPassword(ResetPasswordRequest request)
+        {
+            var userFromDatabase = await _userManager.FindByIdAsync(request.UserId.ToString());
+
+            var codeDecodedBytes = WebEncoders.Base64UrlDecode(request.Token);
+            var codeDecoded = Encoding.UTF8.GetString(codeDecodedBytes);
+
+            var result = await _userManager.ResetPasswordAsync(userFromDatabase, codeDecoded, request.NewPassword);
+
+            if (!result.Succeeded) throw new Exception("temp3");
+        }
+
+        public async Task SendResetPasswordEmail(string email)
+        {
+            _cannonService.FireAsync<UserManager<User>>(async (userManager) =>
+            {
+                var userFromDatabase = await userManager.FindByEmailAsync(email);
+                var resetPasswordToken = await userManager.GeneratePasswordResetTokenAsync(userFromDatabase);
+
+                var tokenGeneratedBytes = Encoding.UTF8.GetBytes(resetPasswordToken);
+                var codeEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+
+                var model = new ResetPasswordMailTemplateModel
+                {
+                    Subject = "Resetowanie hasła",
+                    Name = userFromDatabase.FirstName,
+                    To = $"{userFromDatabase.FirstName} {userFromDatabase.LastName}",
+                    ToAddress = email,
+                    ResetPasswordUrl = $"{_configuration["FrontendUrl"]}/reset-password?id={userFromDatabase.Id}&token={codeEncoded}"
+                };
+
+                await _mailSendingService.SendMailFromTemplateAsync(MailTemplates.ResetPassword, model);
+            });
+        }
+
         public async Task Register(string email, string password, string firstName, string lastName)
         {
             User userToCreate = new User

@@ -11,5 +11,7 @@ namespace Reservea.Microservices.Users.Interfaces.Services
 
         Task<LoginResponse> Login(string email, string password);
         Task ConfirmEmail(ConfirmEmailRequest request);
+        Task ResetPassword(ResetPasswordRequest request);
+        Task SendResetPasswordEmail(string email);
     }
 }

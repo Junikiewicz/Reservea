@@ -55,3 +55,17 @@ export const getAllRolesRequest = async (): Promise<Array<RoleResponse>> => {
 export const confirmEmailRequest = async (token: string, id: number) => {
   await apiClient.post("api/user/Auth/confirmEmail", { token, id });
 };
+
+export const sendResertPasswordEmailRequest = async (email: string) => {
+  await apiClient.post("api/user/Auth/send-reset-password", {email});
+};
+
+export interface ResetPasswordRequest {
+  token: string;
+  newPassword: string;
+  userId: number;
+}
+
+export const resetPassworrdRequest = async (request: ResetPasswordRequest) => {
+  await apiClient.post("api/user/Auth/reset-password", request);
+};
