@@ -21,7 +21,7 @@ namespace Reservea.Common.Helpers
 
         public async Task SendMailFromTemplateAsync(string template, BaseMailModel baseMailModel)
         {
-            var templateString = _mailTemplatesHelper.GetTemplateString(template, baseMailModel);
+            var templateString = await _mailTemplatesHelper.GetTemplateString(template, baseMailModel);
 
             await SendMailAsync(baseMailModel.To, baseMailModel.ToAddress, baseMailModel.Subject, templateString);
         }
