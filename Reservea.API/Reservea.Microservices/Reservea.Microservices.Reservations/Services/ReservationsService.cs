@@ -95,7 +95,7 @@ namespace Reservea.Microservices.Reservations.Services
             //send confirmation mail
             _cannonService.FireAsync<IReservationsUnitOfWork>(async (reservationsUnitOfWork) =>
             {
-                var reservationDetails = await _reservationsUnitOfWork.ReservationsRepository
+                var reservationDetails = await reservationsUnitOfWork.ReservationsRepository
                      .GetAsync(x => newReservations.Select(y => y.Id).Contains(x.Id),
                      cancellationToken,
                      x => x.Include(y => y.User).Include(y => y.Resource));
