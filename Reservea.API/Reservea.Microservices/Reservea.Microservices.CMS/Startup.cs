@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -5,7 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Reservea.Microservices.CMS.Interfaces.Services;
+using Reservea.Microservices.CMS.Services;
 using Reservea.Persistance;
+using Reservea.Persistance.Interfaces.UnitsOfWork;
+using Reservea.Persistance.UnitsOfWork;
+using System.Reflection;
 
 namespace Reservea.Microservices.CMS
 {
@@ -22,6 +28,10 @@ namespace Reservea.Microservices.CMS
         {
             services.AddControllers();
 
+            services.AddScoped<IHomePageService, HomePageService>();
+            services.AddScoped<IPhotosService, PhotosService>();
+            services.AddScoped<ICmsUnitOfWork, CmsUnitOfWork>();
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSwaggerGen(c =>
