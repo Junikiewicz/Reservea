@@ -16,10 +16,12 @@ namespace Reservea.Microservices.Reservations.Helpers
         private void CreateMapsFromEntitiesToDtos()
         {
             CreateMap<TextFieldContent, TextFieldContentResponse>();
+            CreateMap<Photo, PhotoResponse>();
         }
 
         private void CreateMapsFromDtosToEntities()
         {
+            CreateMap<AddPhotoRequest, Photo>();
             CreateMap<UpdateTextFieldContentRequest, TextFieldContent>();
         }
     }

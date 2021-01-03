@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./home.css";
-import { Row, Col, Container } from "react-bootstrap";
-import ImageCarousel from "../../components/image-carousel/image-carousel";
+import { Row, Col, Container, Carousel } from "react-bootstrap";
 import {
+  getAllImages,
   getAllTextFieldsContentsRequest,
+  Photo,
   TextFieldContent,
 } from "../../api/clients/cmsClients";
 
@@ -12,10 +13,17 @@ function Home() {
     Array<TextFieldContent>
   >([]);
 
+  const [pictures, setPictures] = useState<Array<any>>([]);
+
   useEffect(() => {
     getAllTextFieldsContentsRequest()
       .then((response: Array<TextFieldContent>) => {
         setTextFieldsContents(response);
+      })
+      .catch(() => {});
+    getAllImages()
+      .then((response: Array<Photo>) => {
+        setPictures(response);
       })
       .catch(() => {});
   }, []);
@@ -26,7 +34,18 @@ function Home() {
         <Container className="mt-4">
           <Row className="justify-content-center">
             <Col>
-              <ImageCarousel />
+              <Carousel className="my-carousel">
+                {pictures.map((element) => (
+                  <Carousel.Item>
+                    <img
+                      className="d-block w-100"
+                      src={element.url}
+                      alt="First slide"
+                      style={{ height: "400px" }}
+                    />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
             </Col>
           </Row>
           <div className="mt-4">

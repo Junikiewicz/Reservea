@@ -5,5 +5,6 @@ namespace Reservea.Persistance.Interfaces.UnitsOfWork
     public interface ICmsUnitOfWork : IBasicUnitOfWork
     {
         ITextFieldsContentsRepository TextFieldsContentsRepository { get; }
+        IPhotosRepository PhotosRepository { get;}
     }
 }

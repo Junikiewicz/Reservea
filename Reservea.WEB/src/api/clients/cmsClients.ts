@@ -27,3 +27,38 @@ export const getAllTextFieldsContentsRequest = async (): Promise<
 
   return result.data;
 };
+
+export interface Photo {
+  Id: number;
+  Url: string;
+  PublicId: string;
+}
+
+export const uploadImage = async (file: any): Promise<Photo> => {
+  var formData = new FormData();
+  formData.append("File", file);
+
+  const response = await apiClient.post("api/cms/photos", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
+};
+
+export const getAllImages = async (): Promise<Array<Photo>> => {
+  const result = await apiClient.get("api/cms/photos");
+
+  return result.data;
+};
+
+export const getImage = async (id: number): Promise<Photo> => {
+  const result = await apiClient.get("api/cms/photos/" + id);
+
+  return result.data;
+};
+
+export const deleteImage = async (id: number) => {
+  await apiClient.delete("api/cms/photos/" + id);
+};

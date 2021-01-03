@@ -22,6 +22,21 @@ namespace Reservea.Persistance.UnitsOfWork
 
         private ITextFieldsContentsRepository _textFieldsContentsRepository;
 
+        public IPhotosRepository PhotosRepository
+        {
+            get
+            {
+                if (_photosRepository is null)
+                {
+                    _photosRepository = new PhotosRepository(_context, _mapper);
+                }
+
+                return _photosRepository;
+            }
+        }
+
+        private IPhotosRepository _photosRepository;
+
         public CmsUnitOfWork(DataContext context, IMapper mapper) : base(context, mapper)
         {
 

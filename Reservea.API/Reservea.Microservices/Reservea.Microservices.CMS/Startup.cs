@@ -29,6 +29,7 @@ namespace Reservea.Microservices.CMS
             services.AddControllers();
 
             services.AddScoped<IHomePageService, HomePageService>();
+            services.AddScoped<IPhotosService, PhotosService>();
             services.AddScoped<ICmsUnitOfWork, CmsUnitOfWork>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
