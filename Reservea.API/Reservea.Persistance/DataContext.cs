@@ -17,6 +17,7 @@ namespace Reservea.Persistance
         public virtual DbSet<ResourceAvailability> ResourceAvailabilities { get; set; }
         public virtual DbSet<Reservation> Reservations { get; set; }
         public virtual DbSet<ReservationStatus> ReservationStatuses { get; set; }
+        public virtual DbSet<TextFieldContent> TextFieldsContents { get; set; }
 
         public DataContext(DbContextOptions<DataContext> contextOptions) : base(contextOptions) { }
 
