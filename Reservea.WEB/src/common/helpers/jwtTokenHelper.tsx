@@ -24,6 +24,22 @@ export const checkIfValidToken = (): boolean => {
   return true;
 };
 
+export const checkIfInRole = (roles: Array<string>): boolean => {
+  try {
+    if (checkIfValidToken()) {
+      if (decodedToken.role.some((x: any) => roles.includes(x))) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } catch {
+    return false;
+  }
+};
+
 export const checkIfLoggedIn = (): boolean => {
   try {
     return checkIfValidToken();

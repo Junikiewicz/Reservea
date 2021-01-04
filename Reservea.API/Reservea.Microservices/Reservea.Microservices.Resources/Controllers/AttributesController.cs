@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Reservea.Microservices.Resources.Dtos.Requests;
 using Reservea.Microservices.Resources.Interfaces.Services;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Reservea.Microservices.Resources.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AttributesController : ControllerBase
@@ -27,6 +29,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns>Lista wszystkich atrybutów zdefiniowanych w systemie</returns>
         /// <response code="200">Pobranie danych powiodło się</response>
+        [Authorize(Roles = "Admin,Employee")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllAttributesForListAsync(CancellationToken cancellationToken)
@@ -45,6 +48,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns>Szczegółowe dane nowo utworzonego atrybutu</returns>
         /// <response code="200">Dodanie atrybutu powiodło się</response>
+        [Authorize(Roles = "Admin,Employee")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> AddAttributeAsync(AddAttributeRequest request, CancellationToken cancellationToken)
@@ -64,6 +68,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns></returns>
         /// <response code="204">Atrybut został poprawnie zaaktualizowany</response>
+        [Authorize(Roles = "Admin,Employee")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateAttributeAsync(int id, UpdateAttributeRequest request, CancellationToken cancellationToken)
@@ -82,6 +87,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns></returns>
         /// <response code="204">Atrybut został poprawnie usunięty</response>
+        [Authorize(Roles = "Admin,Employee")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> RemoveAttributeAsync(int id, CancellationToken cancellationToken)

@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Reservea.Common.Helpers;
 using Reservea.Microservices.Resources.Helpers;
 using Reservea.Microservices.Resources.Interfaces.Services;
 using Reservea.Microservices.Resources.Services;
@@ -31,7 +33,13 @@ namespace Reservea.Microservices.Resources
                 .AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new TimeSpanConverter()));
 
             AddDependencyInjection(services);
-
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+               options =>
+               {
+                   var publicAuthorizationKey = Configuration.GetSection("AppSettings:PublicKey").Value;
+                   var key = JwtTokenHelper.BuildRsaSigningKey(publicAuthorizationKey);
+                   options.TokenValidationParameters = JwtTokenHelper.GetTokenValidationParameters(key);
+               });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = Configuration.GetValue<string>("ApplicationName"), Version = "v1" });
@@ -65,6 +73,7 @@ namespace Reservea.Microservices.Resources
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

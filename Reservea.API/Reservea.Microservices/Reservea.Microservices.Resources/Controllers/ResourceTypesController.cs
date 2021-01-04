@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Reservea.Microservices.Resources.Dtos.Requests;
 using Reservea.Microservices.Resources.Interfaces.Services;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Reservea.Microservices.Resources.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ResourceTypesController : ControllerBase
@@ -27,6 +29,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns>Lista wszystkich typów zasobów zdefiniowanych w systemie</returns>
         /// <response code="200">Pobranie danych powiodło się</response>
+        [Authorize(Roles = "Admin,Employee")]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllResourceTypesForListAsync(CancellationToken cancellationToken)
@@ -45,6 +48,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns>Lista wszystkich typów zasobów zdefiniowanych w systemie, wraz z ich opisami</returns>
         /// <response code="200">Pobranie danych powiodło się</response>
+        [AllowAnonymous]
         [HttpGet("details")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllResourceTypesWithDetailsForListAsync(CancellationToken cancellationToken)
@@ -63,6 +67,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns>Szczegółowe dane typu zasobu zdefiniowanego w systemie</returns>
         /// <response code="200">Pobranie danych powiodło się</response>
+        [Authorize(Roles = "Admin,Employee")]
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetResourceTypeDetailsAsync(int id, CancellationToken cancellationToken)
@@ -81,6 +86,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns>Lista atrybutów przypisanych do danego typu zasobu</returns>
         /// <response code="200">Pobranie danych powiodło się</response>
+        [Authorize(Roles = "Admin,Employee")]
         [HttpGet("{id}/attributes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetResourceTypeAttributesAsync(int id, CancellationToken cancellationToken)
@@ -99,6 +105,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns>Szczegółowe dane nowo utworzonego typu zasobu</returns>
         /// <response code="200">Dodanie typu zasobu powiodło się</response>
+        [Authorize(Roles = "Admin,Employee")]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> AddResourceTypeAsync(AddResourceTypeRequest request, CancellationToken cancellationToken)
@@ -118,6 +125,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns></returns>
         /// <response code="204">Typ zasobu został poprawnie zaaktualizowany</response>
+        [Authorize(Roles = "Admin,Employee")]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateResourceTypeAsync(int id, UpdateResourceTypeRequest request, CancellationToken cancellationToken)
@@ -136,6 +144,7 @@ namespace Reservea.Microservices.Resources.Controllers
         /// <param name="cancellationToken">Token umożliwiający przerwanie wykonywania rządania</param>
         /// <returns></returns>
         /// <response code="204">Typ zasobu został poprawnie usunięty</response>
+        [Authorize(Roles = "Admin,Employee")]
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> RemoveResourceTypeAsync(int id, CancellationToken cancellationToken)

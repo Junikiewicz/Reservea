@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -52,8 +53,14 @@ namespace Reservea.Microservices.Users
             builder.AddRoleManager<RoleManager<Role>>();
             builder.AddSignInManager<SignInManager<User>>();
             builder.AddDefaultTokenProviders();
-            services.AddAuthentication();
             #endregion
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+               options =>
+               {
+                   var publicAuthorizationKey = Configuration.GetSection("AppSettings:PublicKey").Value;
+                   var key = JwtTokenHelper.BuildRsaSigningKey(publicAuthorizationKey);
+                   options.TokenValidationParameters = JwtTokenHelper.GetTokenValidationParameters(key);
+               });
 
             services.AddSwaggerGen(c =>
             {
@@ -78,6 +85,7 @@ namespace Reservea.Microservices.Users
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

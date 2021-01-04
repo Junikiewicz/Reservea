@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Reservea.Microservices.Users.Dtos.Requests;
 using Reservea.Microservices.Users.Interfaces.Services;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Reservea.Microservices.Users.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
@@ -24,6 +26,7 @@ namespace Reservea.Microservices.Users.Controllers
         /// <returns>Token JWT</returns>
         /// <response code="200">Logowanie powiodło sie</response>
         /// <response code="401">Nieprawidłowy email lub hasło</response>
+        [AllowAnonymous]
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -42,6 +45,7 @@ namespace Reservea.Microservices.Users.Controllers
         /// <returns></returns>
         /// <response code="201">Utworzenie nowego użytkownika powiodło się</response>
         /// <response code="400">Nie udało się stworzyć użytkownika o podanych danych</response>
+        [AllowAnonymous]
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -52,6 +56,7 @@ namespace Reservea.Microservices.Users.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpPost("confirmEmail")]
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailRequest confirmEmailRequest)
         {
@@ -60,6 +65,7 @@ namespace Reservea.Microservices.Users.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpPost("send-reset-password")]
         public async Task<IActionResult> SendResetPasswordEmail(SendResetPasswordEmailRequest request)
         {
@@ -68,6 +74,7 @@ namespace Reservea.Microservices.Users.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
         {
