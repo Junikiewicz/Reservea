@@ -29,6 +29,9 @@ namespace Reservea.Microservices.Resources.Helpers
             CreateMap<ResourceTypeAttribute, ResourceTypeAttributeForDetailedResourceResponse>()
                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute.Name));
 
+            CreateMap<ResourceAttribute, ResourceAttributeResponse>()
+               .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute.Name));
+
             CreateMap<Attribute, AttributeForListResponse>();
             CreateMap<Attribute, AddAttributeResponse>();
 

@@ -1,17 +1,29 @@
-.rct-header-root{
-    background: #343a40 !important;
-    color: white !important;
+.rct-header-root {
+  background: #343a40 !important;
+  color: white !important;
 }
 
 .rct-dateHeader {
-    background: blue;
-    color: black;
+  background: blue;
+  color: black;
 }
-.rct-sidebar{
-    background: #343a40;
-    color: white;
+.rct-sidebar {
+  background: #343a40;
+  color: white;
 }
-.rct-vl{
-    background: rgb(35, 47, 59) !important;
-    color: black;
+.rct-vl {
+  background: rgb(35, 47, 59) !important;
+  color: black;
+}
+
+.popover-header {
+  background: #343a40 !important;
+  color: white !important;
+}
+.popover-body {
+  background: #343a40 !important;
+  color: white !important;
+}
+.popover {
+  max-width: 1000px !important;
 }

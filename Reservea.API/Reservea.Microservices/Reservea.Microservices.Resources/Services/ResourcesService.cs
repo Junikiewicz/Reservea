@@ -43,7 +43,7 @@ namespace Reservea.Microservices.Resources.Services
 
         public async Task<IEnumerable<ResourceWithAvaiabilityResponse>> GetResourcesAvailabilityAsync(int resourceTypeId, CancellationToken cancellationToken)
         {
-            var result = await _unitOfWork.ResourcesRepository.GetAsync(x => x.ResourceTypeId == resourceTypeId, cancellationToken, x => x.Include(x => x.ResourceAvailabilities)); //TEMP
+            var result = await _unitOfWork.ResourcesRepository.GetAsync(x => x.ResourceTypeId == resourceTypeId, cancellationToken, x => x.Include(x => x.ResourceAvailabilities).Include(x => x.ResourceAttributes).ThenInclude(x => x.Attribute)); //TEMP
 
             return _mapper.Map<IEnumerable<ResourceWithAvaiabilityResponse>>(result);
         }
