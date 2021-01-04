@@ -1,10 +1,19 @@
 import {
+  faInfoCircle,
   faLongArrowAltLeft,
   faTrashAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { ReactText, useEffect, useState } from "react";
-import { Button, Col, Container, Row, Table } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  OverlayTrigger,
+  Popover,
+  Row,
+  Table,
+} from "react-bootstrap";
 import Timeline, {
   ReactCalendarItemRendererProps,
 } from "react-calendar-timeline";
@@ -57,12 +66,14 @@ function ResourceTypeTimeline(props: any) {
     const max = addHours(new Date(), 24 * 7 * 4);
 
     resourceTypeAvaliabilitiesRequest(resourceType) //TODO: Remove chain
-      .then(async (response: Array<ResoucerTypeAvaliabilitiesResponse>) => {
+      .then(async (response: Array<any>) => {
         getResourceTypeReservations(resourceType)
           .then(async (reservationsResponse: Array<ReservationRequest>) => {
             const timelineGroups = response.map((x) => ({
               id: x.id,
               title: x.name,
+              description: x.description,
+              resourceAttributes: x.resourceAttributes,
             }));
             let availabilities: any[] = [];
             const reservations: Array<ReservationRequest> = reservationsResponse.map(
@@ -74,7 +85,7 @@ function ResourceTypeTimeline(props: any) {
             );
 
             for (let resource of response) {
-              let temp = resource.resourceAvailabilities.map((x) => {
+              let temp = resource.resourceAvailabilities.map((x: any) => {
                 if (x.interval) {
                   const a = x.interval.replace(/\./g, ":").split(":"); //TEMP
                   if (a.length > 3) {
@@ -169,6 +180,55 @@ function ResourceTypeTimeline(props: any) {
 
   const startSelectingPlace = () => {
     setIsSelectingPlace(true);
+  };
+  const groupRenderer = ({ group }: any) => {
+    return (
+      <div className="custom-group">
+        <span className="title">
+          <span>{group.title}</span>
+          <OverlayTrigger
+            trigger="click"
+            placement="right"
+            overlay={
+              <Popover id={`popover-positioned`}>
+                <Popover.Title as="h3">{group.title}</Popover.Title>
+                <Container>
+                  <Row>
+                    <Popover.Content>
+                      <span>{group.description}</span>
+                      <Table
+                        striped
+                        bordered
+                        hover
+                        variant="dark"
+                        className="text-center mt-2"
+                      >
+                        <tbody>
+                          {group.resourceAttributes.map((element: any) => (
+                            <tr>
+                              <td>{element.name}</td>
+                              <td>{element.value}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </Table>
+                    </Popover.Content>
+                  </Row>
+                </Container>
+              </Popover>
+            }
+          >
+            <FontAwesomeIcon
+              size="lg"
+              className="float-right mt-1"
+              icon={faInfoCircle}
+              style={{ cursor: "pointer" }}
+            />
+          </OverlayTrigger>
+        </span>
+        <p className="tip">{group.tip}</p>
+      </div>
+    );
   };
 
   const itemRenderer = (props: ReactCalendarItemRendererProps<any>) => {
@@ -391,8 +451,10 @@ function ResourceTypeTimeline(props: any) {
                 onItemDrag={onItemDrag}
                 selected={selected}
                 itemHeightRatio={0.95}
+                sidebarWidth={170}
                 defaultTimeStart={addHours(new Date(), -12)}
                 itemRenderer={itemRenderer}
+                groupRenderer={groupRenderer}
                 defaultTimeEnd={addHours(new Date(), 12)}
                 onCanvasClick={onCanvasClick}
                 onItemClick={onItemClick}
