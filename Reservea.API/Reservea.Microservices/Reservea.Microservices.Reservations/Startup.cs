@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +38,14 @@ namespace Reservea.Microservices.Reservations
             services.AddScoped<IMailTemplatesHelper, MailTemplatesHelper>();
             services.AddScoped<IReservationsUnitOfWork, ReservationsUnitOfWork>();
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+               options =>
+               {
+                   var publicAuthorizationKey = Configuration.GetSection("AppSettings:PublicKey").Value;
+                   var key = JwtTokenHelper.BuildRsaSigningKey(publicAuthorizationKey);
+                   options.TokenValidationParameters = JwtTokenHelper.GetTokenValidationParameters(key);
+               });
+
 
             services.AddSwaggerGen(c =>
             {
@@ -59,6 +68,7 @@ namespace Reservea.Microservices.Reservations
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

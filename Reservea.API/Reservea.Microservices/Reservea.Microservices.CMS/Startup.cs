@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Reservea.Common.Helpers;
 using Reservea.Microservices.CMS.Interfaces.Services;
 using Reservea.Microservices.CMS.Services;
 using Reservea.Persistance;
@@ -33,6 +35,13 @@ namespace Reservea.Microservices.CMS
             services.AddScoped<ICmsUnitOfWork, CmsUnitOfWork>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+               options =>
+               {
+                   var publicAuthorizationKey = Configuration.GetSection("AppSettings:PublicKey").Value;
+                   var key = JwtTokenHelper.BuildRsaSigningKey(publicAuthorizationKey);
+                   options.TokenValidationParameters = JwtTokenHelper.GetTokenValidationParameters(key);
+               });
 
             services.AddSwaggerGen(c =>
             {
@@ -55,6 +64,7 @@ namespace Reservea.Microservices.CMS
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
