@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Reservea.Microservices.CMS.Dtos.Requests;
 using Reservea.Microservices.CMS.Dtos.Responses;
+using Reservea.Microservices.CMS.Models;
 using Reservea.Persistance.Models;
 
 namespace Reservea.Microservices.Reservations.Helpers
@@ -17,12 +18,17 @@ namespace Reservea.Microservices.Reservations.Helpers
         {
             CreateMap<TextFieldContent, TextFieldContentResponse>();
             CreateMap<Photo, PhotoResponse>();
+            CreateMap<UserRate, UserRateForHomePageResponse>();
+            CreateMap<UserRate, UserRateForListResponse>();
+            CreateMap<UserRate, UserRateForRandomPick>();
         }
 
         private void CreateMapsFromDtosToEntities()
         {
             CreateMap<AddPhotoRequest, Photo>();
             CreateMap<UpdateTextFieldContentRequest, TextFieldContent>();
+            CreateMap<CreateUserRateRequest, UserRate>();
+            CreateMap<UserRateUpdateRequest, UserRate>();
         }
     }
 }

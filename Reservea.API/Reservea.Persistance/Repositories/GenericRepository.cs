@@ -22,6 +22,11 @@ namespace Reservea.Persistance.Repositories
             _mapper = mapper;
         }
 
+        public async Task<int> CountAllAsync(CancellationToken cancellationToken)
+        {
+            return await _context.Set<TEntity>().CountAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null)
         {
             return await _context.Set<TEntity>().ToListAsync(cancellationToken);

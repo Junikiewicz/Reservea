@@ -6,6 +6,7 @@ import ResourceTypesManagment from "./resource-types-managment/resource-types-ma
 import UsersManagment from "./users-managment/users-managment";
 import ReservationsManagment from "./reservations-managment/reservations-managment";
 import HomePageManagment from "./home-page-managment/home-page-managment";
+import UserRatesManagment from "./user-rates-managment/user-rates-managment";
 
 function AdminPanel(props: any) {
   return (
@@ -39,6 +40,9 @@ function AdminPanel(props: any) {
               <Nav.Item>
                 <Nav.Link eventKey="homePageManagment">Strona główna</Nav.Link>
               </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="userRatesManagment">Opinie</Nav.Link>
+              </Nav.Item>
             </Nav>
           </Row>
         </Container>
@@ -63,6 +67,9 @@ function AdminPanel(props: any) {
         </Tab.Pane>
         <Tab.Pane eventKey="homePageManagment">
           <HomePageManagment />
+        </Tab.Pane>
+        <Tab.Pane eventKey="userRatesManagment">
+          <UserRatesManagment />
         </Tab.Pane>
       </Tab.Content>
     </Tab.Container>
