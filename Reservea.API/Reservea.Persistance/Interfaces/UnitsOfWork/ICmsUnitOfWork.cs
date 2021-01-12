@@ -6,5 +6,6 @@ namespace Reservea.Persistance.Interfaces.UnitsOfWork
     {
         ITextFieldsContentsRepository TextFieldsContentsRepository { get; }
         IPhotosRepository PhotosRepository { get;}
+        IUserRatesRepository UserRatesRepository { get; }
     }
 }

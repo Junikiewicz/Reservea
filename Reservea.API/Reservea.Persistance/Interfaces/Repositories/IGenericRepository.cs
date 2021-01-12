@@ -20,5 +20,6 @@ namespace Reservea.Persistance.Interfaces.Repositories
         void AddRange(IEnumerable<TEntity> entities);
         void Remove(TEntity entity);
         void RemoveRange(IEnumerable<TEntity> entity);
+        Task<int> CountAllAsync(CancellationToken cancellationToken);
     }
 }

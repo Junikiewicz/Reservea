@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Reservea.Persistance;
 
 namespace Reservea.Persistance.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210112175540_addIsVibisbleToUserRate")]
+    partial class addIsVibisbleToUserRate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -463,9 +465,6 @@ namespace Reservea.Persistance.Migrations
                     b.Property<string>("Feedback")
                         .HasMaxLength(2047)
                         .HasColumnType("nvarchar(2047)");
-
-                    b.Property<bool>("IsAllowedToBeShared")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsVisible")
                         .HasColumnType("bit");

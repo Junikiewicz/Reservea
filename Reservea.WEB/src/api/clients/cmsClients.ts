@@ -62,3 +62,23 @@ export const getImage = async (id: number): Promise<Photo> => {
 export const deleteImage = async (id: number) => {
   await apiClient.delete("api/cms/photos/" + id);
 };
+
+export const addUserRateRequest = async (request: any) => {
+  await apiClient.post("api/cms/UserRates", request);
+};
+
+export const updateUserRatesRequest = async (request: Array<any>) => {
+  await apiClient.patch("api/cms/UserRates", request);
+};
+
+export const getAllUserRatesRequest = async () => {
+  const response = await apiClient.get("api/cms/UserRates");
+
+  return response.data;
+};
+
+export const getUserRatesForHomepageRequest = async () => {
+  const response = await apiClient.get("api/cms/UserRates/homepage");
+
+  return response.data;
+};

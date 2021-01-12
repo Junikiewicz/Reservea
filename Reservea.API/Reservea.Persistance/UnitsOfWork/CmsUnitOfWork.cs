@@ -37,6 +37,21 @@ namespace Reservea.Persistance.UnitsOfWork
 
         private IPhotosRepository _photosRepository;
 
+        public IUserRatesRepository UserRatesRepository
+        {
+            get
+            {
+                if(_userRatesRepository is null)
+                {
+                    _userRatesRepository = new UserRatesRepository(_context, _mapper);
+                }
+
+                return _userRatesRepository;
+            }
+        }
+
+        private IUserRatesRepository _userRatesRepository;
+
         public CmsUnitOfWork(DataContext context, IMapper mapper) : base(context, mapper)
         {
 

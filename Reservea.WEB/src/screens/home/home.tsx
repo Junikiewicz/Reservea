@@ -1,21 +1,46 @@
 import React, { useEffect, useState } from "react";
 import "./home.css";
-import { Row, Col, Container, Carousel } from "react-bootstrap";
+import { Row, Col, Container, Carousel, Button } from "react-bootstrap";
 import {
+  addUserRateRequest,
   getAllImages,
   getAllTextFieldsContentsRequest,
+  getUserRatesForHomepageRequest,
   Photo,
   TextFieldContent,
 } from "../../api/clients/cmsClients";
+import AddUserRateModal from "./add-user-rate-modal";
+import { toast } from "react-toastify";
 
 function Home() {
   const [textFieldsContents, setTextFieldsContents] = useState<
     Array<TextFieldContent>
   >([]);
 
+  const [showEditAttribute, setShowEditAttribute] = useState(false);
+  const handleCloseEditAttribute = () => setShowEditAttribute(false);
+  const handleChooseEditAttribute = (reqest: string) => {
+    addUserRateRequest(reqest)
+      .then(() => {
+        toast.success("Dziękujemy za twoją opinie!");
+      })
+      .catch(() => {});
+    setShowEditAttribute(false);
+  };
+  const handleShowEditAtribute = () => {
+    setShowEditAttribute(true);
+  };
+
   const [pictures, setPictures] = useState<Array<any>>([]);
 
+  const [userRates, setUserRates] = useState<Array<any>>([]);
+
   useEffect(() => {
+    getUserRatesForHomepageRequest()
+      .then((response: Array<any>) => {
+        setUserRates(response);
+      })
+      .catch(() => {});
     getAllTextFieldsContentsRequest()
       .then((response: Array<TextFieldContent>) => {
         setTextFieldsContents(response);
@@ -59,39 +84,49 @@ function Home() {
         </Container>
       </Col>
       <Col xl="3" className="pageContent" style={{ whiteSpace: "pre-wrap" }}>
-        <div>
-          <Container>
-            <Row className="mt-3">
-              <h4>KONTAKT</h4>
-            </Row>
-            <Row>
-              {textFieldsContents.find((x) => x.name === "contact")?.content}
-            </Row>
-          </Container>
-        </div>
         <div className="mt-4">
           <Container style={{ textAlign: "justify" }}>
-            <Row>
+            <Row className="mb-3">
               <h4>OPINIE</h4>
+              <Button
+                onClick={handleShowEditAtribute}
+                className="ml-auto"
+                variant="success"
+              >
+                Dodaj własną!
+              </Button>
             </Row>
-            <Row className="mt-1">
-              <span>
-                Volutpat lorem consectetur adipiscing felis ipsum dolor sit
-                amet,elit. Phasellus laoreet non volutpat molestie.
-              </span>
-            </Row>
-            <Row className="mt-4">
-              Phasellus lorem consectetur adipiscing volutpat Phasellus elit
-              ipsum dolor sit amet,. Phasellus laoreet felis non volutpat
-              molestie.
-            </Row>
-            <Row className="mt-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              laoreet felis non volutpat molestie.
-            </Row>
+            <hr/>
+            {userRates.map((element) => (
+              <div className="mt-1 mb-3">
+                <Row>
+                  <span>{element.feedback}</span>
+                </Row>
+                <Row>
+                  <span className="ml-auto">~{element.name}</span>
+                </Row>
+                <hr/>
+              </div>
+            ))}
           </Container>
+          <div>
+            <Container>
+              <Row className="mt-3">
+                <h4>KONTAKT</h4>
+              </Row>
+              <Row>
+                {textFieldsContents.find((x) => x.name === "contact")?.content}
+              </Row>
+            </Container>
+            <hr/>
+          </div>
         </div>
       </Col>
+      <AddUserRateModal
+        show={showEditAttribute}
+        handleClose={handleCloseEditAttribute}
+        handleChoose={handleChooseEditAttribute}
+      />
     </Row>
   );
 }
