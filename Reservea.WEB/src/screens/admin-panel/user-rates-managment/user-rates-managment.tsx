@@ -16,6 +16,7 @@ function Attributes() {
   const updateUserRates = () => {
     updateUserRatesRequest(userRatesToUpdate)
       .then(() => {
+        userRatesToUpdate = [];
         toast.success("Udało się zaaktualizować widoczność opinii!");
       })
       .catch(() => {});

@@ -86,16 +86,27 @@ function Home() {
       <Col xl="3" className="pageContent" style={{ whiteSpace: "pre-wrap" }}>
         <div className="mt-4">
           <Container style={{ textAlign: "justify" }}>
-            <Row>
+            <Row className="mb-3">
               <h4>OPINIE</h4>
-              <Button onClick={handleShowEditAtribute} className="ml-auto" variant="success">
+              <Button
+                onClick={handleShowEditAtribute}
+                className="ml-auto"
+                variant="success"
+              >
                 Dodaj własną!
               </Button>
             </Row>
+            <hr/>
             {userRates.map((element) => (
-              <Row className="mt-1 mb-3">
-                <span>{element.feedback}</span>
-              </Row>
+              <div className="mt-1 mb-3">
+                <Row>
+                  <span>{element.feedback}</span>
+                </Row>
+                <Row>
+                  <span className="ml-auto">~{element.name}</span>
+                </Row>
+                <hr/>
+              </div>
             ))}
           </Container>
           <div>
@@ -107,6 +118,7 @@ function Home() {
                 {textFieldsContents.find((x) => x.name === "contact")?.content}
               </Row>
             </Container>
+            <hr/>
           </div>
         </div>
       </Col>

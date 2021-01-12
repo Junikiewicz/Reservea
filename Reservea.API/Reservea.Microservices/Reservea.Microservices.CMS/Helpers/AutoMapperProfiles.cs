@@ -18,7 +18,8 @@ namespace Reservea.Microservices.Reservations.Helpers
         {
             CreateMap<TextFieldContent, TextFieldContentResponse>();
             CreateMap<Photo, PhotoResponse>();
-            CreateMap<UserRate, UserRateForHomePageResponse>();
+            CreateMap<UserRate, UserRateForHomePageResponse>()
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.User.FirstName + " " + src.User.LastName));
             CreateMap<UserRate, UserRateForListResponse>();
             CreateMap<UserRate, UserRateForRandomPick>();
         }
