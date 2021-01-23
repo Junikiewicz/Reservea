@@ -33,6 +33,13 @@ namespace Reservea.Microservices.Users.Controllers
             return Ok(await _usersService.GetUserDetailsAsync(userId, cancellationToken));
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{userId}")]
+        public async Task DeleteUserAsync(int userId, CancellationToken cancellationToken)
+        {
+            await _usersService.DeleteUserAsync(userId, cancellationToken);
+        }
+
         [Authorize(Roles = "Admin,Employee")]
         [HttpPatch("{userId}")]
         public async Task UpdateUserAsync(int userId, UpdateUserRequest request, CancellationToken cancellationToken)

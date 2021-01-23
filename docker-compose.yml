@@ -60,6 +60,7 @@ services:
       - EmailSettings:IsUseSsl=${EmailServerAddress}
       - EmailSettings:FromAddress=${EmailServerAddress}
       - EmailSettings:From=${EmailServerAddress}
+      - EncryptionKey=${EncryptionKey}
     image: reserveamicroservicesusers:latest
     build:
       context: ./Reservea.API

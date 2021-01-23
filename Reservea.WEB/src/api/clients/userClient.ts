@@ -52,12 +52,16 @@ export const getAllRolesRequest = async (): Promise<Array<RoleResponse>> => {
   return result.data;
 };
 
+export const deleteUserRequest = async (userId: number) => {
+  await apiClient.delete("api/user/Users" + userId);
+};
+
 export const confirmEmailRequest = async (token: string, id: number) => {
   await apiClient.post("api/user/Auth/confirmEmail", { token, id });
 };
 
 export const sendResertPasswordEmailRequest = async (email: string) => {
-  await apiClient.post("api/user/Auth/send-reset-password", {email});
+  await apiClient.post("api/user/Auth/send-reset-password", { email });
 };
 
 export interface ResetPasswordRequest {

@@ -3,11 +3,15 @@ import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/esm/Table";
 import { UserForListResponse } from "../../../api/dtos/user/auth/userForLIstRensponse";
-import { getUsersRequest } from "../../../api/clients/userClient";
+import {
+  deleteUserRequest,
+  getUsersRequest,
+} from "../../../api/clients/userClient";
 import { getAccountStatusName } from "../../../common/enums/accountStatus";
 import { getRoleName } from "../../../common/enums/role";
 import LoadingSpinner from "../../../components/loading-spinner/loading-spinner";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function UsersManagment() {
   const [userList, setUserList] = useState<Array<UserForListResponse>>([]);
@@ -22,6 +26,17 @@ function UsersManagment() {
       })
       .catch(() => {});
   }, []);
+
+  const deleteUser = (userId: number) => {
+    deleteUserRequest(userId)
+      .then(() => {
+        let newUserList = [...userList];
+        newUserList = newUserList.filter((x) => x.id != userId);
+        setUserList(newUserList);
+        toast.success("Dane użytkownika zostały zaanonimizowane");
+      })
+      .catch(() => {});
+  };
 
   if (showSpinner) {
     return <LoadingSpinner />;
@@ -55,6 +70,9 @@ function UsersManagment() {
               <FontAwesomeIcon
                 size="lg"
                 icon={faTrashAlt}
+                onClick={() => {
+                  deleteUser(element.id);
+                }}
                 style={{ cursor: "pointer" }}
               />
             </td>

@@ -11,5 +11,6 @@ namespace Reservea.Microservices.Users.Interfaces.Services
         Task<IEnumerable<UserForListResponse>> GetUsersAsync(CancellationToken cancellationToken);
         Task<UserForDetailedResponse> GetUserDetailsAsync(int userId, CancellationToken cancellationToken);
         Task UpdateUserAsync(int userId, UpdateUserRequest request, CancellationToken cancellationToken);
+        Task DeleteUserAsync(int userId, CancellationToken cancellationToken);
     }
 }
