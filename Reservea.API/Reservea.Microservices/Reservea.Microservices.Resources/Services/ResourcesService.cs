@@ -146,7 +146,7 @@ namespace Reservea.Microservices.Resources.Services
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<bool> Validate(IEnumerable<ReservationValidationRequest> reservations, CancellationToken cancellationToken)
+        public async Task<bool> ValidateAsync(IEnumerable<ReservationValidationRequest> reservations, CancellationToken cancellationToken)
         {
             var allResourcesAvaiabilites = await _unitOfWork.ResourceAvailabilitiesRepository.GetAsync(
                 predicate: x => reservations.Select(x => x.ResourceId).Contains(x.ResourceId),

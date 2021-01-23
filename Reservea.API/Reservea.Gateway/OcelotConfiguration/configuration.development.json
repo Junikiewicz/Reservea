@@ -3,11 +3,11 @@
     {
       "SwaggerKey": "user",
       "DownstreamPathTemplate": "/api/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 44384
+          "Host": "host.docker.internal",
+          "Port": 58435
         }
       ],
       "UpstreamPathTemplate": "/api/user/{everything}",
@@ -16,11 +16,11 @@
     {
       "SwaggerKey": "reservation",
       "DownstreamPathTemplate": "/api/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 44328
+          "Host": "host.docker.internal",
+          "Port": 58506
         }
       ],
       "UpstreamPathTemplate": "/api/reservation/{everything}",
@@ -29,11 +29,11 @@
     {
       "SwaggerKey": "resources",
       "DownstreamPathTemplate": "/api/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 44360
+          "Host": "host.docker.internal",
+          "Port": 58572
         }
       ],
       "UpstreamPathTemplate": "/api/resources/{everything}",
@@ -42,11 +42,11 @@
     {
       "SwaggerKey": "cms",
       "DownstreamPathTemplate": "/api/{everything}",
-      "DownstreamScheme": "https",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 44340
+          "Host": "host.docker.internal",
+          "Port": 58617
         }
       ],
       "UpstreamPathTemplate": "/api/cms/{everything}",
@@ -60,7 +60,7 @@
         {
           "Name": "User API",
           "Version": "v1",
-          "Url": "https://localhost:44384/swagger/v1/swagger.json"
+          "Url": "http://host.docker.internal:58435/swagger/v1/swagger.json"
         }
       ]
     },
@@ -70,7 +70,7 @@
         {
           "Name": "Reservation API",
           "Version": "v1",
-          "Url": "https://localhost:44328/swagger/v1/swagger.json"
+          "Url": "http://host.docker.internal:58506/swagger/v1/swagger.json"
         }
       ]
     },
@@ -80,7 +80,7 @@
         {
           "Name": "Resources API",
           "Version": "v1",
-          "Url": "https://localhost:44360/swagger/v1/swagger.json"
+          "Url": "http://host.docker.internal:58572/swagger/v1/swagger.json"
         }
       ]
     },
@@ -90,12 +90,12 @@
         {
           "Name": "CMS API",
           "Version": "v1",
-          "Url": "https://localhost:44340/swagger/v1/swagger.json"
+          "Url": "http://host.docker.internal:58617/swagger/v1/swagger.json"
         }
       ]
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:44399"
+    "BaseUrl": "http://host.docker.internal:58548"
   }
 }

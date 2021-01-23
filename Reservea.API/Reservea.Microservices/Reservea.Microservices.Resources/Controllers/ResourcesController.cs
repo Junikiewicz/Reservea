@@ -132,7 +132,7 @@ namespace Reservea.Microservices.Resources.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ValidateAvaiability(IEnumerable<ReservationValidationRequest> reservations, CancellationToken cancellationToken)
         {
-            var result = await _resourcesService.Validate(reservations, cancellationToken);
+            var result = await _resourcesService.ValidateAsync(reservations, cancellationToken);
 
             return Ok(result);
         }

@@ -16,6 +16,6 @@ namespace Reservea.Microservices.Resources.Interfaces.Services
         Task<AddResourceResponse> AddResourceAsync(AddResourceRequest request, CancellationToken cancellationToken);
         Task RemoveResourceAsync(int resourceId, CancellationToken cancellationToken);
         Task<ResourceAvailabilityResponse> GetResourceAvailabilityAsync(int resourceId, CancellationToken cancellationToken);
-        Task<bool> Validate(IEnumerable<ReservationValidationRequest> reservations, CancellationToken cancellationToken);
+        Task<bool> ValidateAsync(IEnumerable<ReservationValidationRequest> reservations, CancellationToken cancellationToken);
     }
 }

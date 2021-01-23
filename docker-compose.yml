@@ -1,0 +1,93 @@
+version: '3.4'
+
+services:
+  cms-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:DefaultConnection=${DatabaseConnectionString}
+      - Cloudinary:CloudName=${CloudinaryCloudName}
+      - Cloudinary:ApiSecret=${CloudinaryApiSecret}
+      - Cloudinary:ApiKey=${CloudinaryApiKey}
+      - AppSettings:PublicKey=${PublicKey}
+    image: reserveamicroservicescms:latest
+    build:
+      context: ./Reservea.API
+      dockerfile: Reservea.Microservices/Reservea.Microservices.CMS/Dockerfile
+    ports:
+      - "58617:80"
+
+  reservations-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:DefaultConnection=${DatabaseConnectionString}
+      - AppSettings:PublicKey=${PublicKey}
+      - EmailUsername=marcjun629@student.polsl.pl
+      - EmailSettings:ServerAddress=${EmailServerAddress}
+      - EmailSettings:Port=${EmailServerAddress}
+      - EmailSettings:Password=${EmailServerAddress}
+      - EmailSettings:IsUseSsl=${EmailServerAddress}
+      - EmailSettings:FromAddress=${EmailServerAddress}
+      - EmailSettings:From=${EmailServerAddress}
+    image: reserveamicroservicesreservations:latest
+    build:
+      context: ./Reservea.API
+      dockerfile: Reservea.Microservices/Reservea.Microservices.Reservations/Dockerfile
+    ports:
+      - "58506:80"
+
+  resources-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:DefaultConnection=${DatabaseConnectionString}
+      - AppSettings:PublicKey=${PublicKey}
+    image: reserveamicroservicesresources:latest
+    build:
+      context: ./Reservea.API
+      dockerfile: Reservea.Microservices/Reservea.Microservices.Resources/Dockerfile
+    ports:
+      - "58572:80"
+
+  users-api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:DefaultConnection=${DatabaseConnectionString}
+      - AppSettings:PublicKey=${PublicKey}
+      - AppSettings:PrivateKey=${PrivateKey}
+      - EmailUsername=marcjun629@student.polsl.pl
+      - EmailSettings:ServerAddress=${EmailServerAddress}
+      - EmailSettings:Port=${EmailServerAddress}
+      - EmailSettings:Password=${EmailServerAddress}
+      - EmailSettings:IsUseSsl=${EmailServerAddress}
+      - EmailSettings:FromAddress=${EmailServerAddress}
+      - EmailSettings:From=${EmailServerAddress}
+    image: reserveamicroservicesusers:latest
+    build:
+      context: ./Reservea.API
+      dockerfile: Reservea.Microservices/Reservea.Microservices.Users/Dockerfile
+    ports:
+      - "58435:80"
+
+  gateway:
+    image: reserveagateway:latest
+    build:
+      context: ./Reservea.API
+      dockerfile: Reservea.Gateway/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "58548:80"
+    depends_on:
+      - users-api
+      - resources-api
+      - reservations-api
+      - cms-api
+
+  frontend:
+    image: reserveafrontend:latest
+    build: ./Reservea.WEB
+    environment:
+      - API_BASE_URL=http://localhost:58548
+    ports:
+      - "3000:80"
+    depends_on:
+      - gateway
